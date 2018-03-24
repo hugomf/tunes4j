@@ -1,0 +1,32 @@
+#Eclipse Files
+.settings/
+.classpath
+.project
+.metadata
+
+# Binaries
+*.war
+*.ear
+*.jar
+**/bin
+**/db
+**/build
+
+#Maven Files
+target/
+
+#Gradle
+.gradletasknamecache
+.gradle/
+
+
+#OS specific
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+
