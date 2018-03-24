@@ -31,7 +31,8 @@ import org.ocelot.tunes4j.dao.ColumnRepository;
 import org.ocelot.tunes4j.dao.SongRepository;
 import org.ocelot.tunes4j.dto.Column;
 import org.ocelot.tunes4j.dto.Song;
-import org.ocelot.tunes4j.utils.Notifier;
+import org.ocelot.tunes4j.notification.MacNotifier;
+import org.ocelot.tunes4j.notification.NotifierFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -281,7 +282,7 @@ public class MediaTable {
 		if(row!=-1) {
 			Song bean = (Song) model.getRow(row);
 			String filePath = bean.getPath() + File.separator + bean.getFileName();
-			Notifier.push(bean.getTitle(), "Itunes4j", bean.getArtist());
+			NotifierFactory.instance().push(bean.getTitle(), "Itunes4j", bean.getArtist());
 			return new File(filePath);
 		}
 		return null;

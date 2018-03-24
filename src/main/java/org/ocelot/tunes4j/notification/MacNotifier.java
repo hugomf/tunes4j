@@ -1,11 +1,11 @@
-package org.ocelot.tunes4j.utils;
+package org.ocelot.tunes4j.notification;
 
 import java.io.IOException;
 
-public class Notifier {
+public class MacNotifier implements Notifier {
 	
 	
-	public static void push(String message, String title, String subtitle) {
+	public void push(String message, String title, String subtitle) {
 		
 		String cmd = new StringBuilder()
 				.append("display notification ")
@@ -21,7 +21,6 @@ public class Notifier {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	
 		
 	}
 	
