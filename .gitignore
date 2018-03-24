@@ -7,7 +7,6 @@
 # Binaries
 *.war
 *.ear
-*.jar
 **/bin
 **/db
 **/build
