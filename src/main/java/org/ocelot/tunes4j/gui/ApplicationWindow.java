@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JSplitPane;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -59,7 +60,7 @@ public class ApplicationWindow extends JFrame {
 	private boolean sliderValueLocked = false;
 	
 	private SourceListModel model = new SourceListModel();
-	private ImageIcon imageIcon = ResourceLoader.ICON_MUSIC;
+	private ImageIcon imageIcon = ResourceLoader.ICON_APPICON;
 	private Icon playlistIcon = ResourceLoader.ICON_PLAYLIST;
 	private	SourceListCategory playlistCategory = new SourceListCategory("Playlists");
 

@@ -9,7 +9,7 @@ import javax.swing.ImageIcon;
 
 public class ResourceLoader {
 	
-	public static final String ICON_MUSIC_PATH  = "/icons/MBiTunesMusicPlaylist.png";
+	public static final String ICON_MUSIC_PATH  = "/icons/speaker2.png";
 	
 	
 	public static final ImageIcon ICON_BLUEGLOBE = getImageIcon("/com/explodingpixels/macwidgets/icons/DotMac.png");
@@ -17,7 +17,7 @@ public class ResourceLoader {
 	public static final ImageIcon ICON_PREFERENCES = getImageIcon("/com/explodingpixels/macwidgets/icons/PreferencesGeneral.png");
 	public static final ImageIcon ICON_GEAR = getImageIcon("/com/explodingpixels/macwidgets/icons/Advanced.png");
 	
-	public static final ImageIcon ICON_MUSIC = getImageIcon(ICON_MUSIC_PATH);
+	public static final ImageIcon ICON_MUSIC = getImageIcon("/icons/MBiTunesMusicPlaylist.png");
 	public static final ImageIcon ICON_MOVIES = getImageIcon("/icons/MBiTunesMoviesPlaylist.png");
 	public static final ImageIcon ICON_TVSHOWS = getImageIcon("/icons/MBiTunesTVShowsPlaylist.png");
 	public static final ImageIcon ICON_PODCASTS = getImageIcon("/icons/MBiTunes7PodcastsPlaylist.png");
@@ -25,7 +25,7 @@ public class ResourceLoader {
 	public static final ImageIcon ICON_PLAYLIST = getImageIcon("/icons/MBiTunes7Playlist.png");
 	public static final ImageIcon ICON_SMARTPLAYLIST = getImageIcon("/icons/MBiTunes7SmartPlaylist.png");
 	public static final ImageIcon ICON_ARES = getImageIcon("/icons/Ares16.png");
-	public static final ImageIcon ICON_EMULE = getImageIcon("/icons/emule16.png");
+	public static final ImageIcon ICON_EMULE = getImageIcon("/icons/emule.png");
 	public static final ImageIcon ICON_TXTFIELD_CLOSE = getImageIcon("/icons/close.png");
 	public static final ImageIcon ICON_TXTFIELD_SEARCH = getImageIcon("/icons/lupa.png");
 	public static final ImageIcon ICON_APPICON = getImageIcon(ICON_MUSIC_PATH);

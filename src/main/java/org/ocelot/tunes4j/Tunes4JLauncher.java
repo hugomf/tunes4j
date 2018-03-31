@@ -22,8 +22,6 @@ public class Tunes4JLauncher {
 		LiquidLookAndFeel.setLiquidDecorations(true, "mac");
 		UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
 		
-		//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		
 		//MimeUtil.registerMimeDetector("eu.medsea.mimeutil.detector.MagicMimeMimeDetector");
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
