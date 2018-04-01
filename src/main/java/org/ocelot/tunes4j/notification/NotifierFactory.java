@@ -14,7 +14,8 @@ public class NotifierFactory {
 		 if(SystemUtils.IS_OS_LINUX)
 			 return new UbuntuNotifier();
 	     if(SystemUtils.IS_OS_MAC)
-	    	  	return new MacNotifier();
+	    	 	return new SwingNotifier();
+	    	  	//return new MacNotifier();
 		
 	      return new ConsoleNotifier();
 	}

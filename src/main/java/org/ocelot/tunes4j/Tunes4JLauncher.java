@@ -8,8 +8,6 @@ import org.ocelot.tunes4j.gui.ApplicationWindow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.birosoft.liquid.LiquidLookAndFeel;
-
 @Component
 public class Tunes4JLauncher {
 
@@ -19,8 +17,9 @@ public class Tunes4JLauncher {
 	public void launch() throws ClassNotFoundException, InstantiationException, 
 		IllegalAccessException, UnsupportedLookAndFeelException {
 
-		LiquidLookAndFeel.setLiquidDecorations(true, "mac");
-		UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
+		//LiquidLookAndFeel.setLiquidDecorations(true, "mac");
+		//UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
+		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		
 		//MimeUtil.registerMimeDetector("eu.medsea.mimeutil.detector.MagicMimeMimeDetector");
 		SwingUtilities.invokeLater(new Runnable() {

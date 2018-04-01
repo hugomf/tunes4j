@@ -21,6 +21,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
+import javax.swing.SwingUtilities;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -264,8 +265,8 @@ public class MediaTable {
 					if (e.getClickCount() == 2 && rowAtPoint > -1) {
 						// int row = table.convertRowIndexToModel(rowAtPoint);
 						if (row > -1) {
-							parentFrame.getPlayer().reset();
 							parentFrame.getPlayer().open(getSelectedFile());
+							parentFrame.getPlayer().reset();
 							parentFrame.getPlayer().play();
 						}
 					}
@@ -282,10 +283,24 @@ public class MediaTable {
 		if(row!=-1) {
 			Song bean = (Song) model.getRow(row);
 			String filePath = bean.getPath() + File.separator + bean.getFileName();
-			NotifierFactory.instance().push(bean.getTitle(), "Itunes4j", bean.getArtist());
+			triggerNotification(bean);
 			return new File(filePath);
 		}
 		return null;
+	}
+
+	private void triggerNotification(Song bean) {
+		
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				NotifierFactory.instance().push(bean.getTitle(), "Itunes4j", bean.getArtist());
+				
+			}
+		});
+		
 	}
 	
 

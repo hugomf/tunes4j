@@ -50,6 +50,7 @@ public class Tunes4JAudioPlayer implements BasicPlayerListener {
 	
 	public void reset() {
 		try {
+			player.seek(0);
 			player.stop();
 		} catch (BasicPlayerException e) {
 			e.printStackTrace();
