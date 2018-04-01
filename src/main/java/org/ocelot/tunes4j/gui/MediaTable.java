@@ -1,5 +1,6 @@
 package org.ocelot.tunes4j.gui;
 
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,8 +33,8 @@ import org.ocelot.tunes4j.dao.ColumnRepository;
 import org.ocelot.tunes4j.dao.SongRepository;
 import org.ocelot.tunes4j.dto.Column;
 import org.ocelot.tunes4j.dto.Song;
-import org.ocelot.tunes4j.notification.MacNotifier;
 import org.ocelot.tunes4j.notification.NotifierFactory;
+import org.ocelot.tunes4j.utils.ImageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -296,7 +297,8 @@ public class MediaTable {
 			
 			@Override
 			public void run() {
-				NotifierFactory.instance().push(bean.getTitle(), "Itunes4j", bean.getArtist());
+				Image image = ImageUtils.read(bean.getArtWork());
+				NotifierFactory.instance().push(image, bean.getAlbum(), bean.getTitle(), bean.getArtist());
 				
 			}
 		});

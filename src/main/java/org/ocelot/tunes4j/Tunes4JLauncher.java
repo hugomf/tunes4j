@@ -8,6 +8,8 @@ import org.ocelot.tunes4j.gui.ApplicationWindow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import eu.medsea.mimeutil.MimeUtil;
+
 @Component
 public class Tunes4JLauncher {
 
@@ -21,7 +23,7 @@ public class Tunes4JLauncher {
 		//UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		
-		//MimeUtil.registerMimeDetector("eu.medsea.mimeutil.detector.MagicMimeMimeDetector");
+		MimeUtil.registerMimeDetector("eu.medsea.mimeutil.detector.MagicMimeMimeDetector");
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				try {

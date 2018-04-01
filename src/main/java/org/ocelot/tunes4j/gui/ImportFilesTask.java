@@ -13,6 +13,8 @@ import org.ocelot.tunes4j.taggers.Tagger;
 import org.ocelot.tunes4j.utils.FileUtils;
 import org.ocelot.tunes4j.utils.ResourceLoader;
 
+import eu.medsea.mimeutil.MimeUtil;
+
 
 public class ImportFilesTask extends SwingWorker<Object, Object> {
 
@@ -41,12 +43,12 @@ public class ImportFilesTask extends SwingWorker<Object, Object> {
 		Tagger tagger = registry.getInsance(this.strategy);
 		while( i < fileList.size() &&  !isCancelled() ) {
 			file = fileList.get(i);
-			//if(MimeUtil.getMimeTypes(file).contains("audio/mpeg")) {
+			if(MimeUtil.getMimeTypes(file).contains("audio/mpeg")) {
 				Song bean = tagger.parse(file);
 				if(bean!=null) {
 					publish(bean);
 				}
-			//}
+			}
 			setProgress(100 * (++i) / size);
 		}
 		return null;

@@ -4,6 +4,10 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class ImageUtils {
 
@@ -16,6 +20,15 @@ public class ImageUtils {
 	    g2.dispose();
 
 	    return resizedImg;
+	}
+	
+	public static Image read(byte[] bytes) {
+		try {
+			return ImageIO.read(new ByteArrayInputStream(bytes));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 }

@@ -10,7 +10,8 @@ public class RegistryTagger {
 	public void registerAll() {
 		register("org.ocelot.tunes4j.taggers.JAudioTaggerImpl");
 		register("org.ocelot.tunes4j.taggers.JID3TaggerImpl");
-		//register("org.ocelot.tunes4j.taggers.EntaggedTaggerImpl");
+		register("org.ocelot.tunes4j.taggers.EntaggedTaggerImpl");
+		register("org.ocelot.tunes4j.taggers.Mp3agicTaggerImpl");
 	}
 	
 	public void register(String classFullName){

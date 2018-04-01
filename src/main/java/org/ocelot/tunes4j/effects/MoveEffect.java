@@ -19,7 +19,7 @@ public class MoveEffect {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-	            	 System.out.println(currentLocation);
+	            	 //System.out.println(currentLocation);
 	            	
 	            	 if(currentLocation.x <= finalLocation.x && 
 	            			 currentLocation.y <= finalLocation.y) {

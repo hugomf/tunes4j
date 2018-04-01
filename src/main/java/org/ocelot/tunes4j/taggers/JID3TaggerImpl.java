@@ -30,7 +30,7 @@ public class JID3TaggerImpl implements Tagger {
 	@Override
 	public void save(File sourceFile, Song mp3Bean) {
 		MediaFile mp3file = new MP3File(sourceFile);
-		//System.out.println("mp3Bean=" + mp3Bean);
+		System.out.println("mp3Bean=" + mp3Bean);
 		try {
 			ID3V2_3_0Tag oID3V2Tag = new ID3V2_3_0Tag();
 			ID3V1_1Tag oID3V1_1Tag = new ID3V1_1Tag();

@@ -53,7 +53,7 @@ public class ResourceLoader {
 	public static final ImageIcon boxBackgroundOn = getImageIcon("/icons/search-bg-on.png");
 	
 	
-	public static final String ID3TAGGER_PARSER = "org.ocelot.tunes4j.taggers.JID3TaggerImpl";
+	public static final String ID3TAGGER_PARSER = "org.ocelot.tunes4j.taggers.Mp3agicTaggerImpl";
 	
 	//private  Log log = LogFactory.getLog(ResourceLoader.class);
 	

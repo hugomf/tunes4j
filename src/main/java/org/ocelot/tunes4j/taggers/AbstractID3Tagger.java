@@ -5,6 +5,8 @@ import java.io.FilenameFilter;
 
 import org.ocelot.tunes4j.dto.Song;
 
+import eu.medsea.mimeutil.MimeUtil;
+
 
 public abstract class AbstractID3Tagger {
 	
@@ -17,7 +19,7 @@ public abstract class AbstractID3Tagger {
 			boolean result = true;
 			if (!file.isDirectory())  {
 				if(name.endsWith(".mp3")) {
-					//result = MimeUtil.getMimeTypes(file).contains("audio/mpeg3");
+					result = MimeUtil.getMimeTypes(file).contains("audio/mpeg3");
 				}
 			}
 			return result;

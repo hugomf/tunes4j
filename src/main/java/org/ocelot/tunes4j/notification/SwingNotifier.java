@@ -1,8 +1,8 @@
 package org.ocelot.tunes4j.notification;
 
-import org.ocelot.tunes4j.utils.ResourceLoader;
+import java.awt.Image;
 
-import com.birosoft.liquid.LiquidLookAndFeel;
+import org.ocelot.tunes4j.utils.ResourceLoader;
 
 public class SwingNotifier implements Notifier {
 
@@ -11,7 +11,15 @@ public class SwingNotifier implements Notifier {
 	@Override
 	public void push(String message, String title, String subtitle) {
 
-		notifier.display(ResourceLoader.ICON_APPICON.getImage(), title, subtitle, message);
+		notifier.display(null, title, subtitle, message);
+	}
+
+	@Override
+	public void push(Image image, String message, String title, String subtitle) {
+		if(image==null) {
+			image = ResourceLoader.ICON_APPICON.getImage();
+		}
+		notifier.display(image, title, subtitle, message);
 	}
 
 }

@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -20,6 +21,13 @@ public class Song  {
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid", strategy = "uuid")
 	private String id;
+	
+	@Lob
+	@Column
+	private byte[] artWork;
+	
+	@Column
+	private String artMimeType;
 	
 	@Column
 	private String path;
