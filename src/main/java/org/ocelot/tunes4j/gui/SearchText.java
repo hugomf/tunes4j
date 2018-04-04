@@ -5,18 +5,12 @@ import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-
-import org.ocelot.tunes4j.utils.GUIUtilities;
 
 public class SearchText extends JTextField {
 	
@@ -28,41 +22,52 @@ public class SearchText extends JTextField {
 		this.mediaTable = table;
 		initialize();
 	}
-
 	
 	public void initialize() {
 		putClientProperty("JTextField.variant", "search");
 		setForeground(Color.GRAY);
 		setFont(new Font(getFont().getName(),Font.ITALIC, 12));
 		
+
+		getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				getSorter().setRowFilter(null);
+			}
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+			}
+		});
+		
+		
 		addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
+			public void keyReleased(KeyEvent e) {
 				if (mediaTable != null) {
 					String text = getText();
-					TableRowSorter<TableModel> sorter = (TableRowSorter<TableModel>) mediaTable
-							.getSorter();
+
 					if (text.length() == 0) {
-						sorter.setRowFilter(null);
+						getSorter().setRowFilter(null);
 					} else {
-						sorter.setRowFilter(RowFilter.regexFilter(text));
+						String pattern = String.format("(?i)%s", text);
+						getSorter().setRowFilter(RowFilter.regexFilter(pattern));
 					}
 				}
 			}});
-		
+	}
+
+	private TableRowSorter<TableModel> getSorter() {
+		TableRowSorter<TableModel> sorter = 
+				(TableRowSorter<TableModel>) mediaTable
+					.getSorter();
+		return sorter;
 	}
 	
-	public static void main(String[] args) {
-		
-		SearchText text = new SearchText(null);
-		JFrame frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.add(text);
-		frame.pack();
-		GUIUtilities.centerWindow(frame);
-		frame.setVisible(true);
-		
-	}
 	
 }
 

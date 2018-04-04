@@ -57,7 +57,6 @@ public class ResourceLoader {
 	
 	public static final String ID3TAGGER_PARSER = "org.ocelot.tunes4j.taggers.Mp3agicTaggerImpl";
 	
-	//private  Log log = LogFactory.getLog(ResourceLoader.class);
 	
 	private static ImageIcon getImageIcon(String imgName) {
         URL imgURL = getUrl(imgName);

@@ -166,9 +166,8 @@ public class MediaTable {
 	private void loadData() {
 		List<Song> list = (List<Song>) audioService.findAll();
 		if (CollectionUtils.isNotEmpty(list)) {
-			for (Object row : list) {
-				Song bean = (Song) row;
-				model.addRow(bean);
+			for (Song song : list) {
+				model.addRow(song);
 			}
 		}
 	}
@@ -272,6 +271,7 @@ public class MediaTable {
 		int selectedRow = table.getSelectedRow();
 		if(selectedRow < 0) {
 			JOptionPane.showMessageDialog(parentFrame, "Please choose a song!", "Aviso", JOptionPane.WARNING_MESSAGE);
+			parentFrame.getPlayerPanel().getPlayButton().setSelected(false);
 			return;
 		}
 		int row = table.convertRowIndexToModel(selectedRow);
@@ -297,6 +297,7 @@ public class MediaTable {
 				parentFrame.getPlayer().open(songFile);
 				parentFrame.getPlayer().reset();
 				parentFrame.getPlayer().play();
+				parentFrame.getPlayerPanel().getPlayButton().setSelected(true);
 			}).start();
 	}
 

@@ -5,7 +5,7 @@ import java.io.File;
 import javax.swing.JFrame;
 
 import org.ocelot.tunes4j.player.Tunes4JAudioPlayer;
-import org.ocelot.tunes4j.utils.GUIUtilities;
+import org.ocelot.tunes4j.utils.GUIUtils;
 
 public class PlayerPanelTest {
 	
@@ -18,7 +18,7 @@ public class PlayerPanelTest {
 			Tunes4JAudioPlayer player = new Tunes4JAudioPlayer();
 
 			public Tunes4JAudioPlayer getPlayer() {
-				player.open(new File("/Users/hugo/eclipse-workspace2/tunes4j/src/main/resources/Eye of the Tiger.mp3"));
+				player.open(new File("/Users/hugo/eclipse-workspace2/LaunchAndLearn/resources/amiga.mp3"));
 				return player;
 			};
 			
@@ -37,7 +37,7 @@ public class PlayerPanelTest {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(playerPanel);
 		frame.pack();
-		GUIUtilities.centerWindow(frame);
+		GUIUtils.centerWindow(frame);
 		frame.setVisible(true);
 
 	}

@@ -9,6 +9,7 @@ import org.ocelot.tunes4j.dao.SongRepository;
 import org.ocelot.tunes4j.dto.Song;
 import org.ocelot.tunes4j.taggers.RegistryTagger;
 import org.ocelot.tunes4j.taggers.Tagger;
+import org.ocelot.tunes4j.utils.ResourceLoader;
 
 public class MyTableModelListener implements TableModelListener {
 
@@ -29,7 +30,7 @@ public class MyTableModelListener implements TableModelListener {
 					System.out.println("Update tag:" + bean);
 					RegistryTagger registry = new RegistryTagger();
 					Tagger tagger = registry
-							.getInsance("org.ocelot.tunes4j.taggers.JID3TaggerImpl");
+							.getInsance(ResourceLoader.ID3TAGGER_PARSER);
 					String filePath = bean.getPath() + "\\"
 							+ bean.getFileName();
 					tagger.save(new File(filePath), bean);

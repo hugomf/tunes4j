@@ -12,9 +12,8 @@ import javazoom.jlgui.basicplayer.BasicPlayerEvent;
 import javazoom.jlgui.basicplayer.BasicPlayerException;
 import javazoom.jlgui.basicplayer.BasicPlayerListener;
 
-public class Tunes4JAudioPlayer implements BasicPlayerListener {  
-	
-	
+public class Tunes4JAudioPlayer implements BasicPlayerListener {
+
 	public static final int STATE_UNSTARTED = 0;
 
 	public static final int STATE_RUNNING = 1;
@@ -22,32 +21,31 @@ public class Tunes4JAudioPlayer implements BasicPlayerListener {
 	public static final int STATE_STOPPED = 2;
 
 	public static final int STATE_SUSPENDED = 3;
-	
-    private int runningState = STATE_UNSTARTED;
-	
-    private BasicPlayer player;
-	
+
+	private int runningState = STATE_UNSTARTED;
+
+	private BasicPlayer player;
+
 	private ProgressUpdateListener listener;
-	
+
 	private BasicController control;
-	
+
 	private Map properties;
-	
+
 	public Tunes4JAudioPlayer() {
 		player = new BasicPlayer();
 	}
-	
-	
+
 	public void open(File file) {
 		control = (BasicController) player;
-		player.addBasicPlayerListener(this);	
+		player.addBasicPlayerListener(this);
 		try {
 			control.open(file);
 		} catch (BasicPlayerException e) {
 			e.printStackTrace();
-		}	
+		}
 	}
-	
+
 	public void reset() {
 		try {
 			player.seek(0);
@@ -60,12 +58,12 @@ public class Tunes4JAudioPlayer implements BasicPlayerListener {
 	public void play() {
 		try {
 			control.play();
-			
+
 		} catch (BasicPlayerException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void pause() {
 		try {
 			player.pause();
@@ -73,8 +71,7 @@ public class Tunes4JAudioPlayer implements BasicPlayerListener {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	public void resume() {
 		try {
 			player.resume();
@@ -82,20 +79,20 @@ public class Tunes4JAudioPlayer implements BasicPlayerListener {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void skip(int ms) {
 		try {
 
 			int totalBytes = (int) this.properties.get("mp3.length.bytes");
-			double rate  = ms* 1.0 / 1000;
+			double rate = ms * 1.0 / 1000;
 			long skipBytes = (long) Math.round(totalBytes * rate) - 245000;
-			
+
 			player.seek(skipBytes);
 		} catch (BasicPlayerException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void stop() {
 		try {
 			player.stop();
@@ -103,7 +100,7 @@ public class Tunes4JAudioPlayer implements BasicPlayerListener {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void setGain(double newGain) {
 		try {
 			player.setGain(newGain);
@@ -111,18 +108,16 @@ public class Tunes4JAudioPlayer implements BasicPlayerListener {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	@Override
 	public void opened(Object stream, Map properties) {
-		 System.out.println("opened : "+properties.toString()); 
-		 this.properties = properties;
+		System.out.println("opened : " + properties.toString());
+		this.properties = properties;
 	}
-	
+
 	public Map getProperties() {
 		return this.properties;
 	}
-
 
 	@Override
 	public void progress(int bytesread, long microseconds, byte[] pcmdata, Map properties) {
@@ -130,55 +125,57 @@ public class Tunes4JAudioPlayer implements BasicPlayerListener {
 		listener.updateProgress(event);
 	}
 
-	  /**
-	   * Notification callback for basicplayer events such as opened, eom ...
-	   * 
-	   * @param event
-	   */
-	  public void stateUpdated(BasicPlayerEvent event) {
-		  setRunningState(event);
-	  }
+	public void stateUpdated(BasicPlayerEvent event) {
+		setRunningState(event);
+	}
 
-	  public void setController(BasicController controller)
-	  {
-		  System.out.println("setController : "+controller);
-	  }
-	  
-	  public void setRunningState(BasicPlayerEvent event) {
-		  
-		  int code = event.getCode();
-		  
-		  switch (code) {
-		  	case BasicPlayerEvent.OPENED : runningState = STATE_UNSTARTED; break; 
-		  	case BasicPlayerEvent.PLAYING : runningState = STATE_RUNNING; break;
-		  	case BasicPlayerEvent.RESUMED : runningState = STATE_RUNNING; break;
-		  	case BasicPlayerEvent.PAUSED : runningState = STATE_SUSPENDED; break; 
-		  	case BasicPlayerEvent.STOPPED : runningState = STATE_STOPPED; break; 
-		  	default : runningState = STATE_UNSTARTED;
-		  }
-	  }
-	  
-	  public int getCurrentStatus() {
-		  return runningState;
-	  }
+	public void setController(BasicController controller) {
+		System.out.println("setController : " + controller);
+	}
+
+	public void setRunningState(BasicPlayerEvent event) {
+
+		int code = event.getCode();
+
+		switch (code) {
+		case BasicPlayerEvent.OPENED:
+			runningState = STATE_UNSTARTED;
+			break;
+		case BasicPlayerEvent.PLAYING:
+			runningState = STATE_RUNNING;
+			break;
+		case BasicPlayerEvent.RESUMED:
+			runningState = STATE_RUNNING;
+			break;
+		case BasicPlayerEvent.PAUSED:
+			runningState = STATE_SUSPENDED;
+			break;
+		case BasicPlayerEvent.STOPPED:
+			runningState = STATE_STOPPED;
+			break;
+		default:
+			runningState = STATE_UNSTARTED;
+		}
+	}
+
+	public int getCurrentStatus() {
+		return runningState;
+	}
 
 	public void addProgressUpdateListener(ProgressUpdateListener progressUpdateListener) {
 		this.listener = progressUpdateListener;
 	}
-	
+
 	public boolean isClosed() {
-		return runningState == Tunes4JAudioPlayer.STATE_UNSTARTED ||
-				runningState == Tunes4JAudioPlayer.STATE_STOPPED;
+		return runningState == Tunes4JAudioPlayer.STATE_UNSTARTED || runningState == Tunes4JAudioPlayer.STATE_STOPPED;
 	}
-	
+
 	public boolean isPlaying() {
-		return runningState == Tunes4JAudioPlayer.STATE_RUNNING;		
+		return runningState == Tunes4JAudioPlayer.STATE_RUNNING;
 	}
-	
+
 	public boolean isPaused() {
-		return runningState == Tunes4JAudioPlayer.STATE_SUSPENDED;		
+		return runningState == Tunes4JAudioPlayer.STATE_SUSPENDED;
 	}
 
-
-	
 }

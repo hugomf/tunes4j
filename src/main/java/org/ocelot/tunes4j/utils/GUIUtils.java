@@ -9,7 +9,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-public class GUIUtilities {
+public class GUIUtils {
 
 //	public static void centerWindow(Window window) {
 //		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();

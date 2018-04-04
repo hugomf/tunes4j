@@ -108,6 +108,9 @@ public class ApplicationWindow extends JFrame {
 		return this.mediaTable;
 	}
 
+	public PlayerPanel getPlayerPanel() {
+		return this.playerPanel;
+	}
 
 	public JMenuBar createMenuBar() {
 		applicationMenuBar = new ApplicationMenuBar(mediaTable, leftSplitPane);

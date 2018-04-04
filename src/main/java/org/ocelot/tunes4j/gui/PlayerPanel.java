@@ -35,17 +35,21 @@ public class PlayerPanel extends JPanel {
 	private JSlider slider = new JSlider();
 	
 	private JLabel label = new JLabel();
+	
+	private JToggleButton playButton = new JToggleButton();
+	
+	private JToggleButton stopButton = new JToggleButton();
 
 	public PlayerPanel(ApplicationWindow parentFrame) {
 
 
 		this.player = parentFrame.getPlayer();
-		JToggleButton play = new JToggleButton();
-		play.setIcon(ResourceLoader.PLAY);
-		play.setSelectedIcon(ResourceLoader.PAUSE);
-		play.setBorder(BorderFactory.createEmptyBorder());
-		play.setBorderPainted(false);
-		play.addItemListener(new ItemListener() {
+		
+		this.playButton.setIcon(ResourceLoader.PLAY);
+		this.playButton.setSelectedIcon(ResourceLoader.PAUSE);
+		this.playButton.setBorder(BorderFactory.createEmptyBorder());
+		this.playButton.setBorderPainted(false);
+		this.playButton.addItemListener(new ItemListener() {
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -62,16 +66,15 @@ public class PlayerPanel extends JPanel {
 			}
 		});
 
-		JToggleButton stop = new JToggleButton();
-		stop.setBorder(BorderFactory.createEmptyBorder());
-		stop.setIcon(ResourceLoader.STOP);
-		stop.setSelectedIcon(ResourceLoader.STOP_ON);
-		stop.setBorderPainted(false);
-		stop.addActionListener(new ActionListener() {
+		stopButton.setBorder(BorderFactory.createEmptyBorder());
+		stopButton.setIcon(ResourceLoader.STOP);
+		stopButton.setSelectedIcon(ResourceLoader.STOP_ON);
+		stopButton.setBorderPainted(false);
+		stopButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				stop.setSelected(false);
+				stopButton.setSelected(false);
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
@@ -79,7 +82,7 @@ public class PlayerPanel extends JPanel {
 						System.out.println(slider.getValue());
 						slider.setValue(0);
 						System.out.println(slider.getValue());
-						play.setSelected(false);
+						playButton.setSelected(false);
 					}
 				}).start();
 
@@ -88,6 +91,7 @@ public class PlayerPanel extends JPanel {
 
 		slider.setValue(0);
 		slider.setMaximum(1000);
+		
 		slider.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
@@ -101,6 +105,7 @@ public class PlayerPanel extends JPanel {
 
 			}
 		});
+		
 		slider.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -110,35 +115,43 @@ public class PlayerPanel extends JPanel {
 			}
 
 		});
+		
 		label.setText("00:00:00.00");
 		label.setFont(new Font("Arial", Font.PLAIN, 15));
+		
 		player.addProgressUpdateListener(new ProgressUpdateListener() {
 
 			@Override
 			public void updateProgress(PlayProgressEvent e) {
-				shouldWaitForJSliderUpdate(slider, label, e);
+				
+				if (!isValueLocked()) {
+					int totalBytes = (int) player.getProperties().get("mp3.length.bytes");
+					int bytesread = e.getCurrentProgress().intValue();
+					label.setText(getTimeProgress(bytesread));
+					long value = bytesread * 1000l / totalBytes;
+					slider.setValue((int) value);
+				}
+				
 			}
 
 		});
 		
 		setLayout(new FlowLayout());
-		add(play);
-		add(stop);
+		add(playButton);
+		add(stopButton);
 		add(slider);
 		add(label);
 		
 	}
-
-	private void shouldWaitForJSliderUpdate(JSlider slider, final JLabel label, PlayProgressEvent e) {
-		if (!isValueLocked()) {
-			int totalBytes = (int) player.getProperties().get("mp3.length.bytes");
-			int bytesread = e.getCurrentProgress().intValue();
-			label.setText(getTimeProgress(bytesread));
-
-			long value = bytesread * 1000l / totalBytes;
-			slider.setValue((int) value);
-		}
+	
+	public JToggleButton getPlayButton() {
+		return this.playButton;
 	}
+
+	public JToggleButton getStopButton() {
+		return this.stopButton;
+	}
+
 
 	public String getTimeProgress(long bytesread) {
 		float frameRate = (float) player.getProperties().get("mp3.framerate.fps");

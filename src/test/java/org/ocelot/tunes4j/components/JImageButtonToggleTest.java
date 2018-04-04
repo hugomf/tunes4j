@@ -6,7 +6,7 @@ import java.awt.event.ItemListener;
 import javax.swing.JFrame;
 import javax.swing.JToggleButton;
 
-import org.ocelot.tunes4j.utils.GUIUtilities;
+import org.ocelot.tunes4j.utils.GUIUtils;
 import org.ocelot.tunes4j.utils.ResourceLoader;
 
 public class JImageButtonToggleTest {
@@ -40,7 +40,7 @@ public class JImageButtonToggleTest {
 		JFrame frame = new JFrame();
 		frame.getContentPane().add(button1);
 		frame.pack();
-		GUIUtilities.centerWindow(frame);
+		GUIUtils.centerWindow(frame);
 		frame.setVisible(true);
 	}
 
