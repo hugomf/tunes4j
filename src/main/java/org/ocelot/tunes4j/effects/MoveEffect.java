@@ -8,10 +8,18 @@ import java.util.concurrent.CountDownLatch;
 
 import javax.swing.Timer;
 
-public class MoveEffect {
+public class MoveEffect  {
 	
+	private Point initLocation;
 	
-	public static Timer moveIn(Window window, Point initLocation, Point finalLocation, CountDownLatch lock) {
+	private Point finalLocation;
+	
+	public MoveEffect(Point initLocation, Point finalLocation) {
+		this.initLocation = initLocation;
+		this.finalLocation = finalLocation;
+	}
+	
+	public void apply(Window window, CountDownLatch lock) {
 
 		 Point currentLocation = initLocation;
 				 
@@ -19,12 +27,10 @@ public class MoveEffect {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-	            	 //System.out.println(currentLocation);
-	            	
-	            	 if(currentLocation.x <= finalLocation.x && 
+	            	 if(currentLocation.x <= finalLocation.x &&
 	            			 currentLocation.y <= finalLocation.y) {
-	            		 lock.countDown();
 	            		 ((Timer)e.getSource()).stop();
+	            		 lock.countDown();
 	            	 }
 
 	         	if(currentLocation.x > finalLocation.x ) 
@@ -40,8 +46,6 @@ public class MoveEffect {
 		 timer.setRepeats(true);
 		 timer.setCoalesce(true);
 		 timer.start();
-		 return timer;
-		
 	}
 
 }

@@ -85,7 +85,7 @@ public class SimplePlayer {
 
 	public static void main(String[] args) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		SimplePlayer player = new SimplePlayer();
-		player.open("/Users/hugo/eclipse-workspace2/tunes4j/resources/amiga.mp3");
+		player.open("/Users/hugo/eclipse-workspace2/tunes4j/src/main/resources/Eye of the Tiger.mp3");
 
 	}
 	

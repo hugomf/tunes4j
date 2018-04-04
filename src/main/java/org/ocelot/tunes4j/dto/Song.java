@@ -24,6 +24,7 @@ public class Song  {
 	
 	@Lob
 	@Column
+	//@Convert(converter = OptionalConverter.class)
 	private byte[] artWork;
 	
 	@Column

@@ -1,33 +1,17 @@
 package org.ocelot.tunes4j.gui;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenuBar;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSlider;
 import javax.swing.JSplitPane;
-import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.ocelot.tunes4j.dao.PlayListRepository;
 import org.ocelot.tunes4j.dto.PlayList;
-import org.ocelot.tunes4j.event.PlayProgressEvent;
-import org.ocelot.tunes4j.event.ProgressUpdateListener;
 import org.ocelot.tunes4j.player.Tunes4JAudioPlayer;
 import org.ocelot.tunes4j.utils.ResourceLoader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,27 +29,30 @@ import com.explodingpixels.macwidgets.UnifiedToolBar;
 public class ApplicationWindow extends JFrame {
 
 	private static final long serialVersionUID = -7319833806607935833L;
-	private LeftSplitPane leftSplitPane;
-	private JSplitPane splitPane;
-	private ApplicationMenuBar applicationMenuBar;
 	
 	@Autowired
 	private PlayListRepository playListDao;
 	
 	@Autowired
 	private MediaTable mediaTable;
+
+	private LeftSplitPane leftSplitPane;
+	
+	private JSplitPane splitPane;
+
+	private ApplicationMenuBar applicationMenuBar;
+	
+	private PlayerPanel playerPanel;
 	
 	private Tunes4JAudioPlayer player;
 	
-	private boolean sliderValueLocked = false;
-	
 	private SourceListModel model = new SourceListModel();
-	private ImageIcon imageIcon = ResourceLoader.ICON_APPICON;
-	private Icon playlistIcon = ResourceLoader.ICON_PLAYLIST;
+	
 	private	SourceListCategory playlistCategory = new SourceListCategory("Playlists");
 
 	public void renderUI() {
 		player = new Tunes4JAudioPlayer();
+		playerPanel = new PlayerPanel(this);
 		UnifiedToolBar toolBar = createUnifiedToolBar();
 		splitPane = createSplitPane();
 		setJMenuBar(createMenuBar());
@@ -75,7 +62,7 @@ public class ApplicationWindow extends JFrame {
 		setSize(800, 600);
 		setLocationRelativeTo(null);
 		loadPlayList();
-		setIconImage(imageIcon.getImage());
+		setIconImage(ResourceLoader.ICON_APPICON.getImage());
 		setVisible(true);
 		pack();
 		
@@ -92,8 +79,10 @@ public class ApplicationWindow extends JFrame {
 
 		UnifiedToolBar toolBar = new UnifiedToolBar();
 		VolumePanel volPanel =  new VolumePanel(player);
+		
+		
 		toolBar.addComponentToLeft(volPanel);
-		toolBar.addComponentToCenter(getPlayerPanel());
+		toolBar.addComponentToCenter(this.playerPanel);
 		toolBar.addComponentToRight(MacButtonFactory
 				.makeUnifiedToolBarButton(new JButton("Advanced",
 						ResourceLoader.ICON_GEAR)));
@@ -104,73 +93,21 @@ public class ApplicationWindow extends JFrame {
 		return toolBar;
 	}
 
-	private JComponent getPlayerPanel() {
-
-		JPanel panel = new JPanel();
-		JSlider slider = new JSlider();
-		JLabel label = new JLabel();
-		
-		PlayButton playButton = new PlayButton(player, mediaTable);
-		CloseButton closeButton = new CloseButton(player, slider, playButton);
-		
-		slider.setValue(0);
-		slider.setMaximum(1000);	
-		slider.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				if (slider.getValueIsAdjusting()) {
-					sliderValueLocked = true;
-					int value = slider.getValue();
-					int totalBytes = (int) player.getProperties().get("mp3.length.bytes");
-					long bytesread = (long) value * totalBytes /1000l;
-					label.setText(getTimeProgress(bytesread));
-				}
-				
-			}
-		});
-		slider.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				JSlider source  = (JSlider) e.getSource();
-				player.skip(source.getValue());
-				sliderValueLocked = false;
-			}
-
-		});
-		
-		label.setText("00:00:00.00");
-		label.setFont(new Font("Arial", Font.PLAIN, 15));
-		player.addProgressUpdateListener(new ProgressUpdateListener() {
-			
-			@Override
-			public void updateProgress(PlayProgressEvent e) {
-				shouldWaitForJSliderUpdate(slider, label, e);
-			}
-
-		});
-		
-		panel.setLayout(new FlowLayout());
-		panel.add(playButton);
-		panel.add(closeButton);
-		panel.add(slider);
-		panel.add(label);
-		return panel;
-	}
-
 	public void loadPlayList() {
 		List<PlayList> list = playListDao.findAll();
 		if (CollectionUtils.isNotEmpty(list)) {
 			for (PlayList row : list) {
 				System.out.println("row:" + row);
 				model.addItemToCategory(new SourceListItem(row.getName(),
-						playlistIcon), playlistCategory);
+						ResourceLoader.ICON_PLAYLIST), playlistCategory);
 			}
 		}
 	}
-
-	public JScrollPane getMediaTablePane() {
-		return mediaTable.getTablePane();
+	
+	public MediaTable getMediaTable() {
+		return this.mediaTable;
 	}
+
 
 	public JMenuBar createMenuBar() {
 		applicationMenuBar = new ApplicationMenuBar(mediaTable, leftSplitPane);
@@ -179,21 +116,6 @@ public class ApplicationWindow extends JFrame {
 	
 	public ApplicationMenuBar getApplicationMenuBar() {
 		return applicationMenuBar;
-	}
-	
-	private boolean isValueLocked() {
-		return sliderValueLocked;
-	}
-	
-	private void shouldWaitForJSliderUpdate(JSlider slider, final JLabel label, PlayProgressEvent e) {
-		if(!isValueLocked()) {
-			int totalBytes = (int) player.getProperties().get("mp3.length.bytes");
-			int bytesread = e.getCurrentProgress().intValue();
-			label.setText(getTimeProgress(bytesread));
-			
-			long value = bytesread * 1000l / totalBytes;
-			slider.setValue((int) value);
-		}
 	}
 	
 	public String getTimeProgress(long bytesread) {

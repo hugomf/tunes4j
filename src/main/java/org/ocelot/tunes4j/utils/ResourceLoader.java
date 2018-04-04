@@ -41,9 +41,11 @@ public class ResourceLoader {
 	public static final ImageIcon PAUSE_ON = getImageIcon("/icons/pause_on.png");
 	public static final ImageIcon STOP = getImageIcon("/icons/stop.png");
 	public static final ImageIcon STOP_ON = getImageIcon("/icons/stop_on.png");
+	
+	public static final ImageIcon txtClosed = getImageIcon("/icons/close.png");
+	public static final ImageIcon txtPressed = getImageIcon("/icons/close_pressed.png");
+	public static final ImageIcon txtHover = getImageIcon("/icons/close_hover.png");
 
-	//public static final ImageIcon  boxLeftOff = getImageIcon("/icons/search-left_option_off.png");
-	//public static final ImageIcon  boxLeftOn = getImageIcon("/icons/search-left_option_on.png");
 	public static final ImageIcon  boxRightOff = getImageIcon("/icons/search-right-off.png");
 	public static final ImageIcon  boxRighOn = getImageIcon("/icons/search-right-on.png");
 

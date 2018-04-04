@@ -45,8 +45,7 @@ public class PlayButton extends JLabel  {
 			public void mouseClicked(java.awt.event.MouseEvent e) {
 				if(player.isClosed()) {
 					setIcon(pauseIcon);
-					player.open(table.getSelectedFile());
-					player.play();
+					table.playSelectedRow();
 				}else if(player.isPlaying()) {
 					setIcon(playIcon);
 					player.pause();

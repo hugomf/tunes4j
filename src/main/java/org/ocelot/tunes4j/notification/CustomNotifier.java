@@ -23,7 +23,7 @@ import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.ocelot.tunes4j.effects.FadeEffect;
+import org.ocelot.tunes4j.components.JLabelSlider;
 import org.ocelot.tunes4j.effects.MoveEffect;
 import org.ocelot.tunes4j.utils.ImageUtils;
 import org.ocelot.tunes4j.utils.ResourceLoader;
@@ -39,7 +39,6 @@ public class CustomNotifier {
 	private JPanel mainPanel = new JPanel();
 	private JPanel panel = new JPanel();
 
-	private JLabel lblTitle = new JLabel();
 	private JLabel lblSubtitle = new JLabel();
 	private JLabel lblMessage = new JLabel();
 
@@ -49,7 +48,8 @@ public class CustomNotifier {
 			public void run() {
 				try {
 					CustomNotifier notifier = new CustomNotifier();
-					notifier.display(ResourceLoader.ICON_APPICON.getImage(), "Album", "Song Author", "Arthur's Theme (Best That You Can Do) - Remastered");
+					notifier.display(ResourceLoader.ICON_APPICON.getImage(),
+							"Arthur's Theme (Best That You Can Do) - Remastered", "Song Author", "Album");
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -61,29 +61,33 @@ public class CustomNotifier {
 
 	public void display(Image image, String title, String subtitle, String message) {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		//panel.setBorder(new LineBorder(Color.RED));
 
 		JLabel imagelbl = new JLabel();
 		ImageIcon icon = new ImageIcon(ImageUtils.resize(image, 40, 40));
 		imagelbl.setIcon(icon);
 		mainPanel.add(imagelbl, SwingConstants.CENTER);
 
+		//JLabel lblTitle = new JLabel(title, 40);
+		JLabel lblTitle = new JLabel(title);
 		lblTitle.setFont(new Font(lblTitle.getFont().getName(), Font.PLAIN, 12));
 		lblTitle.setText(title);
-		lblTitle.setHorizontalAlignment(SwingConstants.LEFT);
+		lblTitle.setPreferredSize(new Dimension(250, 20));
+		lblTitle.setOpaque(false);
 		panel.add(lblTitle);
 
 		lblSubtitle.setFont(new Font(lblSubtitle.getFont().getName(), Font.PLAIN, 11));
-		lblSubtitle.setText("<html>" + subtitle + "</html");
+		lblSubtitle.setText(subtitle);
 		lblSubtitle.setHorizontalAlignment(SwingConstants.LEFT);
 		panel.add(lblSubtitle);
 
 		lblMessage.setFont(new Font(lblMessage.getFont().getName(), Font.PLAIN, 10));
-		lblMessage.setText("<html>" + message + "</html>");
+		lblMessage.setText(message);
 		lblMessage.setHorizontalAlignment(SwingConstants.LEFT);
 		panel.add(lblMessage);
 
 		mainPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		mainPanel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		// mainPanel.setPreferredSize(new Dimension(WIDTH + 60, HEIGHT));
 		mainPanel.add(panel);
 
 		frame.setLocationRelativeTo(null);
@@ -91,48 +95,86 @@ public class CustomNotifier {
 		frame.setFocusableWindowState(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBackground(BACKGROUND_COLOR);
-		frame.setShape(new RoundRectangle2D.Double(0, 0, WIDTH, HEIGHT, 25, 25));
-
+		
 		Point moveTo = getSystemTrayLocation(WIDTH, HEIGHT);
 		Point moveFrom = getInitialLocation(moveTo);
 		frame.setLocation(moveFrom);
 		frame.add(mainPanel);
 		frame.pack();
-		FadeEffect.setWindowOpacity(frame, 0.75f);
+		frame.setShape(new RoundRectangle2D.Double(0, 0, frame.getWidth(), frame.getHeight(), 25, 25));
+		frame.setOpacity(0.75f);
 		frame.setVisible(true);
-		
+
 		SplashNotificationWorker worker = new SplashNotificationWorker(frame, moveFrom, moveTo);
 		worker.execute();
-
+		
 	}
-	
+
 	class SplashNotificationWorker extends SwingWorker<Boolean, Boolean> {
 
 		private JFrame frame;
 		private Point moveFrom;
 		private Point moveTo;
-		
+
 		public SplashNotificationWorker(JFrame frame, Point moveFrom, Point moveTo) {
 			this.frame = frame;
 			this.moveFrom = moveFrom;
 			this.moveTo = moveTo;
 		}
-		
+
 		@Override
 		protected Boolean doInBackground() throws Exception {
-			 CountDownLatch lock = new CountDownLatch(1);
-			 FadeEffect.fadeIn(frame, 0.75f, lock);
-			 MoveEffect.moveIn(frame, moveFrom, moveTo, lock);
-			 lock.await();
-			 return true;
+			CountDownLatch lock = new CountDownLatch(1);
+			new MoveEffect(moveFrom, moveTo).apply(frame, lock);
+			lock.await();
+			return true;
 		}
 		
 		@Override
 		protected void done() {
+			super.done();
 			sleep(CLOSE_DELAY);
-			FadeEffect.fadeOut(frame, 0.75f);
+			frame.setVisible(false);
+			frame.dispose();
 		}
+
 	}
+	
+	
+//	class OtherWorker extends SwingWorker<Boolean, Boolean> {
+//
+//		private JFrame frame;
+//		private JLabelSlider slider;
+//
+//		public OtherWorker(JFrame frame, JLabel slider) {
+//			this.frame = frame;
+//			this.slider = slider;
+//		}
+//
+//		@Override
+//		protected Boolean doInBackground() throws Exception {
+//			CountDownLatch lock = new CountDownLatch(1);
+//			slider.startSlideText(120);
+//			new Thread(()-> {
+//				
+//			});
+//			lock.await();
+//			frame.setVisible(false);
+//			frame.dispose();
+//			return true;
+//		}
+//
+//		@Override
+//		protected void done() {
+//			CountDownLatch lock = new CountDownLatch(1);
+//			//new FadeOutTransition(0.75f, 0.01f, 14).apply(frame, lock);
+//			//frame.setVisible(false);
+//			//frame.dispose();
+//
+//		}
+//	}
+	
+	
 
 	public void switchToDefaultLookAndFeel(JFrame frame) {
 		try {

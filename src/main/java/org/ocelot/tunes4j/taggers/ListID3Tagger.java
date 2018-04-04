@@ -1,14 +1,8 @@
 package org.ocelot.tunes4j.taggers;
 
 
-import java.awt.Toolkit;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.List;
-
-import javax.swing.SwingWorker;
-import javax.swing.event.TableModelEvent;
 
 import org.ocelot.tunes4j.dto.Song;
 

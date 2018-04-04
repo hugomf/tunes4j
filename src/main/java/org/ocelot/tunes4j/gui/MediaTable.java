@@ -16,13 +16,13 @@ import java.util.List;
 import javax.swing.DropMode;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
-import javax.swing.SwingUtilities;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -215,11 +215,6 @@ public class MediaTable {
 		TableUtils.makeSortable(table, sortDelegate);
 	}
 
-	// public void configureSort(BeanTableModel model) {
-	// RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(model);
-	// table.setRowSorter(sorter);
-	// }
-
 	public void configureTableListeners() {
 
 		final JPopupMenu popupMenu = new JPopupMenu();
@@ -254,7 +249,6 @@ public class MediaTable {
 				// Fix the sort order issue
 				if (rowAtPoint < 0)
 					return;
-				int row = table.convertRowIndexToModel(rowAtPoint);
 				if (table.isRowSelected(rowAtPoint)) {
 					if (table.isEditing()) {
 						table.getCellEditor().stopCellEditing();
@@ -264,12 +258,7 @@ public class MediaTable {
 						currentRow = rowAtPoint;
 					}
 					if (e.getClickCount() == 2 && rowAtPoint > -1) {
-						// int row = table.convertRowIndexToModel(rowAtPoint);
-						if (row > -1) {
-							parentFrame.getPlayer().open(getSelectedFile());
-							parentFrame.getPlayer().reset();
-							parentFrame.getPlayer().play();
-						}
+						playSelectedRow();
 					}
 				}
 
@@ -279,32 +268,38 @@ public class MediaTable {
 		table.addMouseListener(new PopClickListener(this));
 	}
 	
-	public File getSelectedFile() {
-		int row = table.convertRowIndexToModel(table.getSelectedRow());
-		if(row!=-1) {
-			Song bean = (Song) model.getRow(row);
-			String filePath = bean.getPath() + File.separator + bean.getFileName();
-			triggerNotification(bean);
-			return new File(filePath);
+	public void playSelectedRow() {
+		int selectedRow = table.getSelectedRow();
+		if(selectedRow < 0) {
+			JOptionPane.showMessageDialog(parentFrame, "Please choose a song!", "Aviso", JOptionPane.WARNING_MESSAGE);
+			return;
 		}
-		return null;
+		int row = table.convertRowIndexToModel(selectedRow);
+		Song bean = (Song) model.getRow(row);
+		triggerSongNotification(bean);
+		playSong(bean);
 	}
 
-	private void triggerNotification(Song bean) {
-		
-		
-		SwingUtilities.invokeLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				Image image = ImageUtils.read(bean.getArtWork());
-				NotifierFactory.instance().push(image, bean.getAlbum(), bean.getTitle(), bean.getArtist());
-				
+	private void triggerSongNotification(Song bean) {
+		new Thread(() -> {
+			Image image = null;
+			if (bean.getArtWork() != null) {
+				image = ImageUtils.read(bean.getArtWork());
 			}
-		});
-		
+			NotifierFactory.instance().push(image, bean.getAlbum(), bean.getTitle(), bean.getArtist());
+		}).start();
 	}
 	
+	public void playSong(Song bean) {
+			String filePath = bean.getPath() + File.separator + bean.getFileName();
+			File songFile = new File(filePath);
+			new Thread(() -> {
+				parentFrame.getPlayer().open(songFile);
+				parentFrame.getPlayer().reset();
+				parentFrame.getPlayer().play();
+			}).start();
+	}
+
 
 	public void addToggleVisibilityMenuItem(final JPopupMenu popupMenu,
 			String label, final boolean visibility) {

@@ -2,7 +2,6 @@ package org.ocelot.tunes4j.taggers;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 
 import org.apache.commons.lang.StringUtils;
 import org.ocelot.tunes4j.dto.Song;
@@ -28,14 +27,6 @@ public class Mp3agicTaggerImpl implements Tagger {
 			
 			if (mp3file.hasId3v1Tag()) {
 		        	ID3v1 id3v1Tag = mp3file.getId3v1Tag();
-		        	System.out.println("Track: " + id3v1Tag.getTrack());
-		        	System.out.println("Artist: " + id3v1Tag.getArtist());
-		        	System.out.println("Title: " + id3v1Tag.getTitle());
-		        	System.out.println("Album: " + id3v1Tag.getAlbum());
-		        	System.out.println("Year: " + id3v1Tag.getYear());
-		        	System.out.println("Genre: " + id3v1Tag.getGenre() + " (" + id3v1Tag.getGenreDescription() + ")");
-		        	System.out.println("Comment: " + id3v1Tag.getComment());
-		        	
 		        	song.setTrackNumber(id3v1Tag.getTrack());
 		        	song.setArtist(id3v1Tag.getArtist());
 		        	song.setTitle(id3v1Tag.getTitle());
@@ -46,27 +37,14 @@ public class Mp3agicTaggerImpl implements Tagger {
 			
 			if (mp3file.hasId3v2Tag()) {
 		        	ID3v2 id3v2Tag = mp3file.getId3v2Tag();
-		        	System.out.println("Track: " + id3v2Tag.getTrack());
-		        	System.out.println("Artist: " + id3v2Tag.getArtist());
-		        	System.out.println("Title: " + id3v2Tag.getTitle());
-		        	System.out.println("Album: " + id3v2Tag.getAlbum());
-		        	System.out.println("Year: " + id3v2Tag.getYear());
-		        	System.out.println("Genre: " + id3v2Tag.getGenre() + " (" + id3v2Tag.getGenreDescription() + ")");
-		        	System.out.println("Comment: " + id3v2Tag.getComment());
-		        	
-		        	
 		        	byte[] imageData = id3v2Tag.getAlbumImage();
-		            if (imageData != null) {
-						String mimeType = id3v2Tag.getAlbumImageMimeType();
-						song.setArtWork(imageData);
-						song.setArtMimeType(mimeType);
-						System.out.println("Mime type: " + mimeType);
-						System.out.println("length: " + imageData.length);
-						// Write image to file - can determine appropriate file extension from the mime type
-						//RandomAccessFile file = new RandomAccessFile("album-artwork", "rw");
-						//file.close();
-		            }
-		        	
+	            if (imageData != null) {
+					String mimeType = id3v2Tag.getAlbumImageMimeType();
+					song.setArtWork(imageData);
+					song.setArtMimeType(mimeType);
+					System.out.println("Mime type: " + mimeType);
+					System.out.println("length: " + imageData.length);
+	            }
 		        	song.setTrackNumber(id3v2Tag.getTrack());
 		        	song.setArtist(id3v2Tag.getArtist());
 		        	song.setTitle(id3v2Tag.getTitle());
@@ -93,7 +71,6 @@ public class Mp3agicTaggerImpl implements Tagger {
 
 	@Override
 	public void save(File sourceFile, Song bean) {
-		// TODO Auto-generated method stub
 		
 	}
 
