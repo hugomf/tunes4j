@@ -14,6 +14,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.apache.commons.lang.SystemUtils;
+
 public class GUIUtils {
 
 //	public static void centerWindow(Window window) {
@@ -70,6 +72,9 @@ public class GUIUtils {
 	public static void setDockImage(Image image) {
 		
 		try {
+			
+			if (!SystemUtils.IS_OS_MAC_OSX) return;
+			
 		    Class util = Class.forName("com.apple.eawt.Application");
 		    Method getApplication = util.getMethod("getApplication", new Class[0]);
 		    Object application = getApplication.invoke(util);

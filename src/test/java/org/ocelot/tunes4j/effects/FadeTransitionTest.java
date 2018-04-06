@@ -20,13 +20,6 @@ public class FadeTransitionTest {
 		JFrame frame = new JFrame();
 		frame.setUndecorated(true);
 		frame.setOpacity(0.01f);
-		FadeTransition transition = new FadeTransition(new Consumer<Float>() {
-			@Override
-			public void accept(Float value) {
-				System.out.println("opacity=" + value);
-				frame.setOpacity(value);
-			}
-		} ,20);
 		JButton button = new JButton("Close");
 		
 		button.addActionListener(new ActionListener() {
@@ -42,7 +35,7 @@ public class FadeTransitionTest {
 		frame.pack();
 		GUIUtils.centerWindow(frame);
 		frame.setVisible(true);
-		transition.start();
+		FadeTransition.fadeIn(frame, 14);
 		
 	}
 	

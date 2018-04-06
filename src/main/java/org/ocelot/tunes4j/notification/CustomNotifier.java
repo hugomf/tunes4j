@@ -101,6 +101,7 @@ public class CustomNotifier {
 		
 		GUIUtils.setRoundedWindow(frame, 25, 25);
 		//frame.setOpacity(0.75f);
+		//frame.getRootPane().setBorder(new DropShadowBorder());
 		frame.setVisible(true);
 
 		SplashNotificationWorker worker = new SplashNotificationWorker(frame, moveFrom, moveTo);

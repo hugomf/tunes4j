@@ -99,6 +99,7 @@ public class PlayerPanel extends JPanel {
 
 		slider.setValue(0);
 		slider.setMaximum(1000);
+		slider.setOpaque(false);
 		
 		slider.addChangeListener(new ChangeListener() {
 			@Override
@@ -143,7 +144,7 @@ public class PlayerPanel extends JPanel {
 			}
 
 		});
-		
+		setOpaque(false);
 		setLayout(new FlowLayout());
 		add(playButton);
 		add(stopButton);

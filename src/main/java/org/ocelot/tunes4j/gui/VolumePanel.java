@@ -48,6 +48,7 @@ public class VolumePanel extends JPanel {
 		ImageIcon volumeLowIcon = ResourceLoader.ICON_VOLUME_LOW;
 		ImageIcon volumeHighIcon = ResourceLoader.ICON_VOLUME_LOW;
 		
+		setOpaque(false);
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		JLabel volumeLowLabel = new JLabel(volumeLowIcon);
 		JLabel volumeHighLabel = new JLabel(volumeHighIcon);
