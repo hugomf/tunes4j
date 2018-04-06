@@ -36,6 +36,11 @@ public class DoubleInterpolator implements Interpolatable<Double>, EffectEventLi
 		}
 	}
 
+	private double calculateStep(Double from, Double to, int interpolations) {
+		double resta = to - from;
+		return resta / (double) interpolations;
+	}
+	
 	private void sleep(int delay) {
 		try {
 			Thread.sleep(delay);
@@ -44,10 +49,6 @@ public class DoubleInterpolator implements Interpolatable<Double>, EffectEventLi
 		}
 	}
 
-	private double calculateStep(Double from, Double to, int interpolations) {
-		double resta = to - from;
-		return resta / (double) interpolations;
-	}
 
 
 

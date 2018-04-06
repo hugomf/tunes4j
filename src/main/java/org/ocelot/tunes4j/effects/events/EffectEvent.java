@@ -24,7 +24,5 @@ public class EffectEvent extends EventObject {
 		super(source);
 		this.message = message;
 	}
-
-	
 	
 }

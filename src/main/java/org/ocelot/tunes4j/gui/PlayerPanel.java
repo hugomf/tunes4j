@@ -45,10 +45,15 @@ public class PlayerPanel extends JPanel {
 
 		this.player = parentFrame.getPlayer();
 		
-		this.playButton.setIcon(ResourceLoader.PLAY);
-		this.playButton.setSelectedIcon(ResourceLoader.PAUSE);
+
 		this.playButton.setBorder(BorderFactory.createEmptyBorder());
 		this.playButton.setBorderPainted(false);
+		this.playButton.setContentAreaFilled(false);
+		this.playButton.setFocusPainted(false);
+		
+		this.playButton.setIcon(ResourceLoader.PLAY);
+		this.playButton.setSelectedIcon(ResourceLoader.PAUSE);
+
 		this.playButton.addItemListener(new ItemListener() {
 
 			@Override
@@ -66,10 +71,13 @@ public class PlayerPanel extends JPanel {
 			}
 		});
 
-		stopButton.setBorder(BorderFactory.createEmptyBorder());
+		this.stopButton.setBorder(BorderFactory.createEmptyBorder());
+		this.stopButton.setBorderPainted(false);
+		this.stopButton.setContentAreaFilled(false);
+		this.stopButton.setFocusPainted(false);
+
 		stopButton.setIcon(ResourceLoader.STOP);
 		stopButton.setSelectedIcon(ResourceLoader.STOP_ON);
-		stopButton.setBorderPainted(false);
 		stopButton.addActionListener(new ActionListener() {
 
 			@Override

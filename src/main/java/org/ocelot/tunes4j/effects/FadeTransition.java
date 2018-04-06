@@ -1,69 +1,96 @@
 package org.ocelot.tunes4j.effects;
 
-import java.awt.Window;
+
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.concurrent.CountDownLatch;
+import java.util.function.Consumer;
 
-import javax.swing.Timer;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+
+import org.ocelot.tunes4j.utils.GUIUtils;
 
 public class FadeTransition {
 
-	private static final float STEP = 0.01f;
+	private static final float START_VALUE = 0.01f;
+	private static final float END_VAUE = 1f;
+	private static final int STEPS = 100;
+	private int delay;
+	private Consumer<Float> triggerValue;
 
-//	private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-//
-//	public void addPropertyChangeListener(PropertyChangeListener listener) {
-//		this.pcs.addPropertyChangeListener(listener);
-//	}
-//
-//	public void removePropertyChangeListener(PropertyChangeListener listener) {
-//		this.pcs.removePropertyChangeListener(listener);
-//	}
 	
-	private float fromValue = 0.0f;
-	
-	private float toValue = 0.0f;
-
-	private int speed = 14;
-	
-	public FadeTransition(float fromValue, float toValue, int speed) {
-		this.fromValue = fromValue;
-		this.toValue = toValue;
-		this.speed = speed;
+	public FadeTransition(int delay) {
+		this(null, delay);
 	}
 	
-	public void apply(Window window, CountDownLatch lock) {
+	public FadeTransition(Consumer<Float> triggerValue, int delay) {
+		super();
+		this.delay = delay;
+		this.triggerValue = triggerValue;
+	}
+	
+	public void setConsumer(Consumer<Float> triggerValue){
+		this.triggerValue = triggerValue;
+	}
+	
+	public void start() {
+		start(START_VALUE, END_VAUE);
+	}
+	
+	public void start(float start, float end) {
+		if (this.triggerValue!=null) {
+			interpolate(this.triggerValue, start, end, STEPS);
+		}
+	}
+	
+	public void interpolate(Consumer<Float> triggerValue, float start, float end, int count) {
+	    for (int i = 0; i <= count; ++ i) {
+	        float value = linearInterpolation(start, end, count, i);
+	        triggerValue.accept(value);
+	        GUIUtils.sleep(this.delay);
+	    }
+	}
 
-		Timer timer = new Timer(speed, new ActionListener() {
-			float opacity = fromValue;
-
+	private float linearInterpolation(float start, float end, int count, int x) {
+		float value = start + x * (end - start) / count;
+		value = Math.round(value * (float) count) / (float) count;
+		return value;
+	}
+	
+	
+	public static void main(String[] args) {
+		
+		JFrame frame = new JFrame();
+		frame.setUndecorated(true);
+		frame.setOpacity(0.01f);
+	
+		FadeTransition transition = new FadeTransition(14);
+		transition.setConsumer(new Consumer<Float>() {
+			@Override
+			public void accept(Float value) {
+				System.out.println("opacity=" + value);
+				frame.setOpacity(value);
+			}
+		});
+		
+		JButton button = new JButton("Close");
+		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
-				if (toValue - fromValue > 0) {
-					opacity = new BigDecimal(opacity + STEP).setScale(2, RoundingMode.HALF_UP).floatValue();
-					if (opacity >= toValue) {
-						((Timer) e.getSource()).stop();
-						lock.countDown();
-					}
-				} else {
-					opacity = new BigDecimal(opacity - STEP).setScale(2, RoundingMode.HALF_UP).floatValue();
-					if (opacity <= fromValue) {
-						((Timer) e.getSource()).stop();
-						lock.countDown();
-					}
-				}
-				System.out.println(opacity);
-				//pcs.firePropertyChange("value", opacity, opacity);
-				window.setOpacity(opacity);
+				frame.dispose();
 			}
-
 		});
-		timer.setRepeats(true);
-		timer.start();
+		frame.setPreferredSize(new Dimension(200, 120));
+		frame.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+		frame.add(button);
+		frame.pack();
+		GUIUtils.centerWindow(frame);
+		frame.setVisible(true);
+		transition.start();
+		
 	}
+	
 
 }
