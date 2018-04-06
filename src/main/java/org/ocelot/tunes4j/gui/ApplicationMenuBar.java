@@ -3,6 +3,10 @@ package org.ocelot.tunes4j.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
@@ -11,6 +15,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileView;
+
+import org.ocelot.tunes4j.dao.SongRepository;
 
 public class ApplicationMenuBar {
 
@@ -21,12 +30,12 @@ public class ApplicationMenuBar {
 	private LeftSplitPane leftSplitPane;
 	
 	private JMenu fileMenu;
+	
 
 	public ApplicationMenuBar(MediaTable mediaTable, LeftSplitPane leftSplitPane) {
 
 		this.mediaTable = mediaTable;
 		this.leftSplitPane = leftSplitPane;
-
 	}
 
 	public JMenu createFileMenu() {
@@ -37,11 +46,27 @@ public class ApplicationMenuBar {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
-				chooser.setCurrentDirectory(new java.io.File("."));
-				chooser.setDialogTitle("choosertitle");
-				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				FileFilter mp3Filter = new FileNameExtensionFilter("MP3 File", "mp3");
+				chooser.addChoosableFileFilter(mp3Filter);
+				chooser.setCurrentDirectory(new java.io.File(System.getProperty("user.home")));
+				chooser.setDialogTitle("Select MP3 File Format");
+				chooser.setMultiSelectionEnabled(true);
+				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				chooser.setAcceptAllFileFilterUsed(false);
 				if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					
+					List<File> fileList = new ArrayList<File>();
+					if (chooser.getSelectedFile() != null) {
+						fileList.add(chooser.getSelectedFile());
+					} 
+					
+					if (chooser.getSelectedFiles() != null){
+						File[] selectedFiles = chooser.getSelectedFiles();
+						fileList = Arrays.asList(selectedFiles);
+					}
+					
+					ProgressLoadDialog dialog = new ProgressLoadDialog(fileList, mediaTable.getTable(), 
+							mediaTable.getApplicationWindow(), "Progress Dialog", true, mediaTable.getAudioService());
 				} else {
 					System.out.println("No Selection ");
 				}

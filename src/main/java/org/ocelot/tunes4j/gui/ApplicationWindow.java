@@ -1,6 +1,7 @@
 package org.ocelot.tunes4j.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Image;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -13,6 +14,7 @@ import org.apache.commons.lang.time.DurationFormatUtils;
 import org.ocelot.tunes4j.dao.PlayListRepository;
 import org.ocelot.tunes4j.dto.PlayList;
 import org.ocelot.tunes4j.player.Tunes4JAudioPlayer;
+import org.ocelot.tunes4j.utils.GUIUtils;
 import org.ocelot.tunes4j.utils.ResourceLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -49,6 +51,15 @@ public class ApplicationWindow extends JFrame {
 	private SourceListModel model = new SourceListModel();
 	
 	private	SourceListCategory playlistCategory = new SourceListCategory("Playlists");
+	
+	public ApplicationWindow() {
+		setApplicationIcons(this, ResourceLoader.ICON_APPICON.getImage());
+	}
+	
+	private void setApplicationIcons(ApplicationWindow window, Image image) {
+		window.setIconImage(image);
+		GUIUtils.setDockImage(image);
+	}
 
 	public void renderUI() {
 		player = new Tunes4JAudioPlayer();
@@ -62,11 +73,11 @@ public class ApplicationWindow extends JFrame {
 		setSize(800, 600);
 		setLocationRelativeTo(null);
 		loadPlayList();
-		setIconImage(ResourceLoader.ICON_APPICON.getImage());
 		setVisible(true);
 		pack();
-		
 	}
+
+	
 
 	public JSplitPane createSplitPane() {
 		leftSplitPane = new LeftSplitPane(mediaTable);

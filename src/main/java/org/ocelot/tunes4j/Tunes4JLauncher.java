@@ -1,10 +1,14 @@
 package org.ocelot.tunes4j;
 
+import java.awt.Image;
+
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.ocelot.tunes4j.gui.ApplicationWindow;
+import org.ocelot.tunes4j.utils.GUIUtils;
+import org.ocelot.tunes4j.utils.ResourceLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +31,7 @@ public class Tunes4JLauncher {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					setApplicationIcons(window, ResourceLoader.ICON_APPICON.getImage());
 					window.setTitle("tunes4J");
 					window.renderUI();
 				} catch (Exception e) {
@@ -34,6 +39,11 @@ public class Tunes4JLauncher {
 				}
 			}
 		});
+	}
+	
+	private void setApplicationIcons(ApplicationWindow window, Image image) {
+		window.setIconImage(image);
+		GUIUtils.setDockImage(image);
 	}
 
 }

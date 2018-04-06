@@ -9,7 +9,7 @@ import javax.swing.ImageIcon;
 
 public class ResourceLoader {
 	
-	public static final String ICON_MUSIC_PATH  = "/icons/speaker2.png";
+	public static final String ICON_MUSIC_PATH  = "/icons/speaker3.png";
 	
 	
 	public static final ImageIcon ICON_BLUEGLOBE = getImageIcon("/com/explodingpixels/macwidgets/icons/DotMac.png");

@@ -43,13 +43,17 @@ public class ImportFilesTask extends SwingWorker<Object, Object> {
 		Tagger tagger = registry.getInsance(this.strategy);
 		while( i < fileList.size() &&  !isCancelled() ) {
 			file = fileList.get(i);
-			if(MimeUtil.getMimeTypes(file).contains("audio/mpeg")) {
+			//if(MimeUtil.getMimeTypes(file).contains("audio/mpeg")) {
 				Song bean = tagger.parse(file);
 				if(bean!=null) {
 					publish(bean);
 				}
-			}
+			//}
 			setProgress(100 * (++i) / size);
+		}
+		
+		if (i>0) {
+			System.out.println("Successfully Imported:" + i + " songs!");
 		}
 		return null;
 	}

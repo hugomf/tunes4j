@@ -50,7 +50,7 @@ public class FileTransferHandler extends TransferHandler {
 					List list = (List) t.getTransferData(DataFlavor.javaFileListFlavor);
 					ProgressLoadDialog dialog = new ProgressLoadDialog(list, table, 
 																			parentFrame, "Progress Dialog", true, service);
-					dialog.onImportingData(list);
+					//dialog.onImportingData(list);
 					return true;
 				} else {
 					System.out.println("importData rejected: " + flavor);
