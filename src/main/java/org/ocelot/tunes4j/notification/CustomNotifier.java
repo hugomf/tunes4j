@@ -9,6 +9,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Window;
 import java.util.concurrent.CountDownLatch;
 
 import javax.swing.BoxLayout;
@@ -35,7 +36,6 @@ public class CustomNotifier {
 	private JFrame frame = new JFrame();
 	private JPanel mainPanel = new JPanel();
 	private JPanel panel = new JPanel();
-
 	private JLabel lblSubtitle = new JLabel();
 	private JLabel lblMessage = new JLabel();
 
@@ -113,11 +113,11 @@ public class CustomNotifier {
 
 	class SplashNotificationWorker extends SwingWorker<Boolean, Boolean> {
 
-		private JFrame frame;
+		private Window frame;
 		private Point moveFrom;
 		private Point moveTo;
 
-		public SplashNotificationWorker(JFrame frame, Point moveFrom, Point moveTo) {
+		public SplashNotificationWorker(Window frame, Point moveFrom, Point moveTo) {
 			this.frame = frame;
 			this.moveFrom = moveFrom;
 			this.moveTo = moveTo;

@@ -15,6 +15,30 @@ public class JImageButton extends JLabel  {
 
 	protected ImageIcon icon;
 	
+	public ImageIcon getIcon() {
+		return icon;
+	}
+
+	public void setIcon(ImageIcon icon) {
+		this.icon = icon;
+	}
+
+	public ImageIcon getHoverIcon() {
+		return hoverIcon;
+	}
+
+	public void setHoverIcon(ImageIcon hoverIcon) {
+		this.hoverIcon = hoverIcon;
+	}
+
+	public ImageIcon getPressedIcon() {
+		return pressedIcon;
+	}
+
+	public void setPressedIcon(ImageIcon pressedIcon) {
+		this.pressedIcon = pressedIcon;
+	}
+
 	protected ImageIcon hoverIcon;
 	
 	protected ImageIcon pressedIcon;

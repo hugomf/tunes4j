@@ -9,4 +9,9 @@ public interface HeaderConstants {
 	public String[] PROPERTY_NAMES = {"fileName","title","artist",
 			"album", "path","trackNumber","genre","author",
 			"year"};
+
+	public String[] RADIOSTATION_HEADER_NAMES = {"Name","Local Frequency","Description",
+			"Url"};
+	
+
 }

@@ -43,7 +43,7 @@ public class FileUtils {
 	public static List<File> getFiles( List<File> sourceFileList) {
 		List<File> files = new ArrayList<File>();
 		for (File file : sourceFileList) {
-			FileUtils.getFiles(file, files);
+			getFiles(file, files);
 		}
 		return files;
 	}

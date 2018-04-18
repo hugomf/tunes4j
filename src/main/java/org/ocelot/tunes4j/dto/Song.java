@@ -1,5 +1,8 @@
 package org.ocelot.tunes4j.dto;
 
+import java.beans.Transient;
+import java.io.File;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -56,5 +59,12 @@ public class Song  {
 	
 	@Column
 	private String year;
+	
+	@Transient
+	public File getSongFile() {
+		String filePath = getPath() + File.separator + getFileName();
+		File songFile = new File(filePath);
+		return songFile;
+	}
 
 }

@@ -25,16 +25,19 @@ public class LeftSplitPane {
 	private SourceListCategory playlistCategory = new SourceListCategory("Playlists");
 	private SourceList fSourceList;
 	private Icon musicPlaylistIcon 		= ResourceLoader.ICON_MUSIC;
+	private Icon radioPlaylistIcon 	= ResourceLoader.ICON_RADIO;
 	private Icon moviesPlaylistIcon 	= ResourceLoader.ICON_MOVIES;
 	private Icon tvShowsPlaylistIcon 	= ResourceLoader.ICON_TVSHOWS;
 	private Icon podcastsPlaylistIcon 	= ResourceLoader.ICON_PODCASTS;
 	private Icon playlistIcon 			= ResourceLoader.ICON_PLAYLIST;
 	private Icon smartPlaylistIcon 		= ResourceLoader.ICON_SMARTPLAYLIST;
 	private MediaTable mediaTable;
+	private RadioStationTable radioTable;
 	private JSplitPane splitPane;
 	
-	public LeftSplitPane(MediaTable mediaTable) {
+	public LeftSplitPane(MediaTable mediaTable, RadioStationTable radioTable) {
 		this.mediaTable = mediaTable;
+		this.radioTable = radioTable;
 	}
 	
 	public JSplitPane create() {
@@ -44,6 +47,8 @@ public class LeftSplitPane {
 		model.addCategory(playlistCategory);
 		
 		model.addItemToCategory(new SourceListItem("Music", musicPlaylistIcon), libraryCategory);
+		
+		model.addItemToCategory(new SourceListItem("Radio", radioPlaylistIcon), libraryCategory);
 		
 		model.addItemToCategory(new SourceListItem("Movies", moviesPlaylistIcon), libraryCategory);
 		
@@ -70,6 +75,8 @@ public class LeftSplitPane {
 							splitPane.setRightComponent(mediaTable.getTablePane());
 						} else if (item.getIcon() == playlistIcon) {
 							splitPane.setRightComponent(mediaTable.getTablePane());
+						} else if (item.getIcon() == radioPlaylistIcon) {
+							splitPane.setRightComponent(radioTable.getTablePane());
 						}
 					}
 				});

@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.ocelot.tunes4j.gui.Mp3FileBean;
 import org.ocelot.tunes4j.taggers.ListID3Tagger;
@@ -51,6 +52,7 @@ public class MediaImporterTest {
 	
 	
 	@Test
+	@Ignore
 	public void testPerformance() throws Exception {
 
 		//path = "H:/ORGANIZADO/MEDIA/AUDIO/MUSICA/VARIOS/Rancheras";

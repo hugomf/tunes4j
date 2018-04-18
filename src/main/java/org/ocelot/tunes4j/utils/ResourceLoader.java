@@ -4,6 +4,7 @@ import static org.ocelot.tunes4j.utils.FileUtils.getUrl;
 
 import java.net.URL;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 
@@ -18,6 +19,7 @@ public class ResourceLoader {
 	public static final ImageIcon ICON_GEAR = getImageIcon("/com/explodingpixels/macwidgets/icons/Advanced.png");
 	
 	public static final ImageIcon ICON_MUSIC = getImageIcon("/icons/MBiTunesMusicPlaylist.png");
+	public static final Icon ICON_RADIO = getImageIcon("/icons/radio16.png");
 	public static final ImageIcon ICON_MOVIES = getImageIcon("/icons/MBiTunesMoviesPlaylist.png");
 	public static final ImageIcon ICON_TVSHOWS = getImageIcon("/icons/MBiTunesTVShowsPlaylist.png");
 	public static final ImageIcon ICON_PODCASTS = getImageIcon("/icons/MBiTunes7PodcastsPlaylist.png");
@@ -56,6 +58,9 @@ public class ResourceLoader {
 	
 	
 	public static final String ID3TAGGER_PARSER = "org.ocelot.tunes4j.taggers.Mp3agicTaggerImpl";
+
+
+	
 	
 	
 	private static ImageIcon getImageIcon(String imgName) {

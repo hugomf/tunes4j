@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Image;
 import java.util.List;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JSplitPane;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Component;
 import org.tritonus.share.sampled.AudioUtils;
 
 import com.explodingpixels.macwidgets.LabeledComponentGroup;
-import com.explodingpixels.macwidgets.MacButtonFactory;
 import com.explodingpixels.macwidgets.SourceListCategory;
 import com.explodingpixels.macwidgets.SourceListItem;
 import com.explodingpixels.macwidgets.SourceListModel;
@@ -37,6 +35,9 @@ public class ApplicationWindow extends JFrame {
 	
 	@Autowired
 	private MediaTable mediaTable;
+	
+	@Autowired
+	private RadioStationTable radioTable;
 
 	private LeftSplitPane leftSplitPane;
 	
@@ -63,7 +64,7 @@ public class ApplicationWindow extends JFrame {
 
 	public void renderUI() {
 		player = new Tunes4JAudioPlayer();
-		playerPanel = new PlayerPanel(this);
+		playerPanel = new PlayerPanel(player);
 		UnifiedToolBar toolBar = createUnifiedToolBar();
 		splitPane = createSplitPane();
 		setJMenuBar(createMenuBar());
@@ -80,7 +81,7 @@ public class ApplicationWindow extends JFrame {
 	
 
 	public JSplitPane createSplitPane() {
-		leftSplitPane = new LeftSplitPane(mediaTable);
+		leftSplitPane = new LeftSplitPane(mediaTable, radioTable);
 		leftSplitPane.create();
 		return leftSplitPane.getSplitPane();
 	}
@@ -89,14 +90,13 @@ public class ApplicationWindow extends JFrame {
 
 
 		UnifiedToolBar toolBar = new UnifiedToolBar();
-		VolumePanel volPanel =  new VolumePanel(player);
 		
 		
-		toolBar.addComponentToLeft(volPanel);
-		toolBar.addComponentToCenter(this.playerPanel);
-		toolBar.addComponentToRight(MacButtonFactory
-				.makeUnifiedToolBarButton(new JButton("Advanced",
-						ResourceLoader.ICON_GEAR)));
+		toolBar.addComponentToLeft(this.playerPanel.getPlayerPanel());
+		toolBar.addComponentToCenter(this.playerPanel.getSliderPanel());
+//		toolBar.addComponentToRight(MacButtonFactory
+//				.makeUnifiedToolBarButton(new JButton("Advanced",
+//						ResourceLoader.ICON_GEAR)));
 		toolBar.addComponentToRight(new LabeledComponentGroup("search",
 				new SearchText(mediaTable)).getComponent());
 		
@@ -124,7 +124,7 @@ public class ApplicationWindow extends JFrame {
 	}
 
 	public JMenuBar createMenuBar() {
-		applicationMenuBar = new ApplicationMenuBar(mediaTable, leftSplitPane);
+		applicationMenuBar = new ApplicationMenuBar(this, leftSplitPane);
 		return applicationMenuBar.createMenuBar();
 	}
 	

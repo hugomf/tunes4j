@@ -1,6 +1,5 @@
 package org.ocelot.tunes4j.gui;
 
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,11 +29,9 @@ import javax.swing.table.TableRowSorter;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.ocelot.tunes4j.dao.ColumnRepository;
-import org.ocelot.tunes4j.dao.SongRepository;
+import org.ocelot.tunes4j.dao.RadioStationRepository;
 import org.ocelot.tunes4j.dto.Column;
-import org.ocelot.tunes4j.dto.Song;
-import org.ocelot.tunes4j.notification.NotifierFactory;
-import org.ocelot.tunes4j.utils.ImageUtils;
+import org.ocelot.tunes4j.dto.RadioStation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -44,11 +41,11 @@ import com.explodingpixels.widgets.TableUtils.SortDirection;
 
 
 @Component
-public class MediaTable {
+public class RadioStationTable {
 
 	protected static boolean resizingColumnHasEnded = false;
 	protected static final boolean notRestoringColumnState = true;
-	private BeanTableModel<Song> model;
+	private BeanTableModel<RadioStation> model;
 	private JTable table;
 	private ProgressLoadDialog dialog;
 	protected int prevRow = -1;
@@ -56,7 +53,7 @@ public class MediaTable {
 	private RowSorter<TableModel> sorter;
 	
 	@Autowired
-	private SongRepository audioService;
+	private RadioStationRepository radioStationService;
 	
 	@Autowired
 	private ColumnRepository columnService;
@@ -72,12 +69,12 @@ public class MediaTable {
 		return table;
 	}
 	
-	public BeanTableModel<Song> getModel() {
+	public BeanTableModel<RadioStation> getModel() {
 		return model;
 	}
 	
-	public SongRepository getAudioService() {
-		return audioService;
+	public RadioStationRepository getRadioStationService() {
+		return radioStationService;
 	}
 	
 	public ApplicationWindow getApplicationWindow() {
@@ -86,17 +83,17 @@ public class MediaTable {
 
 	public JScrollPane getTablePane() {
 
-		model = new BeanTableModel<Song>(Song.class);
+		model = new BeanTableModel<RadioStation>(RadioStation.class);
 		table = MacWidgetFactory.createITunesTable(model);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		table.setDropMode(DropMode.INSERT_ROWS);
 		table.setDragEnabled(true);
 		table.setFillsViewportHeight(true);
-		table.setTransferHandler(new FileTransferHandler(parentFrame, table,
-				audioService));
+//		table.setTransferHandler(new FileTransferHandler(parentFrame, table,
+//				radioStationoService));
 		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		new TableColumnResizer(table);
-		reorderColumnsInTable(HeaderConstants.HEADER_NAMES, table);
+		reorderColumnsInTable(HeaderConstants.RADIOSTATION_HEADER_NAMES, table);
 		configureSort(model);
 		configureTableListeners();
 		
@@ -106,7 +103,7 @@ public class MediaTable {
 		// ((DefaultCellEditor)table.getDefaultEditor(String.class)).setClickCountToStart(2);
 		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		// //For Single Click Editing
-		table.setDefaultEditor(Object.class, new MyTableCellEditor(this));
+		table.setDefaultEditor(Object.class, new RadioStationTableCellEditor(this));
 		JScrollPane scrollPane = new JScrollPane(table);
 		// IAppWidgetFactory.makeIAppScrollPane(scrollPane);
 		return scrollPane;
@@ -163,10 +160,10 @@ public class MediaTable {
 	}
 
 	private void loadData() {
-		List<Song> list = (List<Song>) audioService.findAll();
+		List<RadioStation> list = (List<RadioStation>) radioStationService.findAll();
 		if (CollectionUtils.isNotEmpty(list)) {
-			for (Song song : list) {
-				model.addRow(song);
+			for (RadioStation radioStation : list) {
+				model.addRow(radioStation);
 			}
 		}
 	}
@@ -201,7 +198,7 @@ public class MediaTable {
 		}
 	}
 
-	public void configureSort(BeanTableModel<Song> model) {
+	public void configureSort(BeanTableModel<RadioStation> model) {
 		sorter = new TableRowSorter<TableModel>(model);
 		table.setRowSorter(sorter);
 		TableUtils.SortDelegate sortDelegate = new TableUtils.SortDelegate() {
@@ -215,7 +212,7 @@ public class MediaTable {
 	public void configureTableListeners() {
 
 		final JPopupMenu popupMenu = new JPopupMenu();
-		final String[] headers = HeaderConstants.HEADER_NAMES;
+		final String[] headers = HeaderConstants.RADIOSTATION_HEADER_NAMES;
 		for (String itemName : headers) {
 			final JMenuItem item = new JCheckBoxMenuItem(itemName);
 			item.setSelected(true);
@@ -253,11 +250,12 @@ public class MediaTable {
 					if (e.getClickCount() == 1) {
 						prevRow = currentRow;
 						currentRow = rowAtPoint;
-						parentFrame.getPlayerPanel().setSong(getRowSelectedSong());
+						//parentFrame.getPlayerPanel().setSong(getRowSelectedSong());
 					}
 					if (e.getClickCount() == 2 && rowAtPoint > -1) {
-						Song song = getRowSelectedSong();
-						playSong(song);
+						RadioStation song = getRowSelectedSong();
+						System.out.println("Playing radio station");
+						// play radiostation;
 					}
 				}
 
@@ -265,37 +263,24 @@ public class MediaTable {
 
 			
 		});
-		table.getModel().addTableModelListener(new MyTableModelListener(this));
-		table.addMouseListener(new PopClickListener(this));
+		table.getModel().addTableModelListener(new RadioStationTableModelListener(this));
+		//table.addMouseListener(new PopClickListener(this));
 	}
 	
-	public Song getRowSelectedSong() {
+	public RadioStation getRowSelectedSong() {
 		int selectedRow = table.getSelectedRow();
 		if(selectedRow < 0) {
-			JOptionPane.showMessageDialog(parentFrame, "Please choose a song!", "Aviso", JOptionPane.WARNING_MESSAGE);
-			parentFrame.getPlayerPanel().stop();
+			JOptionPane.showMessageDialog(parentFrame, "Please choose a radiostation!", "Aviso", JOptionPane.WARNING_MESSAGE);
+			//parentFrame.getPlayerPanel().stop();
 			return null;
 		}
 		int row = table.convertRowIndexToModel(selectedRow);
-		Song bean = (Song) model.getRow(row);
+		RadioStation bean = (RadioStation) model.getRow(row);
 		return bean;
 	}
 	
-	private void playSong(Song song) {
-		triggerSongNotification(song);
-		parentFrame.getPlayerPanel().play(song);
-	}
-
-	private void triggerSongNotification(Song bean) {
-		new Thread(() -> {
-			Image image = null;
-			if (bean.getArtWork() != null) {
-				image = ImageUtils.read(bean.getArtWork());
-			}
-			NotifierFactory.instance().push(image, bean.getAlbum(), bean.getTitle(), bean.getArtist());
-		}).start();
-	}
 	
+
 
 
 	public void addToggleVisibilityMenuItem(final JPopupMenu popupMenu,

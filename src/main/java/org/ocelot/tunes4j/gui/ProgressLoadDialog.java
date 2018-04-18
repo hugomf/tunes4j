@@ -8,16 +8,12 @@ import java.io.File;
 import java.util.List;
 
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
 
-import org.ocelot.tunes4j.dao.SongRepository;
-import org.ocelot.tunes4j.dto.Song;
 import org.ocelot.tunes4j.utils.GUIUtils;
 
 public class ProgressLoadDialog extends JDialog {
@@ -26,27 +22,17 @@ public class ProgressLoadDialog extends JDialog {
 
 	private List<File> fileList;
 	private JProgressBar progressBar;
-	private JTable table;
 	private JTextArea taskOutput;
 	private ImportFilesTask task;
-	private JFrame parentFrame;
-	private SongRepository service;
+	private ApplicationWindow parentFrame;
 
-	public ProgressLoadDialog(List<File> fileList, JTable table, JFrame frame, String title, boolean modal,
-			SongRepository service) {
-		super(frame, title, modal);
+	public ProgressLoadDialog(List<File> fileList, ApplicationWindow parentFrame, boolean modal) {
+		super(parentFrame,  modal);
 		this.fileList = fileList;
-		this.table = table;
-		this.parentFrame = frame;
-		this.service = service;
+		this.parentFrame = parentFrame;
 		initComponents();
 	}
 
-	/**
-	 * This method initializes this
-	 * 
-	 * @return void
-	 */
 	private void initComponents() {
 
 		progressBar = new JProgressBar(0, 100);
@@ -76,8 +62,7 @@ public class ProgressLoadDialog extends JDialog {
 	}
 
 	private void executeTask() {
-		BeanTableModel<Song> model = (BeanTableModel<Song>) table.getModel();
-		task = new ImportFilesTask(model, this.fileList, service);
+		task = new ImportFilesTask(this.fileList, this.parentFrame.getMediaTable());
 		taskOutput.append("Importing...  \n");
 		task.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {

@@ -27,7 +27,7 @@ public class FadeTransition {
 	
 	public static void fadeIn(Window window, float start, float end, int count, int delay) {
 	    for (int i = 0; i <= count; ++ i) {
-	        float value = linearInterpolation(start, end, count, i);
+	        float value = Interpolator.linearInterpolation(start, end, count, i);
 	        GUIUtils.setWindowOpacity(window, value);
 	        GUIUtils.sleep(delay);
 	    }
@@ -35,17 +35,12 @@ public class FadeTransition {
 	
 	public static void fadeOut(Window window, float start, float end, int count, int delay) {
 	    for (int i = count; i > 0 ; i--) {
-	        float value = linearInterpolation(start, end, count, i);
+	        float value = Interpolator.linearInterpolation(start, end, count, i);
 	        GUIUtils.setWindowOpacity(window, value);
 	        GUIUtils.sleep(delay);
 	    }
 	}
 
-	private static float linearInterpolation(float start, float end, int count, int x) {
-		float value = start + x * (end - start) / count;
-		value = Math.round(value * (float) count) / (float) count;
-		return value;
-	}
 	
 	public static void main(String[] args) {
 		

@@ -17,7 +17,7 @@
  * 
  * Copyright 2007 Vincent Cariven
  */
-package org.ocelot.tunes4j.gui;
+package org.ocelot.tunes4j.components.volumeslider;
 
 import java.awt.Dimension;
 import java.awt.Insets;
@@ -48,8 +48,6 @@ public class VolumePanel extends JPanel {
 		ImageIcon volumeLowIcon = ResourceLoader.ICON_VOLUME_LOW;
 		ImageIcon volumeHighIcon = ResourceLoader.ICON_VOLUME_LOW;
 		
-		setOpaque(false);
-		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		JLabel volumeLowLabel = new JLabel(volumeLowIcon);
 		JLabel volumeHighLabel = new JLabel(volumeHighIcon);
 		VolumeSlider volumeSlider = new VolumeSlider(player);
@@ -66,10 +64,13 @@ public class VolumePanel extends JPanel {
 		volumeHighLabel.setIconTextGap(0);
 		volumeHighLabel.setBorder(new EmptyBorder(new Insets(2, 4, 0, 0)));
 		
-		setPreferredSize(new Dimension(140,80));
+		setOpaque(false);
+		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		setPreferredSize(new Dimension(120,20));
 
 		add(volumeLowLabel);
 		add(volumeSlider);
 		add(volumeHighLabel);
+		System.out.println(this.getHeight());
 	}
 }

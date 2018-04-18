@@ -17,7 +17,7 @@
  * 
  * Copyright 2007 Vincent Cariven
  */
-package org.ocelot.tunes4j.gui;
+package org.ocelot.tunes4j.components.volumeslider;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -70,6 +70,7 @@ public class VolumeSlider extends JSlider implements MouseWheelListener {
 		if (n != getValue()) {
 			super.setValue(n);
 			float newGain = n * 0.01f;
+			System.out.println(newGain);
 			player.setGain(newGain);
 		}
 	}

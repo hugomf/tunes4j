@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.TransferHandler;
 
@@ -20,11 +19,11 @@ public class FileTransferHandler extends TransferHandler {
 
 	private static final long serialVersionUID = 5631023586051978277L;
 	
-	JFrame parentFrame;
+	ApplicationWindow parentFrame;
 	JTable table;
 	SongRepository service;
 	
-	public FileTransferHandler(JFrame frame, JTable table, SongRepository service) {
+	public FileTransferHandler(ApplicationWindow frame, JTable table, SongRepository service) {
 		this.parentFrame = frame;
 		this.table = table;
 		this.service = service;
@@ -48,9 +47,7 @@ public class FileTransferHandler extends TransferHandler {
 			try {
 				if (flavor.equals(DataFlavor.javaFileListFlavor)) {
 					List list = (List) t.getTransferData(DataFlavor.javaFileListFlavor);
-					ProgressLoadDialog dialog = new ProgressLoadDialog(list, table, 
-																			parentFrame, "Progress Dialog", true, service);
-					//dialog.onImportingData(list);
+					ProgressLoadDialog dialog = new ProgressLoadDialog(list, this.parentFrame, true);
 					return true;
 				} else {
 					System.out.println("importData rejected: " + flavor);
