@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.Icon;
+import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 import org.ocelot.tunes4j.utils.ResourceLoader;
@@ -24,13 +25,21 @@ public class LeftSplitPane {
 	private SourceListCategory libraryCategory = new SourceListCategory("Library");
 	private SourceListCategory playlistCategory = new SourceListCategory("Playlists");
 	private SourceList fSourceList;
-	private Icon musicPlaylistIcon 		= ResourceLoader.ICON_MUSIC;
-	private Icon radioPlaylistIcon 	= ResourceLoader.ICON_RADIO;
-	private Icon moviesPlaylistIcon 	= ResourceLoader.ICON_MOVIES;
-	private Icon tvShowsPlaylistIcon 	= ResourceLoader.ICON_TVSHOWS;
+	
+	private JPanel dummyPanel = new JPanel()	;
+	
+	//private Icon moviesPlaylistIcon 	= ResourceLoader.ICON_MOVIES;
+	//private Icon tvShowsPlaylistIcon 	= ResourceLoader.ICON_TVSHOWS;
 	private Icon podcastsPlaylistIcon 	= ResourceLoader.ICON_PODCASTS;
 	private Icon playlistIcon 			= ResourceLoader.ICON_PLAYLIST;
 	private Icon smartPlaylistIcon 		= ResourceLoader.ICON_SMARTPLAYLIST;
+	
+	private SourceListItem musicSourceItem  = new SourceListItem("Music", ResourceLoader.ICON_MUSIC);
+	private SourceListItem radioSourceItem  = new SourceListItem("Radio Stations", ResourceLoader.ICON_RADIO);
+	private SourceListItem gdriveSourceItem  = new SourceListItem("Google Drive", ResourceLoader.ICON_GDRIVE);
+	private SourceListItem meganzSourceItem  = new SourceListItem("Mega Drive", ResourceLoader.ICON_MEGA);
+	
+	
 	private MediaTable mediaTable;
 	private RadioStationTable radioTable;
 	private JSplitPane splitPane;
@@ -46,13 +55,17 @@ public class LeftSplitPane {
 		
 		model.addCategory(playlistCategory);
 		
-		model.addItemToCategory(new SourceListItem("Music", musicPlaylistIcon), libraryCategory);
+		model.addItemToCategory(musicSourceItem, libraryCategory);
 		
-		model.addItemToCategory(new SourceListItem("Radio", radioPlaylistIcon), libraryCategory);
+		model.addItemToCategory(radioSourceItem, libraryCategory);
 		
-		model.addItemToCategory(new SourceListItem("Movies", moviesPlaylistIcon), libraryCategory);
+		model.addItemToCategory(gdriveSourceItem, libraryCategory);
 		
-		model.addItemToCategory(new SourceListItem("TV Shows", tvShowsPlaylistIcon), libraryCategory);
+		model.addItemToCategory(meganzSourceItem, libraryCategory);
+		
+		//model.addItemToCategory(new SourceListItem("Movies", moviesPlaylistIcon), libraryCategory);
+		
+		//model.addItemToCategory(new SourceListItem("TV Shows", tvShowsPlaylistIcon), libraryCategory);
 		
 		model.addItemToCategory(new SourceListItem("Podcasts", podcastsPlaylistIcon), libraryCategory);
 
@@ -71,13 +84,24 @@ public class LeftSplitPane {
 						if (item.getText().equals("eMule")) {
 							TabbedPaneDemo panel = new TabbedPaneDemo();
 							splitPane.setRightComponent(panel);
-						} else if (item.getText().equals("Music")) {
+						} else if (item.equals(musicSourceItem)) {
 							splitPane.setRightComponent(mediaTable.getTablePane());
-						} else if (item.getIcon() == playlistIcon) {
-							splitPane.setRightComponent(mediaTable.getTablePane());
-						} else if (item.getIcon() == radioPlaylistIcon) {
+						} else if (item.equals(radioSourceItem)) {
 							splitPane.setRightComponent(radioTable.getTablePane());
+						} else if (item.equals(gdriveSourceItem)) {
+							splitPane.setRightComponent(dummyPanel);
+						} else if (item.equals(meganzSourceItem)) {
+							splitPane.setRightComponent(dummyPanel);
+						
+						
+						} else if (item.getIcon() == podcastsPlaylistIcon) {
+							splitPane.setRightComponent(dummyPanel);
+						} else if (item.getIcon() == playlistIcon) {
+							splitPane.setRightComponent(dummyPanel);
+						} else if (item.getIcon() == smartPlaylistIcon) {
+							splitPane.setRightComponent(dummyPanel);
 						}
+						
 					}
 				});
 		SourceListControlBar controlBar = new SourceListControlBar();
@@ -95,15 +119,34 @@ public class LeftSplitPane {
 				mediaTable.getTablePane());
 		splitPane.setDividerLocation(200);
 		controlBar.installDraggableWidgetOnSplitPane(splitPane);
+		fSourceList.setSelectedItem(musicSourceItem);
 		return splitPane;
 	}
 	
+	
 	public void removeItemFromCategory() {
-		if(fSourceList.getSelectedItem()!=null && playlistCategory!=null) {
-			fSourceList.getModel().removeItemFromCategory(fSourceList.getSelectedItem(), playlistCategory);
+		
+		if (fSourceList.getSelectedItem()==null) return;
+
+		if (this.fSourceList.getSelectedItem().getText().equals("Music")) {
+			this.mediaTable.removeSelectedItems();
+		} else if (this.fSourceList.getSelectedItem().getText().equals("Radio Stations")) {
+			this.radioTable.removeSelectedItems();
 		} else {
-			mediaTable.removeSelectedItems();
+			fSourceList.getModel().removeItemFromCategory(fSourceList.getSelectedItem(), playlistCategory);
 		}
+	}
+	
+	public void selectAllFromCategory() {
+		
+		if (fSourceList.getSelectedItem()==null) return;
+		
+		if (this.fSourceList.getSelectedItem().getText().equals("Music")) {
+			this.mediaTable.getTable().selectAll();
+		} else {
+			this.radioTable.getTable().selectAll();;
+		}
+		
 	}
 	
 	public JSplitPane getSplitPane() {

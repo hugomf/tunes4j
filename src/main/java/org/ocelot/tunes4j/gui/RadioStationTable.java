@@ -7,7 +7,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
@@ -47,7 +46,6 @@ public class RadioStationTable {
 	protected static final boolean notRestoringColumnState = true;
 	private BeanTableModel<RadioStation> model;
 	private JTable table;
-	private ProgressLoadDialog dialog;
 	protected int prevRow = -1;
 	protected int currentRow;
 	private RowSorter<TableModel> sorter;
@@ -105,7 +103,6 @@ public class RadioStationTable {
 		// //For Single Click Editing
 		table.setDefaultEditor(Object.class, new RadioStationTableCellEditor(this));
 		JScrollPane scrollPane = new JScrollPane(table);
-		// IAppWidgetFactory.makeIAppScrollPane(scrollPane);
 		return scrollPane;
 	}
 
@@ -178,10 +175,6 @@ public class RadioStationTable {
 		}
 	}
 
-	public ProgressLoadDialog showDialog(List<File> list) {
-		dialog = new ProgressLoadDialog(list, parentFrame,  true);
-		return dialog;
-	}
 
 	public void removeSelectedItems() {
 		int[] selectedRows = table.getSelectedRows();
@@ -198,7 +191,7 @@ public class RadioStationTable {
 		}
 	}
 
-	public void configureSort(BeanTableModel<RadioStation> model) {
+	private void configureSort(BeanTableModel<RadioStation> model) {
 		sorter = new TableRowSorter<TableModel>(model);
 		table.setRowSorter(sorter);
 		TableUtils.SortDelegate sortDelegate = new TableUtils.SortDelegate() {
@@ -209,7 +202,7 @@ public class RadioStationTable {
 		TableUtils.makeSortable(table, sortDelegate);
 	}
 
-	public void configureTableListeners() {
+	private void configureTableListeners() {
 
 		final JPopupMenu popupMenu = new JPopupMenu();
 		final String[] headers = HeaderConstants.RADIOSTATION_HEADER_NAMES;
@@ -264,7 +257,24 @@ public class RadioStationTable {
 			
 		});
 		table.getModel().addTableModelListener(new RadioStationTableModelListener(this));
-		//table.addMouseListener(new PopClickListener(this));
+		table.addMouseListener( new MouseAdapter() {
+			
+			public void mousePressed(MouseEvent e){ 
+		        if (e.isPopupTrigger()) 
+		            doPop(e); 
+		    } 
+		 
+		    public void mouseReleased(MouseEvent e){ 
+		        if (e.isPopupTrigger()) 
+		            doPop(e); 
+		    } 
+		 
+		    private void doPop(MouseEvent e){ 
+		    		JPopupMenu menu = getApplicationWindow().getApplicationMenuBar().createPopUpMenu();
+		        menu.show(e.getComponent(), e.getX(), e.getY()); 
+		    } 
+			
+		});
 	}
 	
 	public RadioStation getRowSelectedSong() {
@@ -308,7 +318,7 @@ public class RadioStationTable {
 			column.setMaxWidth(0);
 		} else {
 			column.setMinWidth(15);
-			column.setMaxWidth(2147483647);
+			column.setMaxWidth(Integer.MAX_VALUE);
 			column.setWidth(75);
 			column.setPreferredWidth(75);
 		}

@@ -1,6 +1,5 @@
 package org.ocelot.tunes4j.gui;
 
-import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -15,6 +14,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
+import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -104,15 +104,18 @@ public class ApplicationMenuBar {
 	}
 
 	public JMenu createEditMenu() {
+		
 		JMenu editMenu = new JMenu("Edit");
+		
 		JMenuItem selectAllItem = new JMenuItem("Select All");
 		selectAllItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
 		selectAllItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				parentFrame.getMediaTable().getTable().selectAll();
+				leftSplitPane.selectAllFromCategory();
 			}
 		});
+		
 		JMenuItem deleteItem = new JMenuItem("Delete ");
 		deleteItem.setAccelerator(KeyStroke.getKeyStroke("DELETE"));
 		deleteItem.setMnemonic(KeyEvent.VK_D);

@@ -53,9 +53,6 @@ public class ApplicationWindow extends JFrame {
 	
 	private	SourceListCategory playlistCategory = new SourceListCategory("Playlists");
 	
-	public ApplicationWindow() {
-		setApplicationIcons(this, ResourceLoader.ICON_APPICON.getImage());
-	}
 	
 	private void setApplicationIcons(ApplicationWindow window, Image image) {
 		window.setIconImage(image);
@@ -63,6 +60,7 @@ public class ApplicationWindow extends JFrame {
 	}
 
 	public void renderUI() {
+		setApplicationIcons(this, ResourceLoader.ICON_APPICON.getImage());
 		player = new Tunes4JAudioPlayer();
 		playerPanel = new PlayerPanel(player);
 		UnifiedToolBar toolBar = createUnifiedToolBar();
@@ -117,6 +115,14 @@ public class ApplicationWindow extends JFrame {
 	
 	public MediaTable getMediaTable() {
 		return this.mediaTable;
+	}
+	
+	public void setMediaTable(MediaTable mediaTable) {
+		this.mediaTable = mediaTable;
+	}
+	
+	public RadioStationTable getRadioTable() {
+		return this.radioTable;
 	}
 
 	public PlayerPanel getPlayerPanel() {

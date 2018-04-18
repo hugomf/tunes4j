@@ -20,6 +20,8 @@ public class ResourceLoader {
 	
 	public static final ImageIcon ICON_MUSIC = getImageIcon("/icons/MBiTunesMusicPlaylist.png");
 	public static final Icon ICON_RADIO = getImageIcon("/icons/radio16.png");
+	public static final Icon ICON_GDRIVE = getImageIcon("/icons/drive_16dp.png");
+	public static final Icon ICON_MEGA = getImageIcon("/icons/mega16.png");
 	public static final ImageIcon ICON_MOVIES = getImageIcon("/icons/MBiTunesMoviesPlaylist.png");
 	public static final ImageIcon ICON_TVSHOWS = getImageIcon("/icons/MBiTunesTVShowsPlaylist.png");
 	public static final ImageIcon ICON_PODCASTS = getImageIcon("/icons/MBiTunes7PodcastsPlaylist.png");
