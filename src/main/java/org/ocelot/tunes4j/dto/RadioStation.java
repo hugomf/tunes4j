@@ -35,6 +35,12 @@ public class RadioStation {
 	private String description;
 	
 	@Column
+	private String genre;
+
+	@Column
+	private String contentType;
+
+	@Column
 	private String url;
 	
 }

@@ -14,7 +14,9 @@ version='1.0'
 repositories {
     // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
-    jcenter()
+    jcenter()    
+    
+    maven { url "http://clojars.org/repo/" }
     
     flatDir {
        dirs 'libs'
@@ -24,7 +26,6 @@ repositories {
 configurations.all {
     resolutionStrategy {
         failOnVersionConflict()
-      //  force 'junit:junit:4.12', 'org.slf4j:slf4j-api:1.6.1'
     }
 }
 
@@ -33,6 +34,10 @@ dependencies {
 
 	implementation name: 'liquidlnf'
 	implementation name: 'entagged-audioformats-0.10'
+	implementation name: 'jaad-0.8.7'
+	
+	implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+	
 	
 	//Database Connection
 	implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: '1.11.0.RELEASE'	
@@ -69,6 +74,14 @@ dependencies {
 	implementation group: 'com.explodingpixels', name: 'mac_widgets', version: '0.9.5'
 	implementation group: 'org.twitter4j', name: 'twitter4j-core', version: '4.0.6'
 	implementation group: 'com.mpatric', name: 'mp3agic', version: '0.9.1'
+	
+	//vOrbis Sound Libraries
+	implementation (group: 'com.googlecode.soundlibs', name: 'vorbisspi', version: '1.0.3-1')  {
+    		exclude group: 'com.googlecode.soundlibs'
+    }
+	implementation group: 'org.jcraft', name: 'jorbis', version: '0.0.17'
+	implementation group: 'org.clojars.aseipp', name: 'jogg', version: '0.0.7'	
+	
     
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
