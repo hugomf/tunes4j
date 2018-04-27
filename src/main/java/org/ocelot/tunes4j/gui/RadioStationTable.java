@@ -31,6 +31,7 @@ import org.ocelot.tunes4j.dao.ColumnRepository;
 import org.ocelot.tunes4j.dao.RadioStationRepository;
 import org.ocelot.tunes4j.dto.Column;
 import org.ocelot.tunes4j.dto.RadioStation;
+import org.ocelot.tunes4j.player.RadioStreamPlayer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -58,6 +59,9 @@ public class RadioStationTable {
 
 	@Autowired
 	private ApplicationWindow parentFrame;
+	
+	@Autowired
+	private RadioStreamPlayer radioPlayer;
 	
 	public RowSorter<TableModel> getSorter() {
 		return sorter;
@@ -248,7 +252,13 @@ public class RadioStationTable {
 					if (e.getClickCount() == 2 && rowAtPoint > -1) {
 						RadioStation song = getRowSelectedSong();
 						System.out.println("Playing radio station");
-						// play radiostation;
+						try {
+							radioPlayer.open(song.getUrl());
+							radioPlayer.play();
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+						
 					}
 				}
 

@@ -10,8 +10,7 @@ public interface HeaderConstants {
 			"album", "path","trackNumber","genre","author",
 			"year"};
 
-	public String[] RADIOSTATION_HEADER_NAMES = {"Name","Local Frequency","Description",
-			"Url"};
+	public String[] RADIOSTATION_HEADER_NAMES = {"Url", "Content Type", "Genre", "Bit Rate", "Name","Local Frequency","Description", "Country"};
 	
 
 }

@@ -14,7 +14,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
-import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -35,9 +34,73 @@ public class ApplicationMenuBar {
 		this.leftSplitPane = leftSplitPane;
 	}
 
-	public JMenu createFileMenu() {
+	public JMenu buildFileMenu() {
 
 		fileMenu = new JMenu("File");
+		JMenuItem importFolderItem = buildImportFolderMenuItem();
+		fileMenu.add(importFolderItem);
+		
+		JMenuItem addURLMenuItem = buildAddURLMenuItem();
+		fileMenu.add(addURLMenuItem);
+		
+		
+//		JMenuItem importFileItem = new JMenuItem("Add File(s) ...");
+//		fileMenu.add(importFileItem);
+//		fileMenu.add(new JSeparator());
+		JMenuItem newPlayListItem = buildPlayListMenuItem();
+		fileMenu.add(newPlayListItem);
+
+//		JMenuItem newPlayListSelectItem = new JMenuItem("New PlayList From Selection");
+//		fileMenu.add(newPlayListSelectItem);
+//		JMenuItem newSmartPlayListItem = new JMenuItem("New SmartList PlayList");
+//		fileMenu.add(newSmartPlayListItem);
+		fileMenu.add(new JSeparator());
+		JMenuItem exitItem = new JMenuItem("Exit");
+		fileMenu.add(exitItem);
+		exitItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		return fileMenu;
+	}
+
+	private JMenuItem buildAddURLMenuItem() {
+		
+		JMenuItem menuItem = new JMenuItem("Add URL");
+		if(SystemUtils.IS_OS_WINDOWS) {
+			menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, ActionEvent.CTRL_MASK));
+		} else if(SystemUtils.IS_OS_MAC_OSX) {
+			menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, ActionEvent.META_MASK));
+		}
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new NetworkURLDialog(parentFrame);
+			}
+		});
+		return menuItem;
+	
+	}
+
+	private JMenuItem buildPlayListMenuItem() {
+		JMenuItem newPlayListItem = new JMenuItem("New PlayList");
+		if(SystemUtils.IS_OS_WINDOWS) {
+			newPlayListItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
+		} else if(SystemUtils.IS_OS_MAC_OSX) {
+			newPlayListItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.META_MASK));
+		}
+		newPlayListItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				leftSplitPane.createPlaylist();
+			}
+		});
+		return newPlayListItem;
+	}
+
+	private JMenuItem buildImportFolderMenuItem() {
 		JMenuItem importFolderItem = new JMenuItem("Import Folder ... ");
 		importFolderItem.addActionListener(new ActionListener() {
 			@Override
@@ -51,7 +114,6 @@ public class ApplicationMenuBar {
 				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				chooser.setAcceptAllFileFilterUsed(false);
 				if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-					
 					List<File> fileList = new ArrayList<File>();
 					if (chooser.getSelectedFile() != null) {
 						fileList.add(chooser.getSelectedFile());
@@ -61,49 +123,16 @@ public class ApplicationMenuBar {
 						File[] selectedFiles = chooser.getSelectedFiles();
 						fileList = Arrays.asList(selectedFiles);
 					}
-					
-					ProgressLoadDialog dialog = new ProgressLoadDialog(fileList,parentFrame, true);
+					new ProgressLoadDialog(fileList,parentFrame, true);
 				} else {
 					System.out.println("No Selection ");
 				}
 			}
 		});
-		fileMenu.add(importFolderItem);
-		JMenuItem importFileItem = new JMenuItem("Add File(s) ...");
-		fileMenu.add(importFileItem);
-		fileMenu.add(new JSeparator());
-		JMenuItem newPlayListItem = new JMenuItem("New PlayList");
-		
-		if(SystemUtils.IS_OS_WINDOWS) {
-			newPlayListItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
-		} else if(SystemUtils.IS_OS_MAC_OSX) {
-			newPlayListItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.META_MASK));
-		}
-		
-		fileMenu.add(newPlayListItem);
-		newPlayListItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				leftSplitPane.createPlaylist();
-			}
-		});
-		JMenuItem newPlayListSelectItem = new JMenuItem("New PlayList From Selection");
-		fileMenu.add(newPlayListSelectItem);
-		JMenuItem newSmartPlayListItem = new JMenuItem("New SmartList PlayList");
-		fileMenu.add(newSmartPlayListItem);
-		fileMenu.add(new JSeparator());
-		JMenuItem exitItem = new JMenuItem("Exit");
-		fileMenu.add(exitItem);
-		exitItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-		return fileMenu;
+		return importFolderItem;
 	}
 
-	public JMenu createEditMenu() {
+	public JMenu buildEditMenu() {
 		
 		JMenu editMenu = new JMenu("Edit");
 		
@@ -133,13 +162,13 @@ public class ApplicationMenuBar {
 
 	public JMenuBar createMenuBar() {
 		menuBar = new JMenuBar();
-		menuBar.add(createFileMenu());
-		menuBar.add(createEditMenu());
+		menuBar.add(buildFileMenu());
+		menuBar.add(buildEditMenu());
 		return menuBar;
 	}
 
 	public JPopupMenu createPopUpMenu() {
-		JPopupMenu popUpMenu = createEditMenu().getPopupMenu();
+		JPopupMenu popUpMenu = buildEditMenu().getPopupMenu();
 		return popUpMenu;
 	}
 }

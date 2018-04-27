@@ -41,6 +41,12 @@ public class RadioStation {
 	private String contentType;
 
 	@Column
+	private String country;
+
+	@Column
+	private String bitRate;
+	
+	@Column
 	private String url;
 	
 }

@@ -1,6 +1,5 @@
 package org.ocelot.tunes4j.player;
 
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -9,10 +8,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javazoom.jl.decoder.JavaLayerException;
-import javazoom.jl.player.Player;
+import javazoom.jlgui.basicplayer.BasicPlayer;
+import javazoom.jlgui.basicplayer.BasicPlayerException;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
-public class Mp3StreamPlayer {
+public class Mp3StreamPlayer implements RadioPlayer {
 
 	public static String streamurl1 = "http://radio.flex.ru:8000/radionami";
 	public static String streamurl2 = "http://radio.flex.ru:8000/premium128";
@@ -21,33 +23,33 @@ public class Mp3StreamPlayer {
 	public static String streamurl5 = "http://airspectrum.cdnstream1.com:8114/1648_128";
 	public static String streamurl6 = "http://airspectrum.cdnstream1.com:8116/1649_192";
 	public static String streamurl7 = "http://18803.live.streamtheworld.com:80/XHMVSFM_SC";
+	public static String streamurl8 = "http://noasrv.caster.fm:10182/stream";
+	public static String streamurl9 = "http://stream2.dyndns.org:8000/xeco.mp3";
 	
-	public Player player = null;
 	
 	
-	public static void main(String[] args) throws IOException {        
+	public BasicPlayer player = null;
+	
+	public static void main(String[] args) throws Exception {        
 	    
 		Mp3StreamPlayer player = new Mp3StreamPlayer();
-		player.playUrl(streamurl2);
-//		GUIUtils.sleep(10000);
-//		player.stop();
+		InputStream is = getURLInputStream2(streamurl7);
+		player.open(is);
+		player.play();
+		//GUIUtils.sleep(5000);
+		player.stop();
 	}
 	
-	private  void playUrl(String url) throws IOException {
-		InputStream stream = getURLInputStream(url);
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				stop();
-				playStream(stream);
-			}
-		}).start();
+	public void open(InputStream is) throws Exception {
+		this.player = new BasicPlayer();
+		this.player.open(is);
 	}
 	
-	private  static DataInputStream getURLInputStream(String sUrl) throws IOException {
+	private  static InputStream getURLInputStream(String sUrl) throws IOException {
 		URL url = new URL(sUrl);
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		Map<String, List<String>> headerFields = connection.getHeaderFields();
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setRequestProperty ("Icy-Metadata", "1");
+		Map<String, List<String>> headerFields = conn.getHeaderFields();
 		
 		headerFields.entrySet().forEach(item->System.out.println(
 				String.format("%s: %s",  
@@ -56,26 +58,36 @@ public class Mp3StreamPlayer {
 				)
 			));
 		
-		return new DataInputStream(connection.getInputStream());
+		int metaInt = conn.getHeaderFieldInt("icy-metaint",0);
+		//InputStream is = new IcyInputStream(conn.getInputStream(), metaInt);
+		return conn.getInputStream();
+	}
+	private  static InputStream getURLInputStream2(String sUrl) throws IOException  {
+	
+		OkHttpClient client = new OkHttpClient();
+		 Request request = new Request.Builder()
+		 .url(sUrl)
+		 .build();
+		 Response response = client.newCall(request).execute();
+		 return response.body().byteStream();
 	}
 
-	private  void playStream(InputStream stream) {
-		
-		try {	    	
-	        this.player = new Player(stream);
-	    } catch (Exception e) {
-	        System.out.println(e.getMessage());
-	    }
-	    try {
-	        player.play();
-	    } catch (JavaLayerException e) {
-	        System.out.println(e.getMessage());
-	    }
+	@Override
+	public void play()  {
+		try {
+			this.player.play();
+		} catch (BasicPlayerException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	private  void stop() {
+	public void stop() {
 		if (player!= null) {
-			player.close();
+			try {
+				player.stop();
+			} catch (BasicPlayerException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

@@ -1,6 +1,6 @@
 package org.ocelot.tunes4j.player;
 
-import java.io.DataInputStream;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -16,95 +16,90 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
-public class OggStreamPlayer {
+import org.ocelot.tunes4j.utils.GUIUtils;
+
+public class OggStreamPlayer implements RadioPlayer {
+
+	private static String streamurl1 = "http://stream.radioreklama.bg:80/radio1rock.ogg";
 	
-	public static String streamurl1 = "http://stream.radioreklama.bg:80/radio1rock.ogg";
+	private AudioInputStream din;
 	
-	public static void main(String[] args) throws IOException {        
+	private SourceDataLine line;
+	
+	private boolean running;
+
+	public static void main(String[] args) throws Exception {
 		OggStreamPlayer player = new OggStreamPlayer();
-		player.playUrl(streamurl1);
-	}
-	
-	public void playUrl(String url) throws IOException {
-		InputStream stream = getURLInputStream(url);
-		testPlay(stream);
+		InputStream stream = getURLInputStream(streamurl1);
+		player.open(stream);
+		player.play();
+		GUIUtils.sleep(5000);
+		player.stop();
 	}
 
-	private DataInputStream getURLInputStream(String sUrl) throws IOException {
+	private static InputStream getURLInputStream(String sUrl) throws IOException {
 		URL url = new URL(sUrl);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		Map<String, List<String>> headerFields = connection.getHeaderFields();
-		
-		headerFields.entrySet().forEach(item->System.out.println(
-				String.format("%s: %s",  
-					item.getKey(), 
-					item.getValue().stream().collect(Collectors.joining(", "))	
-				)
-			));
-		
-		return new DataInputStream(connection.getInputStream());
+
+		headerFields.entrySet().forEach(item -> System.out.println(
+				String.format("%s: %s", item.getKey(), item.getValue().stream().collect(Collectors.joining(", ")))));
+		int metaInt = connection.getHeaderFieldInt("icy-metaint", 16000);
+		return new BufferedInputStream(connection.getInputStream(), metaInt);
 	}
 
-	public void testPlay(InputStream is)
-	{
-	  try
-	  {
-	    AudioInputStream in= AudioSystem.getAudioInputStream(is);
-	    AudioInputStream din = null;
-	    if (in != null)
-	    {
-	        AudioFormat baseFormat = in.getFormat();
-	        AudioFormat  decodedFormat = new AudioFormat(
-	                AudioFormat.Encoding.PCM_SIGNED,
-	                baseFormat.getSampleRate(),
-	                16,
-	                baseFormat.getChannels(),
-	                baseFormat.getChannels() * 2,
-	                baseFormat.getSampleRate(),
-	                false);
-	         // Get AudioInputStream that will be decoded by underlying VorbisSPI
-	        din = AudioSystem.getAudioInputStream(decodedFormat, in);
-	        // Play now !
-	        rawplay(decodedFormat, din);
-	        in.close();		
-	    }
-	  }
-	  catch (Exception e)
-	  {
-	    e.printStackTrace();
-	  }
-	}
+	public void open(InputStream is) throws Exception {
+		AudioInputStream in = AudioSystem.getAudioInputStream(is);
+		if (in != null) {
+			AudioFormat baseFormat = in.getFormat();
+			AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, baseFormat.getSampleRate(),
+					16, baseFormat.getChannels(), baseFormat.getChannels() * 2, baseFormat.getSampleRate(), false);
 
-	private void rawplay(AudioFormat targetFormat, 
-	                                   AudioInputStream din) throws IOException, LineUnavailableException
-	{
-	   byte[] data = new byte[4096];
-	  SourceDataLine line = getLine(targetFormat);		
-	  if (line != null)
-	  {
-	     // Start
-	    line.start();
-	     int nBytesRead = 0, nBytesWritten = 0;
-	     while (nBytesRead != -1)
-	    {
-	        nBytesRead = din.read(data, 0, data.length);
-	         if (nBytesRead != -1) nBytesWritten = line.write(data, 0, nBytesRead);
-	    }
-	     // Stop
-	    line.drain();
-	    line.stop();
-	    line.close();
-	    din.close();
-	  }		
-	}
-
-	private SourceDataLine getLine(AudioFormat audioFormat) throws LineUnavailableException
-	{
-	  SourceDataLine res = null;
-	  DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
-	  res = (SourceDataLine) AudioSystem.getLine(info);
-	  res.open(audioFormat);
-	  return res;
+			// Get AudioInputStream that will be decoded by underlying VorbisSPI
+			this.din = AudioSystem.getAudioInputStream(decodedFormat, in);
+			
+			DataLine.Info info = new DataLine.Info(SourceDataLine.class, decodedFormat);
+			this.line = (SourceDataLine) AudioSystem.getLine(info);
+			this.line.open(decodedFormat);
+		}
 	}
 	
+	public void play() {
+		try {
+			rawplay();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void rawplay() throws IOException, LineUnavailableException {
+		byte[] data = new byte[4096];
+		this.running = true;
+		if (line != null) {
+			// Start
+			line.start();
+		    int nBytesRead = 0; 
+		    while (nBytesRead != -1 && this.running) {
+		        nBytesRead = din.read(data, 0, data.length);
+		        if (nBytesRead != -1) {  
+		        		line.write(data, 0, nBytesRead);
+		        }
+		    }
+		     // Stop
+		    line.drain();
+		    line.stop();
+		    line.close();
+		    din.close();
+		}		
+	}
+
+
+
+	@Override
+	public void stop() {
+		this.running = false;
+	}
+
 }
