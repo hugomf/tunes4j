@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
+import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -45,9 +46,11 @@ public class ApplicationWindow extends JFrame {
 
 	private ApplicationMenuBar applicationMenuBar;
 	
-	private PlayerPanel playerPanel;
+	private PlayerPanel audioPlayerPanel;
+
+	private RadioPlayerPanel radioPlayerPanel;
 	
-	private Tunes4JAudioPlayer player;
+	private UnifiedToolBar toolBar;
 	
 	private SourceListModel model = new SourceListModel();
 	
@@ -61,10 +64,11 @@ public class ApplicationWindow extends JFrame {
 
 	public void renderUI() {
 		setApplicationIcons(this, ResourceLoader.ICON_APPICON.getImage());
-		player = new Tunes4JAudioPlayer();
-		playerPanel = new PlayerPanel(player);
-		UnifiedToolBar toolBar = createUnifiedToolBar();
-		splitPane = createSplitPane();
+		this.audioPlayerPanel = new PlayerPanel();
+		this.radioPlayerPanel = new RadioPlayerPanel();
+		this.toolBar = createUnifiedToolBar();
+		this.splitPane = createSplitPane();
+		
 		setJMenuBar(createMenuBar());
 		add(toolBar.getComponent(), BorderLayout.NORTH);
 		add(splitPane, BorderLayout.CENTER);
@@ -79,7 +83,7 @@ public class ApplicationWindow extends JFrame {
 	
 
 	public JSplitPane createSplitPane() {
-		leftSplitPane = new LeftSplitPane(mediaTable, radioTable);
+		leftSplitPane = new LeftSplitPane(this);
 		leftSplitPane.create();
 		return leftSplitPane.getSplitPane();
 	}
@@ -89,9 +93,10 @@ public class ApplicationWindow extends JFrame {
 
 		UnifiedToolBar toolBar = new UnifiedToolBar();
 		
-		
-		toolBar.addComponentToLeft(this.playerPanel.getPlayerPanel());
-		toolBar.addComponentToCenter(this.playerPanel.getSliderPanel());
+		//this.mainPlayerPanel = this.audioPlayerPanel.getPlayerPanel();
+		toolBar.addComponentToLeft(this.audioPlayerPanel.getPlayerPanel());
+		toolBar.addComponentToLeft(this.radioPlayerPanel.getPlayerPanel());
+		toolBar.addComponentToCenter(this.audioPlayerPanel.getSliderPanel());
 //		toolBar.addComponentToRight(MacButtonFactory
 //				.makeUnifiedToolBarButton(new JButton("Advanced",
 //						ResourceLoader.ICON_GEAR)));
@@ -126,7 +131,15 @@ public class ApplicationWindow extends JFrame {
 	}
 
 	public PlayerPanel getPlayerPanel() {
-		return this.playerPanel;
+		return this.audioPlayerPanel;
+	}
+	
+	public RadioPlayerPanel getRadioPlayerPanel() {
+		return this.radioPlayerPanel;
+	}
+	
+	public UnifiedToolBar getToolBar() {
+		return this.toolBar;
 	}
 
 	public JMenuBar createMenuBar() {
@@ -138,16 +151,5 @@ public class ApplicationWindow extends JFrame {
 		return applicationMenuBar;
 	}
 	
-	public String getTimeProgress(long bytesread) {
-		float frameRate = (float) player.getProperties().get("mp3.framerate.fps");
-		int frameSize = (int) player.getProperties().get("mp3.framesize.bytes");
-		long ms  = (long) AudioUtils.bytes2MillisD(bytesread, frameRate, frameSize);
-
-		return DurationFormatUtils.formatDurationHMS(ms);
-	}
-
-	public Tunes4JAudioPlayer getPlayer() {
-		return player;
-	}
 
 }

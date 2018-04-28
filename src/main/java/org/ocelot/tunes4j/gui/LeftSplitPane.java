@@ -40,13 +40,11 @@ public class LeftSplitPane {
 	private SourceListItem meganzSourceItem  = new SourceListItem("Mega Drive", ResourceLoader.ICON_MEGA);
 	
 	
-	private MediaTable mediaTable;
-	private RadioStationTable radioTable;
+	private ApplicationWindow parentFrame;
 	private JSplitPane splitPane;
 	
-	public LeftSplitPane(MediaTable mediaTable, RadioStationTable radioTable) {
-		this.mediaTable = mediaTable;
-		this.radioTable = radioTable;
+	public LeftSplitPane(ApplicationWindow parentFrame) {
+		this.parentFrame = parentFrame;
 	}
 	
 	public JSplitPane create() {
@@ -85,15 +83,17 @@ public class LeftSplitPane {
 							TabbedPaneDemo panel = new TabbedPaneDemo();
 							splitPane.setRightComponent(panel);
 						} else if (item.equals(musicSourceItem)) {
-							splitPane.setRightComponent(mediaTable.getTablePane());
+							parentFrame.getRadioPlayerPanel().getPlayerPanel().setVisible(false);
+							parentFrame.getPlayerPanel().getPlayerPanel().setVisible(true);
+							splitPane.setRightComponent(parentFrame.getMediaTable().getTablePane());
 						} else if (item.equals(radioSourceItem)) {
-							splitPane.setRightComponent(radioTable.getTablePane());
+							parentFrame.getPlayerPanel().getPlayerPanel().setVisible(false);
+							parentFrame.getRadioPlayerPanel().getPlayerPanel().setVisible(true);
+							splitPane.setRightComponent(parentFrame.getRadioTable().getTablePane());
 						} else if (item.equals(gdriveSourceItem)) {
 							splitPane.setRightComponent(dummyPanel);
 						} else if (item.equals(meganzSourceItem)) {
 							splitPane.setRightComponent(dummyPanel);
-						
-						
 						} else if (item.getIcon() == podcastsPlaylistIcon) {
 							splitPane.setRightComponent(dummyPanel);
 						} else if (item.getIcon() == playlistIcon) {
@@ -116,7 +116,7 @@ public class LeftSplitPane {
 						"Item Two", "Item Three"));
 		fSourceList.installSourceListControlBar(controlBar);
 		splitPane = MacWidgetFactory.createSplitPaneForSourceList(fSourceList,
-				mediaTable.getTablePane());
+				parentFrame.getMediaTable().getTablePane());
 		splitPane.setDividerLocation(200);
 		controlBar.installDraggableWidgetOnSplitPane(splitPane);
 		fSourceList.setSelectedItem(musicSourceItem);
@@ -129,9 +129,9 @@ public class LeftSplitPane {
 		if (fSourceList.getSelectedItem()==null) return;
 
 		if (this.fSourceList.getSelectedItem().getText().equals("Music")) {
-			this.mediaTable.removeSelectedItems();
+			this.parentFrame.getMediaTable().removeSelectedItems();
 		} else if (this.fSourceList.getSelectedItem().getText().equals("Radio Stations")) {
-			this.radioTable.removeSelectedItems();
+			this.parentFrame.getRadioTable().removeSelectedItems();
 		} else {
 			fSourceList.getModel().removeItemFromCategory(fSourceList.getSelectedItem(), playlistCategory);
 		}
@@ -142,9 +142,9 @@ public class LeftSplitPane {
 		if (fSourceList.getSelectedItem()==null) return;
 		
 		if (this.fSourceList.getSelectedItem().getText().equals("Music")) {
-			this.mediaTable.getTable().selectAll();
+			this.parentFrame.getMediaTable().getTable().selectAll();
 		} else {
-			this.radioTable.getTable().selectAll();;
+			this.parentFrame.getRadioTable().getTable().selectAll();;
 		}
 		
 	}

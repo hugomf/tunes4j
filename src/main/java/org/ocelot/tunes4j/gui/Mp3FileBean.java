@@ -78,7 +78,6 @@ public class Mp3FileBean {
 		try {
 			return BeanUtils.describe(this).toString();
 		} catch (Exception e) {
-			System.out.println("Error converting object to String" + e.toString());
 			e.printStackTrace();
 		}
 		return super.toString();

@@ -24,6 +24,7 @@ repositories {
 }
 
 configurations.all {
+	exclude group: "commons-logging", module: "commons-logging"
     resolutionStrategy {
         failOnVersionConflict()
     }
@@ -38,6 +39,9 @@ dependencies {
 	
 	implementation 'com.squareup.okhttp3:okhttp:3.10.0'
 	
+	//implementation group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.22'
+	implementation group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.22'
+	implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.1'
 	
 	//Database Connection
 	implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: '1.11.0.RELEASE'	

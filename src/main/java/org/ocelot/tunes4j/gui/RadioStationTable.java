@@ -1,5 +1,6 @@
 package org.ocelot.tunes4j.gui;
 
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,7 +32,8 @@ import org.ocelot.tunes4j.dao.ColumnRepository;
 import org.ocelot.tunes4j.dao.RadioStationRepository;
 import org.ocelot.tunes4j.dto.Column;
 import org.ocelot.tunes4j.dto.RadioStation;
-import org.ocelot.tunes4j.player.RadioStreamPlayer;
+import org.ocelot.tunes4j.notification.NotifierFactory;
+import org.ocelot.tunes4j.utils.ImageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -59,9 +61,6 @@ public class RadioStationTable {
 
 	@Autowired
 	private ApplicationWindow parentFrame;
-	
-	@Autowired
-	private RadioStreamPlayer radioPlayer;
 	
 	public RowSorter<TableModel> getSorter() {
 		return sorter;
@@ -247,18 +246,11 @@ public class RadioStationTable {
 					if (e.getClickCount() == 1) {
 						prevRow = currentRow;
 						currentRow = rowAtPoint;
-						//parentFrame.getPlayerPanel().setSong(getRowSelectedSong());
+						parentFrame.getRadioPlayerPanel().setRadioStation(getRowSelectedRadioStation());
 					}
 					if (e.getClickCount() == 2 && rowAtPoint > -1) {
-						RadioStation song = getRowSelectedSong();
-						System.out.println("Playing radio station");
-						try {
-							radioPlayer.open(song.getUrl());
-							radioPlayer.play();
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
-						
+						RadioStation station = getRowSelectedRadioStation();
+						playRadioStation(station);
 					}
 				}
 
@@ -287,11 +279,12 @@ public class RadioStationTable {
 		});
 	}
 	
-	public RadioStation getRowSelectedSong() {
+	public RadioStation getRowSelectedRadioStation() {
 		int selectedRow = table.getSelectedRow();
+
 		if(selectedRow < 0) {
 			JOptionPane.showMessageDialog(parentFrame, "Please choose a radiostation!", "Aviso", JOptionPane.WARNING_MESSAGE);
-			//parentFrame.getPlayerPanel().stop();
+			parentFrame.getRadioPlayerPanel().stop();
 			return null;
 		}
 		int row = table.convertRowIndexToModel(selectedRow);
@@ -299,6 +292,20 @@ public class RadioStationTable {
 		return bean;
 	}
 	
+	private void playRadioStation(RadioStation station) {
+		triggerRadiStationNotification(station);
+		parentFrame.getRadioPlayerPanel().play(station);
+	}
+
+	private void triggerRadiStationNotification(RadioStation bean) {
+		new Thread(() -> {
+			Image image = null;
+			if (bean.getArtWork() != null) {
+				image = ImageUtils.read(bean.getArtWork());
+			}
+			NotifierFactory.instance().push(image, bean.getName(), bean.getUrl(), bean.getGenre());
+		}).start();
+	}
 	
 
 

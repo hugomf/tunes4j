@@ -83,8 +83,8 @@ public class TableColumnResizer extends MouseInputAdapter{
             mouseXOffset = p.x + resizingColumn.getWidth();
         
         if (e.getClickCount() >= 2) {
-        	System.out.println("e.getClickCount() :" + e.getClickCount() );
-            JTableHeader tableHeader = table.getTableHeader();
+        		//System.out.println("e.getClickCount() :" + e.getClickCount() );
+        		JTableHeader tableHeader = table.getTableHeader();
             int column = getIntendedColumn(tableHeader, e.getPoint());
             Rectangle r = tableHeader.getHeaderRect(column);
             r.grow(-3, 0);

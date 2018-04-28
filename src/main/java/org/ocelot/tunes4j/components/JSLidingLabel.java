@@ -85,6 +85,7 @@ public class JSLidingLabel extends JLabel {
 	}
 	
 	private int getCurrentFontTextWidth() {
+		if (this.getGraphics() == null) return this.getMaximumSize().width;
 		FontMetrics metrics = this.getGraphics().getFontMetrics(this.getFont());
 		return metrics.stringWidth(this.originalString);
 	}

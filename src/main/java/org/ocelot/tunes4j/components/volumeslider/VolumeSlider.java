@@ -70,7 +70,6 @@ public class VolumeSlider extends JSlider implements MouseWheelListener {
 		if (n != getValue()) {
 			super.setValue(n);
 			float newGain = n * 0.01f;
-			System.out.println(newGain);
 			player.setGain(newGain);
 		}
 	}

@@ -37,7 +37,7 @@ import org.tritonus.share.sampled.AudioUtils;
 
 public class PlayerPanel  {
 
-	private Tunes4JAudioPlayer player;
+	private Tunes4JAudioPlayer player = new Tunes4JAudioPlayer();
 
 	private boolean sliderValueLocked = false;
 	
@@ -63,9 +63,7 @@ public class PlayerPanel  {
 	
 	private JToggleButton stopButton = new JToggleButton();
 
-
-	public PlayerPanel(Tunes4JAudioPlayer player) {
-		this.player = player;
+	public PlayerPanel() {
 		renderUI();
 	}
 	
@@ -265,9 +263,9 @@ public class PlayerPanel  {
 
 	public void stop() {
 		this.player.stop();
-		System.out.println(slider.getValue());
+		//System.out.println(slider.getValue());
 		this.slider.setValue(0);
-		System.out.println(slider.getValue());
+		//System.out.println(slider.getValue());
 		this.playButton.setSelected(false);
 	}
 	
