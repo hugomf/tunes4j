@@ -2,12 +2,14 @@ package org.ocelot.tunes4j.dto;
 
 import java.beans.Transient;
 import java.io.File;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -27,7 +29,6 @@ public class Song  {
 	
 	@Lob
 	@Column
-	//@Convert(converter = OptionalConverter.class)
 	private byte[] artWork;
 	
 	@Column
@@ -59,6 +60,9 @@ public class Song  {
 	
 	@Column
 	private String year;
+	
+	@ManyToMany(mappedBy = "songs")
+    private List<PlayList> playlists;
 	
 	@Transient
 	public File getSongFile() {

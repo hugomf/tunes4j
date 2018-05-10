@@ -9,23 +9,25 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.TableCellEditor;
 
-public class MyTableCellEditor extends AbstractCellEditor implements
-		TableCellEditor {
+public class MediaTableCellEditor extends AbstractCellEditor implements TableCellEditor {
+	
 	private static final long serialVersionUID = 1L;
 	private JComponent component = null;
 	private MediaTable media;
 
-	public MyTableCellEditor(MediaTable media) {
+	public MediaTableCellEditor(MediaTable media) {
 		super();
 		this.media = media;
 	}
 
 	@Override
-	public Component getTableCellEditorComponent(JTable table, Object value,
+	public Component getTableCellEditorComponent(JTable table, Object value, 
 			boolean isSelected, int row, int column) {
+		
 		component = new JTextField();
 		((JTextField) component).setText((String) value);
 		return component;
+	
 	}
 
 	@Override

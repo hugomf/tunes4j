@@ -72,6 +72,8 @@ public class LeftSplitPane {
 		model.addItemToCategory(new SourceListItem("My smart playlist", smartPlaylistIcon), playlistCategory);
 
 		fSourceList = new SourceList(model);
+		
+		fSourceList.setTransferHandler(new LibraryToPlaylistTransferHandler());
 
 		fSourceList
 				.addSourceListSelectionListener(new SourceListSelectionListener() {
@@ -83,13 +85,13 @@ public class LeftSplitPane {
 							TabbedPaneDemo panel = new TabbedPaneDemo();
 							splitPane.setRightComponent(panel);
 						} else if (item.equals(musicSourceItem)) {
-							parentFrame.getRadioPlayerPanel().getPlayerPanel().setVisible(false);
-							parentFrame.getPlayerPanel().getPlayerPanel().setVisible(true);
 							splitPane.setRightComponent(parentFrame.getMediaTable().getTablePane());
+							parentFrame.getPlayerPanel().show();
+							parentFrame.getRadioPlayerPanel().hide();
 						} else if (item.equals(radioSourceItem)) {
-							parentFrame.getPlayerPanel().getPlayerPanel().setVisible(false);
-							parentFrame.getRadioPlayerPanel().getPlayerPanel().setVisible(true);
 							splitPane.setRightComponent(parentFrame.getRadioTable().getTablePane());
+							parentFrame.getPlayerPanel().hide();
+							parentFrame.getRadioPlayerPanel().show();
 						} else if (item.equals(gdriveSourceItem)) {
 							splitPane.setRightComponent(dummyPanel);
 						} else if (item.equals(meganzSourceItem)) {
@@ -112,13 +114,13 @@ public class LeftSplitPane {
 		});
 		controlBar.createAndAddButton(MacIcons.MINUS, null);
 		controlBar.createAndAddPopdownButton(MacIcons.GEAR,
-				new PopupMenuCustomizerUsingStrings(null, "Item One",
-						"Item Two", "Item Three"));
+				new PopupMenuCustomizerUsingStrings(null, "Item One", "Item Two", "Item Three"));
 		fSourceList.installSourceListControlBar(controlBar);
 		splitPane = MacWidgetFactory.createSplitPaneForSourceList(fSourceList,
 				parentFrame.getMediaTable().getTablePane());
 		splitPane.setDividerLocation(200);
 		controlBar.installDraggableWidgetOnSplitPane(splitPane);
+		//splitPane.setTransferHandler(new LibraryToPlaylistTransferHandler());
 		fSourceList.setSelectedItem(musicSourceItem);
 		return splitPane;
 	}

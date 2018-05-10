@@ -38,6 +38,7 @@ dependencies {
 	implementation name: 'jaad-0.8.7'
 	
 	implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+	implementation group: 'org.processing', name: 'core', version: '3.3.6'
 	
 	//implementation group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.22'
 	implementation group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.22'
@@ -90,9 +91,10 @@ dependencies {
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.springframework:spring-test:4.3.6.RELEASE'
-	testImplementation group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
-	testImplementation group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
-	
+    testImplementation group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
+    testImplementation group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+	testImplementation group: 'org.assertj', name: 'assertj-swing-junit', version: '3.8.0'
+    
     
 }
 

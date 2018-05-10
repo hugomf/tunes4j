@@ -1,6 +1,5 @@
 package org.ocelot.tunes4j.gui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -10,15 +9,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 
-import org.ocelot.tunes4j.components.JSLidingLabel;
-import org.ocelot.tunes4j.components.RoundedJPanel;
 import org.ocelot.tunes4j.dto.RadioStation;
 import org.ocelot.tunes4j.player.RadioStreamPlayer;
 import org.ocelot.tunes4j.utils.ImageUtils;
@@ -34,15 +30,9 @@ public class RadioPlayerPanel  {
 	
 	private JPanel playerPanel = new JPanel();
 	
-	private JPanel sliderPanel = new JPanel();
+	private SongDisplayPanel songDetailsPanel = new SongDisplayPanel();
 	
-	private RoundedJPanel controlPanel = new RoundedJPanel();
-	
-	private JLabel artWorkImageLabel = new JLabel();
-	
-	private JSLidingLabel lblSongTitle = new JSLidingLabel("Song Title");
-	
-	private JLabel lblArtistAndAlbum = new JLabel("Artist - Album");
+	private JPanel mainDisplayPanel = new JPanel();
 	
 	private JSlider slider = new JSlider();
 	
@@ -109,40 +99,15 @@ public class RadioPlayerPanel  {
 			}
 		});
 		
-		
-		
-		Image resized = ImageUtils.resize(ResourceLoader.ICON_APPICON.getImage(), 60, 60);
-		this.artWorkImageLabel.setIcon(new ImageIcon(resized));
-		this.artWorkImageLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		
-		
-		this.lblSongTitle.setHorizontalAlignment(SwingConstants.LEFT);
-		this.lblSongTitle.setFont(new Font("Verdana", Font.PLAIN, 16));
-		this.lblSongTitle.setForeground(Color.black);
-		this.lblSongTitle.setPreferredSize(new Dimension(250, 20));
-		this.lblSongTitle.setInfinity(true);
-		
-		
-		this.lblArtistAndAlbum.setHorizontalAlignment(SwingConstants.LEFT);
-		this.lblArtistAndAlbum.setFont(new Font("Arial", Font.PLAIN, 12));
-		this.lblArtistAndAlbum.setForeground(Color.black);
-		this.lblArtistAndAlbum.setPreferredSize(new Dimension(250, 20));
-		
-		JPanel songDetailPanel = new JPanel();
-		songDetailPanel.setLayout(new BoxLayout(songDetailPanel, BoxLayout.Y_AXIS));
-		songDetailPanel.setOpaque(false);
-		songDetailPanel.add(new JLabel("   "));
-		songDetailPanel.add(new JLabel("   "));
-		songDetailPanel.add(lblSongTitle);
-		songDetailPanel.add(lblArtistAndAlbum);
-		
-		this.controlPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		this.controlPanel.setForeground(Color.darkGray);
-		//this.controlPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-		this.controlPanel.add(artWorkImageLabel);
-		this.controlPanel.add(songDetailPanel);
-		this.controlPanel.setBackground(new Color(0.95f,0.96f,0.98f));
-		
+		playerPanel = new JPanel();
+		//playerPanel.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+		playerPanel.setOpaque(false);
+		playerPanel.setLayout(new FlowLayout());
+		playerPanel.add(playButton);
+		playerPanel.add(stopButton);
+		playerPanel.setPreferredSize(new Dimension(150,80));
+//		VolumePanel volPanel =  new VolumePanel(this.player);
+//		playerPanel.add(volPanel);
 		
 		this.slider.setValue(0);
 		this.slider.setMaximum(1000);
@@ -194,24 +159,14 @@ public class RadioPlayerPanel  {
 //
 //		});
 		
-		playerPanel = new JPanel();
-		//playerPanel.setBorder(BorderFactory.createLineBorder(Color.BLUE));
-		playerPanel.setOpaque(false);
-		playerPanel.setLayout(new FlowLayout());
-		playerPanel.add(playButton);
-		playerPanel.add(stopButton);
-		playerPanel.setPreferredSize(new Dimension(150,80));
-//		VolumePanel volPanel =  new VolumePanel(this.player);
-//		playerPanel.add(volPanel);
-		
-		sliderPanel = new JPanel();
-		sliderPanel.setOpaque(false);
+		mainDisplayPanel = new JPanel();
+		mainDisplayPanel.setOpaque(false);
 		//sliderPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
-		sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.Y_AXIS));
-		sliderPanel.setPreferredSize(new Dimension(350, 110));
-		sliderPanel.add(controlPanel);
+		mainDisplayPanel.setLayout(new BoxLayout(mainDisplayPanel, BoxLayout.Y_AXIS));
+		mainDisplayPanel.setPreferredSize(new Dimension(350, 110));
+		mainDisplayPanel.add(this.songDetailsPanel);
 		//sliderPanel.add(timeLabel);
-		sliderPanel.add(slider);
+		mainDisplayPanel.add(slider);
 
 	}
 	
@@ -247,13 +202,9 @@ public class RadioPlayerPanel  {
 		if (station.getArtWork() != null) {
 			img = ImageUtils.read(station.getArtWork());
 		}
-		ImageIcon resized = new ImageIcon(ImageUtils.resize(img, 60, 60));
-	 	this.artWorkImageLabel.setIcon(resized);
-	 	this.lblArtistAndAlbum.setText(station.getUrl() + "-" + station.getGenre());
-	 	
-		this.lblSongTitle.stop();
-		this.lblSongTitle.setText("Streaming: " + station.getName());
-		this.lblSongTitle.play(200);
+		this.songDetailsPanel.setArtwork(img);
+		this.songDetailsPanel.setSongTitle("Streaming: " + station.getName());
+		this.songDetailsPanel.setArtist(station.getUrl() + "-" + station.getGenre());
 		
 	}
 
@@ -277,8 +228,18 @@ public class RadioPlayerPanel  {
 		return this.playerPanel;
 	}
 	
-	public JPanel getSliderPanel() {
-		return this.sliderPanel;
+	public JPanel getMainDisplayPanel() {
+		return this.mainDisplayPanel;
+	}
+	
+	public void show() {
+		this.playerPanel.setVisible(true);
+		this.mainDisplayPanel.setVisible(true);
+	}
+	
+	public void hide() {
+		this.playerPanel.setVisible(false);
+		this.mainDisplayPanel.setVisible(false);
 	}
 	
 //	public String getTimeProgress(long bytesread) {

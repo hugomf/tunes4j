@@ -38,6 +38,7 @@ import org.ocelot.tunes4j.utils.ImageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.explodingpixels.macwidgets.IAppWidgetFactory;
 import com.explodingpixels.macwidgets.MacWidgetFactory;
 import com.explodingpixels.widgets.TableUtils;
 import com.explodingpixels.widgets.TableUtils.SortDirection;
@@ -103,12 +104,12 @@ public class MediaTable {
 		loadColumnWidth();
 		listenForColumnWidthChanges();
 		loadData();
-		// ((DefaultCellEditor)table.getDefaultEditor(String.class)).setClickCountToStart(2);
+		 //((DefaultCellEditor)table.getDefaultEditor(String.class)).setClickCountToStart(2);
 		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		// //For Single Click Editing
-		table.setDefaultEditor(Object.class, new MyTableCellEditor(this));
+		table.setDefaultEditor(Object.class, new MediaTableCellEditor(this));
 		JScrollPane scrollPane = new JScrollPane(table);
-		// IAppWidgetFactory.makeIAppScrollPane(scrollPane);
+//		 IAppWidgetFactory.makeIAppScrollPane(scrollPane);
 		return scrollPane;
 	}
 
@@ -239,7 +240,7 @@ public class MediaTable {
 		table.addMouseListener(new MouseAdapter() {
 
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseReleased(MouseEvent e) {
 				JTable table = (JTable) e.getSource();
 				Point p = e.getPoint();
 				int rowAtPoint = table.rowAtPoint(p);
@@ -247,6 +248,7 @@ public class MediaTable {
 				if (rowAtPoint < 0)
 					return;
 				if (table.isRowSelected(rowAtPoint)) {
+					System.out.println("ENTREEEEEEE!:::!!!!S");
 					if (table.isEditing()) {
 						table.getCellEditor().stopCellEditing();
 					}
@@ -262,10 +264,10 @@ public class MediaTable {
 				}
 
 			}
-
+			
 			
 		});
-		table.getModel().addTableModelListener(new MyTableModelListener(this));
+		table.getModel().addTableModelListener(new MediaTableModelListener(this));
 		table.addMouseListener(new PopClickListener(this));
 	}
 	

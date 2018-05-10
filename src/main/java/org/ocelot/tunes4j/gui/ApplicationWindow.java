@@ -96,7 +96,8 @@ public class ApplicationWindow extends JFrame {
 		//this.mainPlayerPanel = this.audioPlayerPanel.getPlayerPanel();
 		toolBar.addComponentToLeft(this.audioPlayerPanel.getPlayerPanel());
 		toolBar.addComponentToLeft(this.radioPlayerPanel.getPlayerPanel());
-		toolBar.addComponentToCenter(this.audioPlayerPanel.getSliderPanel());
+		toolBar.addComponentToCenter(this.radioPlayerPanel.getMainDisplayPanel());
+  		toolBar.addComponentToCenter(this.audioPlayerPanel.getMainDisplayPanel());
 //		toolBar.addComponentToRight(MacButtonFactory
 //				.makeUnifiedToolBarButton(new JButton("Advanced",
 //						ResourceLoader.ICON_GEAR)));

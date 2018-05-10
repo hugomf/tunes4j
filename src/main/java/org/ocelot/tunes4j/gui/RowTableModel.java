@@ -15,13 +15,13 @@ abstract class RowTableModel<T> extends AbstractTableModel
 	private static final long serialVersionUID = 1L;
 	protected List<T> modelData;
 	protected List<String> columnNames;
-	protected Class[] columnClasses;
+	protected Class<T>[] columnClasses;
 	protected Boolean[] isColumnEditable;
-	private Class rowClass = Object.class;
+	private Class<T> rowClass;
 	private boolean isModelEditable = true;
 
 
-	protected RowTableModel(Class rowClass)
+	protected RowTableModel(Class<T> rowClass)
 	{
 		setRowClass( rowClass );
 	}
@@ -37,7 +37,7 @@ abstract class RowTableModel<T> extends AbstractTableModel
 		setDataAndColumnNames(modelData, columnNames);
 	}
 
-	protected RowTableModel(EventList<T> modelData, List<String> columnNames, Class rowClass)
+	protected RowTableModel(EventList<T> modelData, List<String> columnNames, Class<T> rowClass)
 	{
 		setDataAndColumnNames(modelData, columnNames);
 		setRowClass( rowClass );
@@ -52,14 +52,14 @@ abstract class RowTableModel<T> extends AbstractTableModel
 		fireTableStructureChanged();
 	}
 
-	protected void setRowClass(Class rowClass)
+	protected void setRowClass(Class<T> rowClass)
 	{
 		this.rowClass = rowClass;
 	}
 
-	public Class getColumnClass(int column)
+	public Class<?> getColumnClass(int column)
 	{
-		Class columnClass = null;
+		Class<?> columnClass = null;
 
 
 		if (column < columnClasses.length)
@@ -239,7 +239,7 @@ abstract class RowTableModel<T> extends AbstractTableModel
 		fireTableRowsUpdated(row, row);
 	}
 
-	public void setColumnClass(int column, Class columnClass)
+	public void setColumnClass(int column, Class<T> columnClass)
 	{
 		columnClasses[column] = columnClass;
 		fireTableRowsUpdated(0, getColumnCount() - 1);

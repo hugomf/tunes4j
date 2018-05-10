@@ -3,13 +3,16 @@ package org.ocelot.tunes4j.components;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class RoundedJPanel extends JPanel {
 
 	
@@ -39,11 +42,25 @@ public class RoundedJPanel extends JPanel {
 	public static void main(String[] args) {
 		JFrame f = new JFrame();
 		f.setSize(new Dimension(600, 400));
-		f.getContentPane().setLayout(null);
+		f.getContentPane().setLayout(new FlowLayout());
+		
 		RoundedJPanel rp = new RoundedJPanel();
 		rp.setBackground(Color.GRAY);
+		rp.add(new JButton("OK"));
 		rp.setBounds(100, 50, 400, 300);
+		
+		
+		RoundedJPanel rp1 = new RoundedJPanel();
+		rp1.add(new JButton("CANCEL"));
+		rp1.setBackground(Color.GRAY);
+		rp1.setBounds(100, 50, 400, 300);
+
 		f.getContentPane().add(rp);
+		f.getContentPane().add(rp1);
+		
+		
+		
+		f.pack();
 		f.setVisible(true);
 	}
 	
@@ -54,7 +71,7 @@ public class RoundedJPanel extends JPanel {
 	       int height = getHeight();
 	       int shadowGap = this.shadowGap;
 	       Color shadowColorA = new Color(shadowColor.getRed(),
-	   shadowColor.getGreen(), shadowColor.getBlue(), shadowAlpha);
+	    		   shadowColor.getGreen(), shadowColor.getBlue(), shadowAlpha);
 	       Graphics2D graphics = (Graphics2D) g;
 
 	       //Sets antialiasing if HQ.

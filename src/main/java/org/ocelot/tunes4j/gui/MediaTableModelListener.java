@@ -11,11 +11,11 @@ import org.ocelot.tunes4j.taggers.RegistryTagger;
 import org.ocelot.tunes4j.taggers.Tagger;
 import org.ocelot.tunes4j.utils.ResourceLoader;
 
-public class MyTableModelListener implements TableModelListener {
+public class MediaTableModelListener implements TableModelListener {
 
-	MediaTable mediaTable;
+	private MediaTable mediaTable;
 
-	MyTableModelListener(MediaTable mediaTable) {
+	public MediaTableModelListener(MediaTable mediaTable) {
 		this.mediaTable = mediaTable;
 	}
 
