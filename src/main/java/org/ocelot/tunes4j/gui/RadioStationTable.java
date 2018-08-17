@@ -85,11 +85,13 @@ public class RadioStationTable {
 	public JScrollPane getTablePane() {
 
 		model = new BeanTableModel<RadioStation>(RadioStation.class);
-		table = MacWidgetFactory.createITunesTable(model);
+		//table = MacWidgetFactory.createITunesTable(model);
+		table = new JTable(model);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		table.setDropMode(DropMode.INSERT_ROWS);
 		table.setDragEnabled(true);
 		table.setFillsViewportHeight(true);
+		table.putClientProperty("Quaqua.Table.style", "striped");
 //		table.setTransferHandler(new FileTransferHandler(parentFrame, table,
 //				radioStationoService));
 		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);

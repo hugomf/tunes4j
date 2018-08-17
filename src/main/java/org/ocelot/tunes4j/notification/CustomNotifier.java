@@ -17,9 +17,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import org.ocelot.tunes4j.effects.FadeTransition;
 import org.ocelot.tunes4j.effects.MoveEffect;
@@ -38,6 +41,7 @@ public class CustomNotifier {
 	private JPanel panel = new JPanel();
 	private JLabel lblSubtitle = new JLabel();
 	private JLabel lblMessage = new JLabel();
+	//private LookAndFeel previousLF;
 
 	public static void main(String[] args) throws Exception {
 
@@ -57,6 +61,15 @@ public class CustomNotifier {
 	}
 
 	public void display(Image image, String title, String subtitle, String message) {
+		//this.previousLF = UIManager.getLookAndFeel();
+		//setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		//SwingUtilities.updateComponentTreeUI(this.frame);
+		//SwingUtilities.updateComponentTreeUI(this.mainPanel);
+		renderUI(image, title, subtitle, message);
+		
+	}
+
+	private void renderUI(Image image, String title, String subtitle, String message) {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		//panel.setBorder(new LineBorder(Color.RED));
 
@@ -106,7 +119,6 @@ public class CustomNotifier {
 
 		SplashNotificationWorker worker = new SplashNotificationWorker(frame, moveFrom, moveTo);
 		worker.execute();
-		
 	}
 
 	
@@ -141,10 +153,19 @@ public class CustomNotifier {
 					FadeTransition.fadeOut(frame, 8);
 					frame.setVisible(false);
 					frame.dispose();
+					//setLookAndFeel(previousLF.getClass().getName());
 				}
 			}).start();;
 		}
 
+	}
+	
+	private void setLookAndFeel(String lookAndFeel)  {
+		try {
+			UIManager.setLookAndFeel(lookAndFeel);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private Point getMaxScreenPoint() {

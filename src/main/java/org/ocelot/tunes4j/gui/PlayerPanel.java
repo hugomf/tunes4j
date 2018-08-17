@@ -22,10 +22,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.commons.lang.time.DurationFormatUtils;
-import org.ocelot.tunes4j.components.volumeslider.VolumePanel;
 import org.ocelot.tunes4j.dto.Song;
 import org.ocelot.tunes4j.event.PlayProgressEvent;
 import org.ocelot.tunes4j.event.ProgressUpdateListener;
+import org.ocelot.tunes4j.gui.volumeslider.VolumePanel;
 import org.ocelot.tunes4j.player.Tunes4JAudioPlayer;
 import org.ocelot.tunes4j.utils.ImageUtils;
 import org.ocelot.tunes4j.utils.ResourceLoader;

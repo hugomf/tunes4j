@@ -6,19 +6,15 @@ import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
-import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.time.DurationFormatUtils;
 import org.ocelot.tunes4j.dao.PlayListRepository;
 import org.ocelot.tunes4j.dto.PlayList;
-import org.ocelot.tunes4j.player.Tunes4JAudioPlayer;
 import org.ocelot.tunes4j.utils.GUIUtils;
 import org.ocelot.tunes4j.utils.ResourceLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.tritonus.share.sampled.AudioUtils;
 
 import com.explodingpixels.macwidgets.LabeledComponentGroup;
 import com.explodingpixels.macwidgets.SourceListCategory;
@@ -40,7 +36,10 @@ public class ApplicationWindow extends JFrame {
 	@Autowired
 	private RadioStationTable radioTable;
 
-	private LeftSplitPane leftSplitPane;
+	//private LeftSplitPane leftSplitPane;
+	
+	private SplitPane leftSplitPane;
+	
 	
 	private JSplitPane splitPane;
 
@@ -73,19 +72,21 @@ public class ApplicationWindow extends JFrame {
 		add(toolBar.getComponent(), BorderLayout.NORTH);
 		add(splitPane, BorderLayout.CENTER);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(800, 600);
+		setSize(600, 600);
 		setLocationRelativeTo(null);
 		loadPlayList();
-		setVisible(true);
 		pack();
+		GUIUtils.centerWindow(this);
+		setVisible(true);
 	}
 
 	
 
 	public JSplitPane createSplitPane() {
-		leftSplitPane = new LeftSplitPane(this);
-		leftSplitPane.create();
-		return leftSplitPane.getSplitPane();
+		//leftSplitPane = new LeftSplitPane(this);
+		leftSplitPane = new  SplitPane(this);
+		return leftSplitPane.create();
+		//return leftSplitPane.getSplitPane();
 	}
 
 	private UnifiedToolBar createUnifiedToolBar() {

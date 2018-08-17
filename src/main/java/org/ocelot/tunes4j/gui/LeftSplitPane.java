@@ -67,13 +67,14 @@ public class LeftSplitPane {
 		
 		model.addItemToCategory(new SourceListItem("Podcasts", podcastsPlaylistIcon), libraryCategory);
 
-		model.addItemToCategory(new SourceListItem("My playlist", playlistIcon), playlistCategory);
+		//model.addItemToCategory(new SourceListItem("My playlist", playlistIcon), playlistCategory);
 		
 		model.addItemToCategory(new SourceListItem("My smart playlist", smartPlaylistIcon), playlistCategory);
 
 		fSourceList = new SourceList(model);
 		
 		fSourceList.setTransferHandler(new LibraryToPlaylistTransferHandler());
+		
 
 		fSourceList
 				.addSourceListSelectionListener(new SourceListSelectionListener() {
@@ -118,6 +119,7 @@ public class LeftSplitPane {
 		fSourceList.installSourceListControlBar(controlBar);
 		splitPane = MacWidgetFactory.createSplitPaneForSourceList(fSourceList,
 				parentFrame.getMediaTable().getTablePane());
+		
 		splitPane.setDividerLocation(200);
 		controlBar.installDraggableWidgetOnSplitPane(splitPane);
 		//splitPane.setTransferHandler(new LibraryToPlaylistTransferHandler());

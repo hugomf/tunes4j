@@ -1,27 +1,15 @@
 package org.ocelot.tunes4j.gui;
 
-import java.awt.Cursor;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.dnd.DragSource;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Vector;
 
 import javax.activation.ActivationDataFlavor;
 import javax.activation.DataHandler;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.TransferHandler;
-import javax.swing.table.DefaultTableModel;
 
 import org.ocelot.tunes4j.dto.Song;
-
-import com.explodingpixels.macwidgets.SourceListCategory;
-import com.explodingpixels.macwidgets.SourceListItem;
 
 @SuppressWarnings("serial")
 public class LibraryToPlaylistTransferHandler extends TransferHandler {

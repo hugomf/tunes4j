@@ -1,5 +1,6 @@
 package org.ocelot.tunes4j.gui;
 
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -13,6 +14,7 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.DropMode;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
@@ -23,6 +25,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
+import javax.swing.UIManager;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -50,7 +53,7 @@ public class MediaTable {
 	protected static boolean resizingColumnHasEnded = false;
 	protected static final boolean notRestoringColumnState = true;
 	private BeanTableModel<Song> model;
-	private JTable table;
+	private StrippedTable table;
 	private ProgressLoadDialog dialog;
 	protected int prevRow = -1;
 	protected int currentRow;
@@ -88,7 +91,7 @@ public class MediaTable {
 	public JScrollPane getTablePane() {
 
 		model = new BeanTableModel<Song>(Song.class);
-		table = MacWidgetFactory.createITunesTable(model);
+		table = new StrippedTable(model);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		table.setDropMode(DropMode.INSERT_ROWS);
 		table.setDragEnabled(true);
@@ -96,6 +99,8 @@ public class MediaTable {
 		table.setTransferHandler(new FileTransferHandler(parentFrame, table,
 				audioService));
 		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+		table.putClientProperty("Quaqua.Table.style", "striped");
 		new TableColumnResizer(table);
 		reorderColumnsInTable(HeaderConstants.HEADER_NAMES, table);
 		configureSort(model);
@@ -108,7 +113,13 @@ public class MediaTable {
 		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		// //For Single Click Editing
 		table.setDefaultEditor(Object.class, new MediaTableCellEditor(this));
+		table.setIntercellSpacing(new Dimension(0, 0));
+		table.setShowGrid(false);
+	    table.setShowHorizontalLines(false);
+	    UIManager.put("Table.focusCellHighlightBorder", BorderFactory.createEmptyBorder());
+		    
 		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 //		 IAppWidgetFactory.makeIAppScrollPane(scrollPane);
 		return scrollPane;
 	}
@@ -248,7 +259,6 @@ public class MediaTable {
 				if (rowAtPoint < 0)
 					return;
 				if (table.isRowSelected(rowAtPoint)) {
-					System.out.println("ENTREEEEEEE!:::!!!!S");
 					if (table.isEditing()) {
 						table.getCellEditor().stopCellEditing();
 					}

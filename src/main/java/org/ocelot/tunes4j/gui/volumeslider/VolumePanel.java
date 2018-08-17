@@ -17,7 +17,7 @@
  * 
  * Copyright 2007 Vincent Cariven
  */
-package org.ocelot.tunes4j.components.volumeslider;
+package org.ocelot.tunes4j.gui.volumeslider;
 
 import java.awt.Dimension;
 import java.awt.Insets;

@@ -24,11 +24,12 @@ public class ApplicationMenuBar {
 
 	private JMenuBar menuBar;
 	private ApplicationWindow parentFrame;
-	private LeftSplitPane leftSplitPane;
+	//private LeftSplitPane leftSplitPane;
+	private SplitPane leftSplitPane;
 	private JMenu fileMenu;
 	
 
-	public ApplicationMenuBar(ApplicationWindow parentFrame, LeftSplitPane leftSplitPane) {
+	public ApplicationMenuBar(ApplicationWindow parentFrame, SplitPane leftSplitPane) {
 
 		this.parentFrame = parentFrame;
 		this.leftSplitPane = leftSplitPane;
@@ -94,7 +95,8 @@ public class ApplicationMenuBar {
 		newPlayListItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				leftSplitPane.createPlaylist();
+			//	leftSplitPane.createPlaylist();
+				leftSplitPane.getSourceList().addPlaylist();
 			}
 		});
 		return newPlayListItem;
@@ -141,7 +143,7 @@ public class ApplicationMenuBar {
 		selectAllItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				leftSplitPane.selectAllFromCategory();
+		//		leftSplitPane.selectAllFromCategory();
 			}
 		});
 		
@@ -151,7 +153,7 @@ public class ApplicationMenuBar {
 		deleteItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				leftSplitPane.removeItemFromCategory();
+		//		leftSplitPane.removeItemFromCategory();
 			}
 		});
 		editMenu.setMnemonic(KeyEvent.VK_E);
