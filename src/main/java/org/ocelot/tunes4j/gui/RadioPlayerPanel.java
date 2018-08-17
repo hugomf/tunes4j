@@ -105,6 +105,10 @@ public class RadioPlayerPanel  {
 		playerPanel.setLayout(new FlowLayout());
 		playerPanel.add(playButton);
 		playerPanel.add(stopButton);
+		
+
+		
+		
 		playerPanel.setPreferredSize(new Dimension(150,80));
 //		VolumePanel volPanel =  new VolumePanel(this.player);
 //		playerPanel.add(volPanel);
@@ -162,8 +166,10 @@ public class RadioPlayerPanel  {
 		mainDisplayPanel = new JPanel();
 		mainDisplayPanel.setOpaque(false);
 		//sliderPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
+		//mainDisplayPanel.setLayout(new FlowLayout());
+		
+		//mainDisplayPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		mainDisplayPanel.setLayout(new BoxLayout(mainDisplayPanel, BoxLayout.Y_AXIS));
-		mainDisplayPanel.setPreferredSize(new Dimension(350, 110));
 		mainDisplayPanel.add(this.songDetailsPanel);
 		//sliderPanel.add(timeLabel);
 		mainDisplayPanel.add(slider);

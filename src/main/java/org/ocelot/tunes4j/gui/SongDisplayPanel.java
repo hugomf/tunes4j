@@ -14,6 +14,7 @@ import javax.swing.SwingConstants;
 
 import org.ocelot.tunes4j.components.JSLidingLabel;
 import org.ocelot.tunes4j.components.RoundedJPanel;
+import org.ocelot.tunes4j.processing.SineWave;
 import org.ocelot.tunes4j.utils.ImageUtils;
 import org.ocelot.tunes4j.utils.ResourceLoader;
 
@@ -52,6 +53,8 @@ public class SongDisplayPanel extends RoundedJPanel {
 		
 		songDetailPanel.setLayout(new BoxLayout(songDetailPanel, BoxLayout.Y_AXIS));
 		songDetailPanel.setOpaque(false);
+
+		
 		songDetailPanel.add(new JLabel("   "));
 		songDetailPanel.add(new JLabel("   "));
 		songDetailPanel.add(lblSongTitle);
@@ -61,6 +64,7 @@ public class SongDisplayPanel extends RoundedJPanel {
 		setForeground(Color.darkGray);
 		//this.controlPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		add(artWorkImageLabel);
+		add(new SineWave());
 		add(songDetailPanel);
 		setBackground(new Color(0.95f,0.96f,0.98f));
 		

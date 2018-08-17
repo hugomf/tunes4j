@@ -170,7 +170,6 @@ public class PlayerPanel  {
 		mainDisplayPanel.setOpaque(false);
 		//sliderPanel.setBorder(BorderFactory.createLineBorder(Color.RED));
 		mainDisplayPanel.setLayout(new BoxLayout(mainDisplayPanel, BoxLayout.Y_AXIS));
-		mainDisplayPanel.setPreferredSize(new Dimension(350, 110));
 		mainDisplayPanel.add(this.songDisplayPanel);
 		//sliderPanel.add(timeLabel);
 		mainDisplayPanel.add(slider);
