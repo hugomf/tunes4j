@@ -29,7 +29,6 @@ public class TestPlay {
 		OkHttpClient client = new OkHttpClient();
 		Request request = new Request.Builder().url(url).addHeader("Icy-MetaData", "1") .build();
 		Response response = client.newCall(request).execute();
-		System.out.println(response.headers());	
 		InputStream stream = response.body().byteStream();
 		return stream;
 	}

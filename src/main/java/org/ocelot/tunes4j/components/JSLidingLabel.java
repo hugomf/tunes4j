@@ -80,7 +80,6 @@ public class JSLidingLabel extends JLabel {
 	private boolean textFitsInLabel() {
 		double preferredSizeWidth = getPreferredSize().getWidth();
 		int currentFontMaxSize = getCurrentFontTextWidth();
-		//System.out.println("preferred size: " + preferredSizeWidth + " currentFontTextWidth:" + currentFontMaxSize);
 		return currentFontMaxSize <= preferredSizeWidth;
 	}
 	

@@ -33,7 +33,6 @@ public class IcyOggInputStream extends BufferedInputStream {
 	        OggVorbisInfo info = new OggVorbisInfo();
 	        try {
 				info.loadInfo(in);
-				System.out.println(info.getTitle());
 			} catch (UnsupportedAudioFileException e) {
 				e.printStackTrace();
 			}

@@ -54,7 +54,6 @@ class SourceListCellEditor extends DefaultCellEditor {
 			TreePath path = tree.getPathForLocation(mouseEvent.getX(), mouseEvent.getY());
 			if (path != null) {
 				Object node = path.getLastPathComponent();
-				System.out.println(node);
 				if ((node != null) && (node instanceof DefaultMutableTreeNode)) {
 					DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) node;
 					if (treeNode.getUserObject() instanceof SourceListItem) {

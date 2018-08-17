@@ -282,7 +282,6 @@ public class LightScrollPane extends JComponent
 		@Override
 		protected Rectangle getThumbBounds() {
 			 Rectangle t = super.getThumbBounds();
-			 System.out.println(t);
 			 return t;
 		}
 

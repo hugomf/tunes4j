@@ -113,7 +113,6 @@ public class ApplicationWindow extends JFrame {
 		List<PlayList> list = playListDao.findAll();
 		if (CollectionUtils.isNotEmpty(list)) {
 			for (PlayList row : list) {
-				System.out.println("row:" + row);
 				model.addItemToCategory(new SourceListItem(row.getName(),
 						ResourceLoader.ICON_PLAYLIST), playlistCategory);
 			}

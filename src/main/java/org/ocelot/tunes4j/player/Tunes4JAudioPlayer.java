@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.ocelot.tunes4j.event.PlayProgressEvent;
 import org.ocelot.tunes4j.event.ProgressUpdateListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javazoom.jlgui.basicplayer.BasicController;
 import javazoom.jlgui.basicplayer.BasicPlayer;
@@ -13,6 +15,9 @@ import javazoom.jlgui.basicplayer.BasicPlayerException;
 import javazoom.jlgui.basicplayer.BasicPlayerListener;
 
 public class Tunes4JAudioPlayer implements BasicPlayerListener {
+	
+	
+	private static Logger logger = LoggerFactory.getLogger(Tunes4JAudioPlayer.class);
 
 	public static final int STATE_UNSTARTED = 0;
 
@@ -111,10 +116,11 @@ public class Tunes4JAudioPlayer implements BasicPlayerListener {
 
 	@Override
 	public void opened(Object stream, Map properties) {
-		System.out.println("opened : " + properties.toString());
+		logger.info("opened : " + properties.toString());
 		this.properties = properties;
 	}
 
+	
 	public Map getProperties() {
 		return this.properties;
 	}
@@ -129,9 +135,7 @@ public class Tunes4JAudioPlayer implements BasicPlayerListener {
 		setRunningState(event);
 	}
 
-	public void setController(BasicController controller) {
-		System.out.println("setController : " + controller);
-	}
+	public void setController(BasicController controller) {   }
 
 	public void setRunningState(BasicPlayerEvent event) {
 

@@ -40,7 +40,6 @@ public class LibraryToPlaylistTransferHandler extends TransferHandler {
 	public boolean canImport(TransferSupport info) {
 		//SourceListItem table = (SourceListItem) info.
 		
-		System.out.println("DROP LOCATION!:" + info.getDropLocation());
 		
 		boolean isDroppable = info.isDrop() && info.isDataFlavorSupported(localObjectFlavor);
 		// XXX bug?

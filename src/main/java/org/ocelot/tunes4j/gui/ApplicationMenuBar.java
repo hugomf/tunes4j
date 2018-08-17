@@ -19,8 +19,14 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.commons.lang.SystemUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 
 public class ApplicationMenuBar {
+	
+	private static Logger logger = LoggerFactory.getLogger(ApplicationMenuBar.class);
 
 	private JMenuBar menuBar;
 	private ApplicationWindow parentFrame;
@@ -127,7 +133,7 @@ public class ApplicationMenuBar {
 					}
 					new ProgressLoadDialog(fileList,parentFrame, true);
 				} else {
-					System.out.println("No Selection ");
+					logger.info("No Selection ");
 				}
 			}
 		});

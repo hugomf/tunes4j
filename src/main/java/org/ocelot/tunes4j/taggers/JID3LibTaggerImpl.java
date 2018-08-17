@@ -2,12 +2,10 @@ package org.ocelot.tunes4j.taggers;
 
 
 import java.io.File;
-import java.io.IOException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.farng.mp3.MP3File;
-import org.farng.mp3.TagException;
 import org.ocelot.tunes4j.dto.Song;
 
 
@@ -16,7 +14,7 @@ import org.ocelot.tunes4j.dto.Song;
 
 public class JID3LibTaggerImpl implements Tagger {
 
-	private Log log = LogFactory.getLog(this.getClass());
+	private Log logger = LogFactory.getLog(this.getClass());
 	
 	@Override
 	public Song parse(File sourceFile) {
@@ -40,20 +38,13 @@ public class JID3LibTaggerImpl implements Tagger {
 				mp3Bean.setTitle(mp3file.getID3v1Tag().getSongTitle());
 				mp3Bean.setAlbum(mp3file.getID3v1Tag().getAlbum());
 		    }
-	    } catch (IOException e) {
-	    	System.out.println("Error en el archivo: " + sourceFile.getPath());
-			e.printStackTrace();
-		} catch (TagException e) {
-			System.out.println("Error en el archivo: " + sourceFile.getPath());
-			e.printStackTrace();
+	    } catch (Exception e) {
+	    	logger.debug("Error en el archivo: " + sourceFile.getPath(), e);
 		}
 		return mp3Bean;
 	}
 
 	@Override
-	public void save(File sourceFile, Song bean) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void save(File sourceFile, Song bean) {  }
 
 }

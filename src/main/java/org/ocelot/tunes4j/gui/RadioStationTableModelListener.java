@@ -21,9 +21,7 @@ public class RadioStationTableModelListener implements TableModelListener {
 				if (!(firstRow == TableModelEvent.HEADER_ROW)) {
 					for (int r = firstRow; r <= lastRow; r++) {
 						RadioStation bean = (RadioStation) this.table.getModel().getRow(r);
-						//System.out.println("Update tag:" + bean);
 						table.getRadioStationService().save(bean);
-						//System.out.println("Radio Station saved!!!");
 					}
 				}
 			case TableModelEvent.DELETE:

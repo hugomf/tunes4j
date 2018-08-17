@@ -29,22 +29,6 @@ class SourceListCellRenderer extends DefaultTreeCellRenderer {
 		
 	}
 	
-//	private JPanel updateJPanel(JTree tree, SourceListItem item) {
-//		
-//		this.panel.setBackground(getBackgroundNonSelectionColor());
-//		this.label.setForeground(getTextNonSelectionColor());
-//	    
-//		if(selected) {
-//	      this.panel.setBackground(getBackgroundSelectionColor());
-//	      this.label.setForeground(getTextSelectionColor());
-//	    }
-//	    panel.setLayout(new BorderLayout());
-//	    System.out.println(tree.getWidth());
-//	    this.label.setText(item.getName());
-//		this.label.setIcon(item.getNodeIcon());
-//	    panel.add(this.label);
-//	    return this.panel;
-//	}
 	
 
 }

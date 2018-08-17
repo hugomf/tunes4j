@@ -60,7 +60,6 @@ public class FileTransferHandler extends TransferHandler {
 
 	@Override
 	public int getSourceActions(JComponent c) {
-		//System.out.println("getSourceActions");
 	      Component glassPane = c.getRootPane().getGlassPane();
 	      glassPane.setCursor(DragSource.DefaultMoveDrop);
 	      if (!(c instanceof JTable)) {

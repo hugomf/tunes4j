@@ -212,9 +212,7 @@ public class PlayerPanel  {
 
 	public void stop() {
 		this.player.stop();
-		//System.out.println(slider.getValue());
 		this.slider.setValue(0);
-		//System.out.println(slider.getValue());
 		this.playButton.setSelected(false);
 	}
 	

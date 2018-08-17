@@ -71,6 +71,5 @@ public class VolumePanel extends JPanel {
 		add(volumeLowLabel);
 		add(volumeSlider);
 		add(volumeHighLabel);
-		System.out.println(this.getHeight());
 	}
 }

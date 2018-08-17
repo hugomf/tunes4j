@@ -30,7 +30,6 @@ public class JID3TaggerImpl implements Tagger {
 	@Override
 	public void save(File sourceFile, Song mp3Bean) {
 		MediaFile mp3file = new MP3File(sourceFile);
-		System.out.println("mp3Bean=" + mp3Bean);
 		try {
 			ID3V2_3_0Tag oID3V2Tag = new ID3V2_3_0Tag();
 			ID3V1_1Tag oID3V1_1Tag = new ID3V1_1Tag();
@@ -77,7 +76,7 @@ public class JID3TaggerImpl implements Tagger {
 			
 			
 		} catch (ID3Exception e) {
-			System.out.println("Error en el archivo: " + sourceFile.getPath());
+			System.out.println("Error in the file: " + sourceFile.getPath());
 			e.printStackTrace();
 		}
 		
@@ -125,7 +124,7 @@ public class JID3TaggerImpl implements Tagger {
 			try {
 				aoID3Tag = mp3file.getTags();
 			} catch(ID3Exception e) {
-				System.out.println("Error en el archivo: " + sourceFile.getPath());
+				System.out.println("Error in the file: " + sourceFile.getPath());
 				e.printStackTrace();
 			}
 			if (aoID3Tag !=null && aoID3Tag.length > 0) {
@@ -178,7 +177,7 @@ public class JID3TaggerImpl implements Tagger {
 			}
 			
 		} catch (Exception e) {
-			System.out.println("Error en el archivo: " + sourceFile.getPath());
+			System.out.println("Error en the file: " + sourceFile.getPath());
 			e.printStackTrace();
 		}
 		return mp3Bean;

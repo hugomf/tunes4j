@@ -145,9 +145,6 @@ public class FadeTransition2 {
 						public void accept(Integer t) {
 							 p.addPoint(x, t);
 							 x++;
-							System.out.println(String.format("x:%s, y:%s", x, t));
-							//g2.setColor(Color.RED);
-							//g2.fillOval(x, t, 2, 2);
 							
 						}
 					});

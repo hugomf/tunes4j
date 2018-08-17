@@ -86,13 +86,10 @@ public class ImageBuilder {
 		g2.drawString(text, txtX, txtY);
 		g2.dispose();
 		targetImg.coerceData(true);
-		
-		System.out.println(margin.x);
 		return new ImageIcon(targetImg);
 	}
 
 	private BufferedImage getSourceImage()  {
-		BufferedImage sourceImg;
 		try {
 			return ImageIO.read(FileUtils.getUrl(BACKGROUND_IMAGE));
 		} catch (IOException e) {
