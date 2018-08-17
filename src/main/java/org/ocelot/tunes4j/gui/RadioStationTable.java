@@ -1,5 +1,6 @@
 package org.ocelot.tunes4j.gui;
 
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -12,6 +13,7 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.DropMode;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
@@ -22,6 +24,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
+import javax.swing.UIManager;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -37,7 +40,6 @@ import org.ocelot.tunes4j.utils.ImageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.explodingpixels.macwidgets.MacWidgetFactory;
 import com.explodingpixels.widgets.TableUtils;
 import com.explodingpixels.widgets.TableUtils.SortDirection;
 
@@ -48,7 +50,7 @@ public class RadioStationTable {
 	protected static boolean resizingColumnHasEnded = false;
 	protected static final boolean notRestoringColumnState = true;
 	private BeanTableModel<RadioStation> model;
-	private JTable table;
+	private StrippedTable table;
 	protected int prevRow = -1;
 	protected int currentRow;
 	private RowSorter<TableModel> sorter;
@@ -85,16 +87,16 @@ public class RadioStationTable {
 	public JScrollPane getTablePane() {
 
 		model = new BeanTableModel<RadioStation>(RadioStation.class);
-		//table = MacWidgetFactory.createITunesTable(model);
-		table = new JTable(model);
+		table = new StrippedTable(model);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		table.setDropMode(DropMode.INSERT_ROWS);
 		table.setDragEnabled(true);
 		table.setFillsViewportHeight(true);
-		table.putClientProperty("Quaqua.Table.style", "striped");
 //		table.setTransferHandler(new FileTransferHandler(parentFrame, table,
 //				radioStationoService));
-		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION); 
+		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+		table.putClientProperty("Quaqua.Table.style", "striped");
 		new TableColumnResizer(table);
 		reorderColumnsInTable(HeaderConstants.RADIOSTATION_HEADER_NAMES, table);
 		configureSort(model);
@@ -104,10 +106,16 @@ public class RadioStationTable {
 		listenForColumnWidthChanges();
 		loadData();
 		// ((DefaultCellEditor)table.getDefaultEditor(String.class)).setClickCountToStart(2);
-		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		// //For Single Click Editing
 		table.setDefaultEditor(Object.class, new RadioStationTableCellEditor(this));
+		table.setIntercellSpacing(new Dimension(0, 0));
+		table.setShowGrid(false);
+	    table.setShowHorizontalLines(false);
+		UIManager.put("Table.focusCellHighlightBorder", BorderFactory.createEmptyBorder());
+		
+		
 		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		return scrollPane;
 	}
 

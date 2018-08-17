@@ -28,7 +28,7 @@ public StrippedTable( String[][] data, String[] fields )
   }
 
 
-  public StrippedTable(BeanTableModel<Song> model) {
+  public StrippedTable(BeanTableModel<?> model) {
 	  super(model);
   }
 

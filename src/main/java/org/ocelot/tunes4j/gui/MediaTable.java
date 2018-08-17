@@ -41,8 +41,6 @@ import org.ocelot.tunes4j.utils.ImageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.explodingpixels.macwidgets.IAppWidgetFactory;
-import com.explodingpixels.macwidgets.MacWidgetFactory;
 import com.explodingpixels.widgets.TableUtils;
 import com.explodingpixels.widgets.TableUtils.SortDirection;
 
@@ -110,7 +108,6 @@ public class MediaTable {
 		listenForColumnWidthChanges();
 		loadData();
 		 //((DefaultCellEditor)table.getDefaultEditor(String.class)).setClickCountToStart(2);
-		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		// //For Single Click Editing
 		table.setDefaultEditor(Object.class, new MediaTableCellEditor(this));
 		table.setIntercellSpacing(new Dimension(0, 0));
@@ -120,7 +117,6 @@ public class MediaTable {
 		    
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
-//		 IAppWidgetFactory.makeIAppScrollPane(scrollPane);
 		return scrollPane;
 	}
 
