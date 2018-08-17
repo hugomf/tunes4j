@@ -41,6 +41,8 @@ public class SourceList {
 	private DefaultTreeModel treeModel;
 	
 	private final SourceListModel sourceListModel;
+	
+	private String selectedItem = "NONE";
 
 	@SuppressWarnings("serial")
 	public SourceList() {
@@ -53,7 +55,7 @@ public class SourceList {
 				super.valueForPathChanged(path, obj);
 			}
 		};
-
+		
 		
 		initUI();
 		
@@ -146,6 +148,12 @@ public class SourceList {
 		scrollPane = new JScrollPane(tree);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
+		tree.addTreeSelectionListener(event-> {
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+			String name = ((SourceListItem) node.getUserObject()).getName();
+		    selectedItem = name;
+		});
+		
 		tree.setUI(new javax.swing.plaf.basic.BasicTreeUI() {
 
 			@Override
@@ -281,6 +289,10 @@ public class SourceList {
 
 	public JScrollPane getContentPane() {
 		return this.scrollPane;
+	}
+	
+	public String getSelectedItem() {
+		return this.selectedItem;
 	}
 
 //	private void addNodesToCategory(DefaultMutableTreeNode categoryNode, SourceListItem[] items) {

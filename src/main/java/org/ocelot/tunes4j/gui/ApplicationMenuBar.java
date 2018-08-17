@@ -137,24 +137,16 @@ public class ApplicationMenuBar {
 	public JMenu buildEditMenu() {
 		
 		JMenu editMenu = new JMenu("Edit");
-		
 		JMenuItem selectAllItem = new JMenuItem("Select All");
 		selectAllItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
-		selectAllItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-		//		leftSplitPane.selectAllFromCategory();
-			}
+		selectAllItem.addActionListener(e -> {
+				leftSplitPane.selectAllFromCategory();
 		});
-		
 		JMenuItem deleteItem = new JMenuItem("Delete ");
 		deleteItem.setAccelerator(KeyStroke.getKeyStroke("DELETE"));
 		deleteItem.setMnemonic(KeyEvent.VK_D);
-		deleteItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-		//		leftSplitPane.removeItemFromCategory();
-			}
+		deleteItem.addActionListener(event->{
+				leftSplitPane.removeItemFromCategory();
 		});
 		editMenu.setMnemonic(KeyEvent.VK_E);
 		editMenu.add(selectAllItem);

@@ -107,5 +107,34 @@ public class SplitPane  {
 	}
 
 	
+	public void selectAllFromCategory() {
+		
+		
+		String selectedItem = sourceListPanel.getSelectedItem();
+		if (selectedItem.equals("NONE")) return;
+		
+		if (selectedItem.equals("Music")) {
+			this.parentFrame.getMediaTable().getTable().selectAll();
+		} else {
+			this.parentFrame.getRadioTable().getTable().selectAll();;
+		}
+		
+	}
+	
+	public void removeItemFromCategory() {
+		
+		
+		String selectedItem = sourceListPanel.getSelectedItem();
+		if (selectedItem.equals("NONE")) return;
+
+		if (selectedItem.equals("Music")) {
+			this.parentFrame.getMediaTable().removeSelectedItems();
+		} else if (selectedItem.equals("Radio Stations")) {
+			this.parentFrame.getRadioTable().removeSelectedItems();
+		} else {
+			//fSourceList.getModel().removeItemFromCategory(fSourceList.getSelectedItem(), playlistCategory);
+		}
+	}
+	
 
 }
