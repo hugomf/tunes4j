@@ -20,13 +20,15 @@ import com.google.common.util.concurrent.AbstractExecutionThreadService;
 
 import ch.qos.logback.classic.Logger;
 
-public class FolderMonitorService extends AbstractExecutionThreadService {
+public class FolderMonitorService  extends AbstractExecutionThreadService {
 
 	private static Logger logger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(FolderMonitorService.class);
 
 	private WatchService folderWatcher;
 	
 	private FileChangeEventNotifier notifier;
+	
+	private Path watchedFolder;
 	
 	public void addFileChangeListener(FileChangeEventListener listener) {
 		notifier.registerListener(listener);
@@ -38,8 +40,9 @@ public class FolderMonitorService extends AbstractExecutionThreadService {
 	
 	public void subscribeFolder(File folder) {
 		try {
-			Path path = folder.toPath();
-			path.register(folderWatcher, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY,
+			this.watchedFolder = folder.toPath();
+			logger.info(watchedFolder.toAbsolutePath().toString());
+			watchedFolder.register(folderWatcher, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY,
 					StandardWatchEventKinds.ENTRY_DELETE);
 
 		} catch (IOException e) {
@@ -64,7 +67,7 @@ public class FolderMonitorService extends AbstractExecutionThreadService {
 			try {
 				while(!complete) {
 					WatchKey key = folderWatcher.take();
-					for (WatchEvent<?> event: key.pollEvents()) {
+					for (final WatchEvent<?> event: key.pollEvents()) {
 						syncFiles(event, key);
 					}
 					complete = !key.reset();
@@ -72,21 +75,22 @@ public class FolderMonitorService extends AbstractExecutionThreadService {
 				
 			} catch (InterruptedException e) {
 				logger.error("error in the startMonitor occurred:", e);
-			}	
+			} 	
 		}
 	}
 
 	private void syncFiles(WatchEvent<?> event, WatchKey key) {
-		Path file = (Path) event.context();
-		//logger.info(format("Event Kind: %s, File: %s", event.kind(), event.context()));
+		Path path = (Path) event.context();
+		File file = watchedFolder.resolve(path).toFile();
+		
 		if (StandardWatchEventKinds.ENTRY_CREATE == event.kind()) {
-			this.notifier.notifyListeners(new FileChangeEvent(FileChangeEvent.Type.ON_ADDNEW, file.toFile()));
+			this.notifier.notifyListeners(new FileChangeEvent(FileChangeEvent.Type.ON_ADDNEW, file));
 		}
 		if (StandardWatchEventKinds.ENTRY_DELETE == event.kind()) {
-			this.notifier.notifyListeners(new FileChangeEvent(FileChangeEvent.Type.ON_DELETE, file.toFile()));
+			this.notifier.notifyListeners(new FileChangeEvent(FileChangeEvent.Type.ON_DELETE, file));
 		}
 		if (StandardWatchEventKinds.ENTRY_MODIFY == event.kind()) {
-			this.notifier.notifyListeners(new FileChangeEvent(FileChangeEvent.Type.ON_CHANGE, file.toFile()));
+			this.notifier.notifyListeners(new FileChangeEvent(FileChangeEvent.Type.ON_CHANGE, file));
 		}
 	}
 	
@@ -118,7 +122,7 @@ public class FolderMonitorService extends AbstractExecutionThreadService {
 		monitor.startAsync();
 		
 	}
-	
+
 	
 
 }

@@ -114,7 +114,8 @@ abstract class RowTableModel<T> extends AbstractTableModel
 	{
 		return modelData.get( row );
 	}
-
+	
+	
 	@SuppressWarnings("unchecked")
 	public T[] getRowsAsArray(int... rows)
 	{
@@ -231,6 +232,13 @@ abstract class RowTableModel<T> extends AbstractTableModel
 			fireTableRowsDeleted(row, row);
 			modelData.remove(row);
 		}
+	}
+	
+	
+	public void removeRow(T rowData) {
+		int index = modelData.indexOf(rowData);
+		fireTableRowsDeleted(index, index);
+		modelData.remove(index);
 	}
 
 	public void replaceRow(int row, T rowData)

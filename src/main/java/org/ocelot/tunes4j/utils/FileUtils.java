@@ -11,7 +11,6 @@ import com.google.common.io.Files;
 
 public class FileUtils {
 	
-	public static CustomFileFilter filefilter = new CustomFileFilter();
 	
 	public static void copy(File s, File t) throws IOException {
 		Files.copy(s, t);
@@ -23,29 +22,6 @@ public class FileUtils {
 			return fileName.substring(0, whereDot);
 		} 
 		return "";
-	}
-	
-	/**
-	 * Recursive function that gets Media Files from the FileSystem
-	 * @param folder
-	 * @param list
-	 */
-	public static void  getFiles(File folder, List<File> list){
-		if (folder.isDirectory()) {
-			for (File file : folder.listFiles(filefilter)) {
-				getFiles(file,list);
-			}
-		} else if (folder.isFile()) {
-				list.add(folder);
-		}
-	}
-	
-	public static List<File> getFiles( List<File> sourceFileList) {
-		List<File> files = new ArrayList<File>();
-		for (File file : sourceFileList) {
-			getFiles(file, files);
-		}
-		return files;
 	}
 	
 	public static URL getUrl(String resourcePath) {

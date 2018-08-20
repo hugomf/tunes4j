@@ -10,6 +10,8 @@ public interface SongRepository extends CrudRepository<Song, String> {
 
 	public Song findById(String id);
 	
+	public Song findByPathAndFileName(String path, String fileName);
+	
 }
 
 
