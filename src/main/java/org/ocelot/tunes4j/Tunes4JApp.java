@@ -4,6 +4,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.ocelot.tunes4j.config.AppConfiguration;
 import org.ocelot.tunes4j.config.JpaConfiguration;
+import org.ocelot.tunes4j.utils.SingleInstanceVerifier;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Tunes4JApp {
@@ -12,6 +13,8 @@ public class Tunes4JApp {
 			IllegalAccessException, UnsupportedLookAndFeelException {
 
 		try {
+			
+			SingleInstanceVerifier.checkIfRunning();
 
 			@SuppressWarnings("resource")
 			AnnotationConfigApplicationContext context = 
