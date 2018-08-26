@@ -37,7 +37,9 @@ dependencies {
 	implementation name: 'entagged-audioformats-0.10'
 	implementation name: 'jaad-0.8.7'
 	implementation name: 'Vaqua4'
-	
+
+
+	implementation group: 'net.incongru.watchservice', name: 'barbary-watchservice', version: '1.0'
 	implementation 'com.squareup.okhttp3:okhttp:3.10.0'
 
 	//implementation group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.22'

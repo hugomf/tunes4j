@@ -25,7 +25,8 @@ public class ProgressLoadDialog extends JDialog {
 	private ImportFilesTask task;
 	private ApplicationWindow parentFrame;
 
-	public ProgressLoadDialog(List<File> fileList, ApplicationWindow parentFrame, boolean modal) {
+
+	public ProgressLoadDialog(List<File> fileList, ApplicationWindow parentFrame,  boolean modal) {
 		super(parentFrame, modal);
 		this.fileList = fileList;
 		this.parentFrame = parentFrame;
@@ -51,7 +52,7 @@ public class ProgressLoadDialog extends JDialog {
 	}
 
 	private void executeTask() {
-		task = new ImportFilesTask(this.fileList, this.parentFrame.getMediaTable());
+		task = new ImportFilesTask(this.fileList, this.parentFrame.getRegisterFolderWatcher());
 		task.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
 				if ("progress".equals(evt.getPropertyName())) {

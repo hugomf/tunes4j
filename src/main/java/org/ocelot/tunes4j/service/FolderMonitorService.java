@@ -1,4 +1,4 @@
-package org.ocelot.tunes4j.gui;
+package org.ocelot.tunes4j.service;
 
 import static java.lang.String.format;
 
@@ -15,12 +15,14 @@ import org.ocelot.tunes4j.event.FileChangeEvent;
 import org.ocelot.tunes4j.event.FileChangeEventListener;
 import org.ocelot.tunes4j.event.FileChangeEventNotifier;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.google.common.util.concurrent.AbstractExecutionThreadService;
 
 import ch.qos.logback.classic.Logger;
 
-public class FolderMonitorService  extends AbstractExecutionThreadService {
+
+public class FolderMonitorService  extends AbstractExecutionThreadService implements FolderWatcherService {
 
 	private static Logger logger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(FolderMonitorService.class);
 

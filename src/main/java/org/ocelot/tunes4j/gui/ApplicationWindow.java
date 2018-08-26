@@ -11,6 +11,7 @@ import javax.swing.JSplitPane;
 import org.apache.commons.collections.CollectionUtils;
 import org.ocelot.tunes4j.dao.PlayListRepository;
 import org.ocelot.tunes4j.dto.PlayList;
+import org.ocelot.tunes4j.service.FolderWatcherRegister;
 import org.ocelot.tunes4j.utils.GUIUtils;
 import org.ocelot.tunes4j.utils.ResourceLoader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +36,11 @@ public class ApplicationWindow extends JFrame {
 	
 	@Autowired
 	private RadioStationTable radioTable;
-
-	//private LeftSplitPane leftSplitPane;
+	
+	@Autowired
+	private FolderWatcherRegister watcher;
 	
 	private SplitPane leftSplitPane;
-	
 	
 	private JSplitPane splitPane;
 
@@ -54,8 +55,7 @@ public class ApplicationWindow extends JFrame {
 	private SourceListModel model = new SourceListModel();
 	
 	private	SourceListCategory playlistCategory = new SourceListCategory("Playlists");
-	
-	
+
 	private void setApplicationIcons(ApplicationWindow window, Image image) {
 		window.setIconImage(image);
 		GUIUtils.setDockImage(image);
@@ -117,6 +117,11 @@ public class ApplicationWindow extends JFrame {
 						ResourceLoader.ICON_PLAYLIST), playlistCategory);
 			}
 		}
+	}
+	
+	
+	public FolderWatcherRegister getRegisterFolderWatcher() {
+		return this.watcher;
 	}
 	
 	public MediaTable getMediaTable() {
