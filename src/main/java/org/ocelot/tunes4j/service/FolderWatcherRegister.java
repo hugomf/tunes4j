@@ -24,7 +24,7 @@ public class FolderWatcherRegister {
 	
 	private static Logger logger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(RecurseFilesProvider.class);
 	
-	private FolderMonitorForMacService monitorService;
+	private FolderWatcherService monitorService;
 	
 	private MediaTable mediaTable;
 	
@@ -33,7 +33,7 @@ public class FolderWatcherRegister {
 	@Autowired
 	public FolderWatcherRegister(MediaTable mediaTable) {
 		
-		this.monitorService = new FolderMonitorForMacService();
+		this.monitorService = FolderWatcherFactory.getInstance();
 		this.mediaTable = mediaTable;
 		this.monitorService.addFileChangeListener(new FileChangeEventListener() {
 			
