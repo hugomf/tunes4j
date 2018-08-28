@@ -1,29 +1,34 @@
 package org.ocelot.tunes4j.taggers;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.apache.commons.lang.StringUtils;
 import org.ocelot.tunes4j.dto.Song;
 import org.ocelot.tunes4j.utils.FileUtils;
+import org.slf4j.LoggerFactory;
 
+import com.google.common.io.Files;
 import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.ID3v2;
-import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
-import com.mpatric.mp3agic.UnsupportedTagException;
+
+import ch.qos.logback.classic.Logger;
 
 public class Mp3agicTaggerImpl implements Tagger {
+	
+	private static Logger logger = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(Mp3agicTaggerImpl.class);
 
 	@Override
 	public Song parse(File sourceFile) {
 
 		Song song = new Song();
-
+		song.setPath(sourceFile.getParent());
+		song.setFileName(sourceFile.getName());
+		song.setTitle(Files.getNameWithoutExtension(sourceFile.getName()));
+		
 		try {
 			Mp3File mp3file = new Mp3File(sourceFile);
-			song.setPath(sourceFile.getParent());
-			song.setFileName(sourceFile.getName());
+
 
 			if (mp3file.hasId3v1Tag()) {
 				ID3v1 id3v1Tag = mp3file.getId3v1Tag();
@@ -59,12 +64,8 @@ public class Mp3agicTaggerImpl implements Tagger {
 				song.setTitle(FileUtils.getFileNameWithoutExtension(song.getFileName()));
 			}
 
-		} catch (UnsupportedTagException e) {
-			e.printStackTrace();
-		} catch (InvalidDataException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			logger.error(String.format("Invalid song file: %s", sourceFile.getAbsoluteFile().toString()), e);
 		}
 		return song;
 	}

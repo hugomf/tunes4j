@@ -15,7 +15,6 @@ import org.ocelot.tunes4j.event.FileChangeEvent;
 import org.ocelot.tunes4j.event.FileChangeEventListener;
 import org.ocelot.tunes4j.event.FileChangeEventNotifier;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import com.google.common.util.concurrent.AbstractExecutionThreadService;
 

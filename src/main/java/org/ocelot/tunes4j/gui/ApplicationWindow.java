@@ -38,7 +38,7 @@ public class ApplicationWindow extends JFrame {
 	private RadioStationTable radioTable;
 	
 	@Autowired
-	private FolderWatcherRegister watcher;
+	private FolderWatcherRegister folderWatcherRegister;
 	
 	private SplitPane leftSplitPane;
 	
@@ -121,7 +121,7 @@ public class ApplicationWindow extends JFrame {
 	
 	
 	public FolderWatcherRegister getRegisterFolderWatcher() {
-		return this.watcher;
+		return this.folderWatcherRegister;
 	}
 	
 	public MediaTable getMediaTable() {

@@ -54,7 +54,6 @@ public class FolderWatcherRegister {
 				//updateMediaTable(event.getFile());
 			}
 		});
-		
 		registerFolders();
 		this.monitorService.startAsync();
 	}
@@ -62,7 +61,7 @@ public class FolderWatcherRegister {
 	
 	public void updateMediaTable(File file) {
 		Tagger tagger = TAGGER_FACTORY.getInsance(ResourceLoader.ID3TAGGER_PARSER);
-		if(file.exists()) {
+		if(file.isFile() && file.exists()) {
 			Song bean = tagger.parse(file);
 			if (bean != null) {
 				String folderPath = getFolderPath(file.getAbsolutePath());

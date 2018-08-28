@@ -6,9 +6,7 @@ import org.assertj.core.util.Lists;
 
 public class FileChangeEventNotifier {
 	
-	
 	private List<FileChangeEventListener> fileChangeListeners = Lists.newArrayList();
-	
 	
 	public void notifyListeners(FileChangeEvent event){
 		for (FileChangeEventListener listener : fileChangeListeners) {
@@ -25,6 +23,7 @@ public class FileChangeEventNotifier {
 	}
 	
 	public void registerListener(FileChangeEventListener listener) {
+		if (this.fileChangeListeners.contains(listener)) return;
 		this.fileChangeListeners.add(listener);
 	}
 	

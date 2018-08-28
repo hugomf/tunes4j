@@ -10,7 +10,6 @@ import org.ocelot.tunes4j.service.FolderWatcherRegister;
 import org.ocelot.tunes4j.utils.RecurseFilesProvider;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import ch.qos.logback.classic.Logger;
 
 
@@ -20,14 +19,14 @@ public class ImportFilesTask extends SwingWorker<Integer, File> {
 
 	private List<File> sourceFileList;
 	
-	private FolderWatcherRegister watcher;
+	private FolderWatcherRegister register;
 	
 	private int count;
 	
 	@Autowired
-	public ImportFilesTask(List<File> sourceFileList, FolderWatcherRegister watcher) {
+	public ImportFilesTask(List<File> sourceFileList, FolderWatcherRegister register) {
 		this.sourceFileList = sourceFileList;
-		this.watcher = watcher;
+		this.register = register;
 	}
 
 	@Override
@@ -47,8 +46,6 @@ public class ImportFilesTask extends SwingWorker<Integer, File> {
 		return null;
 	}
 	
-	
-	
 	/**
      * Wait the given time in milliseconds
      * @param iMillis
@@ -66,13 +63,14 @@ public class ImportFilesTask extends SwingWorker<Integer, File> {
 	@Override
 	public void done() {
 		logger.info("Successfully Imported:" + count + " songs!");
+		this.register.registerFolders();
 		Toolkit.getDefaultToolkit().beep();
 	}
 
 	@Override
 	protected void process(List<File> chunks) {
 		for (File file : chunks) {
-			this.watcher.updateMediaTable(file);
+			this.register.updateMediaTable(file);
 		}
 	}
 	
