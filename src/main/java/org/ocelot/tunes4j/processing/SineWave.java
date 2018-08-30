@@ -37,7 +37,7 @@ public class SineWave extends Processing {
 	public void draw() {
 		//background(0);
 		background(new Color(0.95f,0.96f,0.98f));
-		
+		//background(Color.DARK_GRAY);
 		renderWave();
 	}
 

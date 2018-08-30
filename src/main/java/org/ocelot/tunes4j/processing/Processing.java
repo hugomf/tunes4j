@@ -45,17 +45,15 @@ public abstract class Processing extends JComponent implements MouseListener, Mo
 	private boolean showStroke = true;
 	
 	private int frameRate = 60;
-	private Timer timer;
+	private Timer timer = new Timer(1000/frameRate, event-> repaint());
 	private boolean setupIsOff = true;
-	//private MouseEvent mouseEvent;
 	
 	public Processing() {
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		setOpaque(true);
 		settings();
-		timer = new Timer(1000/frameRate, event-> repaint());
-		timer.start();
+		this.timer.start();
 	}
 	
 	@Override
@@ -67,6 +65,8 @@ public abstract class Processing extends JComponent implements MouseListener, Mo
 			setup();
 			setupIsOff = false;
 		}
+		g2d.setBackground(getBackground());
+		g2d.clearRect(0, 0, width, height);
 		draw();
 	}
 	
@@ -211,7 +211,6 @@ public abstract class Processing extends JComponent implements MouseListener, Mo
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		//this.mouseEvent = e;
 		mouseClicked();
 	}
 

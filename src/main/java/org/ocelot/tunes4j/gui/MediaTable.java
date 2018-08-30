@@ -98,7 +98,7 @@ public class MediaTable {
 				audioService));
 		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
-		table.putClientProperty("Quaqua.Table.style", "striped");
+		//table.putClientProperty("Quaqua.Table.style", "striped");
 		new TableColumnResizer(table);
 		reorderColumnsInTable(HeaderConstants.HEADER_NAMES, table);
 		configureSort(model);
@@ -110,9 +110,12 @@ public class MediaTable {
 		 //((DefaultCellEditor)table.getDefaultEditor(String.class)).setClickCountToStart(2);
 		// //For Single Click Editing
 		table.setDefaultEditor(Object.class, new MediaTableCellEditor(this));
+		
 		table.setIntercellSpacing(new Dimension(0, 0));
 		table.setShowGrid(false);
-	    table.setShowHorizontalLines(false);
+	   // table.setShowHorizontalLines(false);
+	   // table.setShowVerticalLines(false);
+	    
 	    UIManager.put("Table.focusCellHighlightBorder", BorderFactory.createEmptyBorder());
 		    
 		JScrollPane scrollPane = new JScrollPane(table);

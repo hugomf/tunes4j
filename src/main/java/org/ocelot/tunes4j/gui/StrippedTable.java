@@ -12,7 +12,6 @@ import javax.swing.UIManager;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import org.ocelot.tunes4j.dto.Song;
 
 @SuppressWarnings("serial")
 public class StrippedTable extends JTable
@@ -30,6 +29,7 @@ public StrippedTable( String[][] data, String[] fields )
 
   public StrippedTable(BeanTableModel<?> model) {
 	  super(model);
+	  setShowGrid(false);
   }
 
 
@@ -58,15 +58,12 @@ public StrippedTable( String[][] data, String[] fields )
 
       while ( rowYToDraw < getHeight() )
       {
-        if ( actualRow % 2 == 0 )
-        {
+        if ( actualRow % 2 == 0 ) {
           newGraphics.setColor( BACKGROUND_COLOR ); //change this to another color (Color.YELLOW, anyone?) to show that only the free space is painted
           newGraphics.fillRect( 0, rowYToDraw, getWidth(), getRowHeight() );
           newGraphics.setColor( UIManager.getColor( "Table.gridColor" ) );
         }
-
-        newGraphics.drawLine( 0, rowYToDraw, getWidth(), rowYToDraw );
-
+       // newGraphics.drawLine( 0, rowYToDraw, getWidth(), rowYToDraw );
         rowYToDraw += getRowHeight();
         actualRow++;
       }
@@ -74,12 +71,10 @@ public StrippedTable( String[][] data, String[] fields )
 
       //paint the column-lines:
       int x = 0;
-      for ( int i = 0; i < getColumnCount(); i++ )
-      {
+      for ( int i = 0; i < getColumnCount(); i++ ) {
         TableColumn column = getColumnModel().getColumn( i );
         x += column.getWidth(); //add the column width to the x-coordinate
-
-        newGraphics.drawLine( x - 1, firstNonExistentRowY, x - 1, getHeight() );
+       // newGraphics.drawLine( x - 1, firstNonExistentRowY, x - 1, getHeight() );
       }
 
       newGraphics.dispose();
