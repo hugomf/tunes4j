@@ -11,7 +11,7 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.LineBorder;
 
-public class Main {
+public class BordersExample {
 	  public static void main(String args[]) {
 	    JFrame frame = new JFrame("Compound Borders");
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
