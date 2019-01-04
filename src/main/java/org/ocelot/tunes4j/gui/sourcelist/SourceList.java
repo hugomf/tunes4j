@@ -21,12 +21,13 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.assertj.core.util.Lists;
 import org.ocelot.tunes4j.event.ItemSelectionEvent;
 import org.ocelot.tunes4j.event.SourceListItemSelectionListener;
 import org.ocelot.tunes4j.utils.GUIUtils;
 import org.ocelot.tunes4j.utils.PlayListNameGenerator;
 import org.ocelot.tunes4j.utils.ResourceLoader;
+
+import com.google.common.collect.Lists;
 
 public class SourceList {
 

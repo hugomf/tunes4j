@@ -3,7 +3,6 @@ package org.ocelot.tunes4j.gui.sourcelist;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.experimental.categories.Categories;
 import org.springframework.util.StringUtils;
 
 import com.google.common.collect.Lists;

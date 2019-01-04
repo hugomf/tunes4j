@@ -18,6 +18,10 @@ target/
 .gradletasknamecache
 .gradle/
 
+#IntelliJ
+.idea/
+out/
+
 
 #OS specific
 .DS_Store
