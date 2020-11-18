@@ -19,7 +19,8 @@ target/
 .gradle/
 
 #IntelliJ
-#.idea/
+.idea/
+.vscode/
 out/
 
 

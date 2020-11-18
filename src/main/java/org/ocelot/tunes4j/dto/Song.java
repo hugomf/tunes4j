@@ -15,7 +15,7 @@ import javax.persistence.ManyToMany;
 import org.hibernate.annotations.GenericGenerator;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+
 
 @Data
 @Entity

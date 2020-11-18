@@ -18,12 +18,6 @@ import org.apache.commons.lang.SystemUtils;
 
 public class GUIUtils {
 
-//	public static void centerWindow(Window window) {
-//		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-//		int  x = dim.width /2 - window.getWidth();
-//		int y = dim.height/2 - window.getHeight();
-//		window.setLocation(x, y);
-//	}
 	public static void centerWindow(Window window) {
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		window.setLocation(dim.width / 2 - window.getSize().width / 2, dim.height / 2 - window.getSize().height / 2);
@@ -47,27 +41,7 @@ public class GUIUtils {
 			e1.printStackTrace();
 		}
 	}
-	
-	public static void setWindowOpacity(Window window, float value) {
-		try {
-			Class awtUtilitiesClass = Class.forName("com.sun.awt.AWTUtilities");
-			Method mSetWindowOpacity = awtUtilitiesClass.getMethod("setWindowOpacity", Window.class, float.class);
-			mSetWindowOpacity.invoke(null, window, Float.valueOf(value));
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException ex) {
-			ex.printStackTrace();
-		} catch (SecurityException ex) {
-			ex.printStackTrace();
-		} catch (ClassNotFoundException ex) {
-			ex.printStackTrace();
-		} catch (IllegalAccessException ex) {
-			ex.printStackTrace();
-		} catch (IllegalArgumentException ex) {
-			ex.printStackTrace();
-		}
-	}
-	
+		
 	
 	public static void setDockImage(Image image) {
 		

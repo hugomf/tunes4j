@@ -7,7 +7,22 @@
  */
 
 // Apply the java-library plugin to add support for Java Library
+
+
+
+plugins {
+	id "application"
+}
+
 apply plugin: 'java-library'
+
+ext {
+	javaMainClass = "org.ocelot.tunes4j.Tunes4JApp"
+}
+
+application {
+	mainClassName = javaMainClass
+}
 
 version='1.0'
 // In this section you declare where to find the dependencies of your project
@@ -32,6 +47,11 @@ configurations.all {
 
 
 dependencies {
+
+
+	//Java 11 Compatibility (JAF update)
+
+	implementation 'com.sun.activation:javax.activation:1.2.0'
 
 	implementation name: 'liquidlnf'
 	implementation name: 'entagged-audioformats-0.10'
@@ -62,8 +82,9 @@ dependencies {
 
 	implementation group: 'net.java.dev.glazedlists', name: 'glazedlists_java15', version: '1.8.0'
     implementation 'com.google.guava:guava:21.0'
-	implementation 'org.projectlombok:lombok:1.16.16'
-	
+	implementation 'org.projectlombok:lombok:1.18.16'
+	annotationProcessor 'org.projectlombok:lombok:1.18.16'
+
 	implementation (group: 'eu.medsea.mimeutil', name: 'mime-util', version: '2.1.1') {
 		exclude group: 'org.slf4j'
 	}
@@ -100,6 +121,8 @@ dependencies {
     
 }
 
+
+
 task fatJar(type: Jar) {
 
 	manifest {
@@ -120,3 +143,4 @@ task fatJar(type: Jar) {
     	}
     with jar
 }
+
