@@ -11,12 +11,18 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 
 import org.ocelot.tunes4j.utils.ResourceLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TabbedPaneDemo extends JPanel {
+    
+    private static Logger logger = LoggerFactory.getLogger(TabbedPaneDemo.class);
 
 	private static final long serialVersionUID = 1L;
 
@@ -57,7 +63,7 @@ public class TabbedPaneDemo extends JPanel {
     protected JComponent makeTextPanel(String text) {
         JPanel panel = new JPanel(false);
         JLabel filler = new JLabel(text);
-        filler.setHorizontalAlignment(JLabel.CENTER);
+        filler.setHorizontalAlignment(SwingConstants.CENTER);
         panel.setLayout(new GridLayout(1, 1));
         panel.add(filler);
         return panel;
@@ -68,14 +74,14 @@ public class TabbedPaneDemo extends JPanel {
         if (imgURL != null) {
             return new ImageIcon(imgURL);
         } else {
-            System.err.println("Couldn't find file: " + path);
+            logger.info(String.format("Couldn't find file: ", path));
             return null;
         }
     }
     
     private static void createAndShowGUI() {
         JFrame frame = new JFrame("TabbedPaneDemo");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         
         frame.add(new TabbedPaneDemo(), BorderLayout.CENTER);
         
@@ -84,11 +90,9 @@ public class TabbedPaneDemo extends JPanel {
     }
     
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+        SwingUtilities.invokeLater(() -> {
             		UIManager.put("swing.boldMetal", Boolean.FALSE);
             		createAndShowGUI();
-            }
         });
     }
 }

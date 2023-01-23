@@ -4,11 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
-import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
 import javax.swing.plaf.basic.BasicSplitPaneDivider;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 
@@ -24,9 +22,8 @@ public class SplitPane  {
 
 	private ApplicationWindow parentFrame;
 
-	private JSplitPane splitPane;
+	private JSplitPane plane;
 
-	private JPanel dummyPanel = new JPanel();
 
 	@Autowired
 	public SplitPane(ApplicationWindow window) {
@@ -36,25 +33,25 @@ public class SplitPane  {
 	public JSplitPane create() {
 		
 		
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, 
+		plane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, 
 				sourceListPanel.getContentPane(),
 					this.parentFrame.getMediaTable().getTablePane());
 		
-		splitPane.setDividerLocation(300);
+		plane.setDividerLocation(300);
 		//splitPane.putClientProperty("Quaqua.SplitPane.style","bar");
-		splitPane.setDividerSize(1);
-		splitPane.setContinuousLayout(true);
-        ((BasicSplitPaneUI) splitPane.getUI()).getDivider().setBorder(
+		plane.setDividerSize(1);
+		plane.setContinuousLayout(true);
+        ((BasicSplitPaneUI) plane.getUI()).getDivider().setBorder(
                 BorderFactory.createMatteBorder(0, 1, 0, 0, new Color(0xa5a5a5)));
-        splitPane.setBorder(BorderFactory.createEmptyBorder());
+        plane.setBorder(BorderFactory.createEmptyBorder());
 
         Dimension leftMinimumSize = new Dimension(200,0);
-		splitPane.getLeftComponent().setMinimumSize(leftMinimumSize);
+		plane.getLeftComponent().setMinimumSize(leftMinimumSize);
 		
 		Dimension rightMinimumSize = new Dimension(350,0);
-		splitPane.getRightComponent().setMinimumSize(rightMinimumSize);
+		plane.getRightComponent().setMinimumSize(rightMinimumSize);
 		
-		splitPane.setUI(new BasicSplitPaneUI() {
+		plane.setUI(new BasicSplitPaneUI() {
             public BasicSplitPaneDivider createDefaultDivider() {
                 return new BasicSplitPaneDivider(this) {
                     public void setBorder(Border b) {
@@ -72,23 +69,23 @@ public class SplitPane  {
 			public void selectItem(ItemSelectionEvent event) {
 				SourceListItem item = event.getSourceListItem();
 				String name = item.getName();
-				int dividerLocation = splitPane.getDividerLocation();
+				int dividerLocation = plane.getDividerLocation();
 				switch (name) {
 					case "Music":
-						splitPane.setRightComponent(parentFrame.getMediaTable().getTablePane());
+						plane.setRightComponent(parentFrame.getMediaTable().getTablePane());
 						parentFrame.getPlayerPanel().show();
 						parentFrame.getRadioPlayerPanel().hide();
 						break;
 					case "Radio Stations":
-						splitPane.setRightComponent(parentFrame.getRadioTable().getTablePane());
+						plane.setRightComponent(parentFrame.getRadioTable().getTablePane());
 						parentFrame.getPlayerPanel().hide();
 						parentFrame.getRadioPlayerPanel().show();
 						break;
 //					default:
 //						splitPane.setRightComponent(dummyPanel);
 				}
-				splitPane.getRightComponent().setMinimumSize(rightMinimumSize);
-				splitPane.setDividerLocation(dividerLocation);
+				plane.getRightComponent().setMinimumSize(rightMinimumSize);
+				plane.setDividerLocation(dividerLocation);
 			}
 		});
 		
@@ -99,7 +96,7 @@ public class SplitPane  {
 		    
 		});
 		
-		return this.splitPane;
+		return this.plane;
 	}
 
 	public SourceList getSourceList() {

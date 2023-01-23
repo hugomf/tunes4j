@@ -15,10 +15,6 @@ public class PlayerPanelTest {
 		
 
 	}
-
-	
-	
-	
 	class PlayerPanelFrame {
 		
 		PlayerPanel playerPanel = new PlayerPanel();
@@ -46,8 +42,8 @@ public class PlayerPanelTest {
 			song.setTitle("I Want To Spend My Lifetime Loving You");
 			song.setArtist("Freddy Mercury");
 			song.setAlbum("Lo Mejor de la Salsa 90's");
-			song.setPath("/Users/hugo/eclipse-workspace2/LaunchAndLearn/resources/");
-			song.setFileName("amiga.mp3");
+			song.setPath("/Users/Hugo/music");
+			song.setFileName("Amanda.mp3");
 			return song;
 		}
 		

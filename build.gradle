@@ -109,7 +109,9 @@ dependencies {
     }
 	implementation group: 'org.jcraft', name: 'jorbis', version: '0.0.17'
 	implementation group: 'org.clojars.aseipp', name: 'jogg', version: '0.0.7'	
-	
+
+	// for FFT transformation
+	implementation 'com.github.wendykierp:JTransforms:3.1'
     
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'

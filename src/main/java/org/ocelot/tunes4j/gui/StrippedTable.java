@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
@@ -63,7 +64,7 @@ public StrippedTable( String[][] data, String[] fields )
           newGraphics.fillRect( 0, rowYToDraw, getWidth(), getRowHeight() );
           newGraphics.setColor( UIManager.getColor( "Table.gridColor" ) );
         }
-       // newGraphics.drawLine( 0, rowYToDraw, getWidth(), rowYToDraw );
+        newGraphics.drawLine( 0, rowYToDraw, getWidth(), rowYToDraw );
         rowYToDraw += getRowHeight();
         actualRow++;
       }
@@ -74,7 +75,7 @@ public StrippedTable( String[][] data, String[] fields )
       for ( int i = 0; i < getColumnCount(); i++ ) {
         TableColumn column = getColumnModel().getColumn( i );
         x += column.getWidth(); //add the column width to the x-coordinate
-       // newGraphics.drawLine( x - 1, firstNonExistentRowY, x - 1, getHeight() );
+        newGraphics.drawLine( x - 1, firstNonExistentRowY, x - 1, getHeight() );
       }
 
       newGraphics.dispose();
@@ -84,7 +85,7 @@ public StrippedTable( String[][] data, String[] fields )
   } //paintEmptyRows
 
 
-
+  @Override
   public Component prepareRenderer( TableCellRenderer renderer, int row, int column )
   {
     Component c = super.prepareRenderer( renderer, row, column );
@@ -107,7 +108,7 @@ public StrippedTable( String[][] data, String[] fields )
     StrippedTable table = new StrippedTable( data, fields );
     JScrollPane pane = new JScrollPane( table );
 
-    frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+    frame.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
     frame.add( pane );
     frame.setSize( 400, 300 );
     frame.setLocationRelativeTo( null );
