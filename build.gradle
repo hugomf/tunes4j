@@ -56,7 +56,7 @@ dependencies {
 	implementation name: 'liquidlnf'
 	implementation name: 'entagged-audioformats-0.10'
 	implementation name: 'jaad-0.8.7'
-	implementation name: 'Vaqua4'
+	implementation name: 'VAqua4'
 
 
 	implementation group: 'net.incongru.watchservice', name: 'barbary-watchservice', version: '1.0'
