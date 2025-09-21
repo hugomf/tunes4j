@@ -46,7 +46,7 @@ Tunes4J is a comprehensive Java-based audio player and tag editor application bu
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/tunes4j.git
+git clone https://github.com/hugomf/tunes4j.git
 cd tunes4j
 ```
 
@@ -67,7 +67,7 @@ java -jar build/libs/tunes4j-all.jar
 
 ### Pre-built Releases
 
-Download the latest release from the [Releases page](https://github.com/your-username/tunes4j/releases) and run:
+Download the latest release from the [Releases page](https://github.com/hugomf/tunes4j/releases) and run:
 ```bash
 java -jar tunes4j-all.jar
 ```
