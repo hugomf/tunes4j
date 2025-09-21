@@ -127,7 +127,7 @@ public class Tunes4JAudioPlayer implements BasicPlayerListener {
 
 	@Override
 	public void progress(int bytesread, long microseconds, byte[] pcmdata, Map properties) {
-		PlayProgressEvent event = new PlayProgressEvent(new Long(bytesread));
+		PlayProgressEvent event = new PlayProgressEvent(Long.valueOf(bytesread));
 		listener.updateProgress(event);
 	}
 

@@ -49,21 +49,29 @@ public class GUIUtils {
 			
 			if (!SystemUtils.IS_OS_MAC_OSX) return;
 			
-		    Class util = Class.forName("com.apple.eawt.Application");
-		    Method getApplication = util.getMethod("getApplication", new Class[0]);
-		    Object application = getApplication.invoke(util);
-		    Class params[] = new Class[1];
-		    params[0] = Image.class;
-		    Method setDockIconImage = util.getMethod("setDockIconImage", params);
-		    setDockIconImage.invoke(application, image);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+		    // Use modern JavaFX approach or skip if not available
+		    try {
+		        Class<?> taskbarClass = Class.forName("java.awt.Taskbar");
+		        Method getTaskbar = taskbarClass.getMethod("getTaskbar");
+		        Object taskbar = getTaskbar.invoke(null);
+		        Method setIconImage = taskbarClass.getMethod("setIconImage", java.awt.Image.class);
+		        setIconImage.invoke(taskbar, image);
+		    } catch (ClassNotFoundException | NoSuchMethodException |
+		             IllegalAccessException | InvocationTargetException e) {
+		        // Fallback to old EAWT approach with module access
+		        try {
+		            Class<?> util = Class.forName("com.apple.eawt.Application");
+		            Method getApplication = util.getMethod("getApplication");
+		            Object application = getApplication.invoke(util);
+		            Method setDockIconImage = util.getMethod("setDockIconImage", java.awt.Image.class);
+		            setDockIconImage.invoke(application, image);
+		        } catch (Exception ex) {
+		            // If both approaches fail, just log and continue
+		            System.err.println("Could not set dock icon: " + ex.getMessage());
+		        }
+		    }
+		} catch (Exception e) {
+		    System.err.println("Error setting dock image: " + e.getMessage());
 		}
 		
 	}

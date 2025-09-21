@@ -16,13 +16,15 @@ public class MissingSequentialGeneratorTest {
 	@Test
 	public void shouldReturnStartWhenEmptyArray() throws Exception {
 		int[] array = {};
-		assertThat(MissingSequentialGenerator.getInstance().findFirst(array, 1, 1), equalTo(1));
+		MissingSequentialGenerator.getInstance();
+		assertThat(MissingSequentialGenerator.findFirst(array, 1, 1), equalTo(1));
 	}
 	
 	@Test
 	public void shouldReturnStartWhenArrayIsNull() throws Exception {
 		int[] array = null;
-		assertThat(MissingSequentialGenerator.getInstance().findFirst(array, 1, 1), equalTo(1));
+		MissingSequentialGenerator.getInstance();
+		assertThat(MissingSequentialGenerator.findFirst(array, 1, 1), equalTo(1));
 	}
 	
 	@Test
@@ -32,13 +34,15 @@ public class MissingSequentialGeneratorTest {
 		this.exception.expectMessage("Start:10 cannot be greater than End:4");
 		int start = 1;
 		int[] array = { start};
-		assertThat(MissingSequentialGenerator.getInstance().findFirst(array, 10, 4), equalTo(2));
+		MissingSequentialGenerator.getInstance();
+		assertThat(MissingSequentialGenerator.findFirst(array, 10, 4), equalTo(2));
 	}
 	
 	@Test
 	public void shouldReturnMissingNumberWhenTheNumberIsBetweenTheRange() throws Exception {
 		int[] array = {1,2,4,5};
-		assertThat(MissingSequentialGenerator.getInstance().findFirst(array, 1, 5), equalTo(3));
+		MissingSequentialGenerator.getInstance();
+		assertThat(MissingSequentialGenerator.findFirst(array, 1, 5), equalTo(3));
 	}
 	
 	
@@ -69,7 +73,8 @@ public class MissingSequentialGeneratorTest {
 	}
 	
 	private void assertIntRange(int[] array, int start, int end, int expected) {
-		assertThat(MissingSequentialGenerator.getInstance().findFirst(
+		MissingSequentialGenerator.getInstance();
+		assertThat(MissingSequentialGenerator.findFirst(
 				array, start, end), equalTo(expected));
 	}
 	
