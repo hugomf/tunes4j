@@ -96,12 +96,10 @@ public class SourceList {
 	
 	
 	private static void expandPath(final JTree tree, final TreePath path) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				if ((tree == null) || (path == null))
-					return;
-				tree.expandPath(path);
-			}
+		SwingUtilities.invokeLater(() -> {
+			if ((tree == null) || (path == null))
+				return;
+			tree.expandPath(path);
 		});
 	}
 	
@@ -304,52 +302,49 @@ public class SourceList {
 //	}
 
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					// UIManager.setLookAndFeel("org.violetlib.aqua.AquaLookAndFeel");
-					// UIManager.setLookAndFeel(UIManager.getLookAndFeel());
-					SourceList panel = new SourceList();
-					panel.getTree().addKeyListener(new KeyAdapter() {
+		SwingUtilities.invokeLater(() -> {
+			try {
+				// UIManager.setLookAndFeel("org.violetlib.aqua.AquaLookAndFeel");
+				// UIManager.setLookAndFeel(UIManager.getLookAndFeel());
+				SourceList panel = new SourceList();
+				panel.getTree().addKeyListener(new KeyAdapter() {
 
-						@Override
-						public void keyPressed(KeyEvent e) {
+					@Override
+					public void keyPressed(KeyEvent e) {
 
-							if ((e.getKeyCode() == KeyEvent.VK_N) && ((e.getModifiers() & KeyEvent.VK_META) != 0)) {
-								panel.addPlaylist();
-							}
-
-							if ((e.getKeyCode() == KeyEvent.VK_N) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
-								panel.addPlaylist();
-							}
-
-							if ((e.getKeyCode() == KeyEvent.VK_BACK_SPACE)
-									&& ((e.getModifiers() & KeyEvent.VK_META) != 0)) {
-								panel.deletePlaylist();
-							}
-
-							if ((e.getKeyCode() == KeyEvent.VK_DELETE)
-									&& ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
-								panel.deletePlaylist();
-							}
+						if ((e.getKeyCode() == KeyEvent.VK_N) && ((e.getModifiers() & KeyEvent.VK_META) != 0)) {
+							panel.addPlaylist();
 						}
 
-					});
-					JFrame frame = new JFrame();
-					frame.getRootPane().putClientProperty("Aqua.backgroundStyle", "vibrantUltraDark");
-					frame.add(panel.getContentPane());
-					frame.setPreferredSize(new Dimension(300, 400));
-					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-					frame.setTitle("JTree Example");
-					frame.pack();
-					GUIUtils.centerWindow(frame);
-					frame.setVisible(true);
+						if ((e.getKeyCode() == KeyEvent.VK_N) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+							panel.addPlaylist();
+						}
 
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+						if ((e.getKeyCode() == KeyEvent.VK_BACK_SPACE)
+								&& ((e.getModifiers() & KeyEvent.VK_META) != 0)) {
+							panel.deletePlaylist();
+						}
+
+						if ((e.getKeyCode() == KeyEvent.VK_DELETE)
+								&& ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+							panel.deletePlaylist();
+						}
+					}
+
+				});
+				JFrame frame = new JFrame();
+				frame.getRootPane().putClientProperty("Aqua.backgroundStyle", "vibrantUltraDark");
+				frame.add(panel.getContentPane());
+				frame.setPreferredSize(new Dimension(300, 400));
+				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				frame.setTitle("JTree Example");
+				frame.pack();
+				GUIUtils.centerWindow(frame);
+				frame.setVisible(true);
+
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		});
 	}

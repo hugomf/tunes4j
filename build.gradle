@@ -140,6 +140,9 @@ dependencies {
 
 	// for FFT transformation
 	implementation 'com.github.wendykierp:JTransforms:3.1'
+
+	// TOML parsing for theme configuration
+	implementation 'com.moandjiezana.toml:toml4j:0.7.2'
     
     testImplementation 'org.springframework:spring-test:5.3.31'
     testImplementation 'junit:junit:4.13.2'

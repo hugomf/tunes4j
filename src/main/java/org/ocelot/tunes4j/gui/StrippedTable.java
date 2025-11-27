@@ -18,8 +18,6 @@ import javax.swing.table.TableColumn;
 public class StrippedTable extends JTable
 {
 
-  private static final Color BACKGROUND_COLOR =  new Color(0.95f,0.96f,0.98f);
-
 
 public StrippedTable( String[][] data, String[] fields )
   {
@@ -60,7 +58,11 @@ public StrippedTable( String[][] data, String[] fields )
       while ( rowYToDraw < getHeight() )
       {
         if ( actualRow % 2 == 0 ) {
-          newGraphics.setColor( BACKGROUND_COLOR ); //change this to another color (Color.YELLOW, anyone?) to show that only the free space is painted
+          // Use theme-aware alternating row color
+          Color altRowColor = UIManager.getColor("Table.alternateRowColor");
+          if (altRowColor != null) {
+            newGraphics.setColor(altRowColor);
+          }
           newGraphics.fillRect( 0, rowYToDraw, getWidth(), getRowHeight() );
           newGraphics.setColor( UIManager.getColor( "Table.gridColor" ) );
         }
@@ -92,7 +94,13 @@ public StrippedTable( String[][] data, String[] fields )
 
     if ( !isRowSelected( row ) )
     {
-      c.setBackground( row % 2 == 0 ? getBackground() : BACKGROUND_COLOR );
+      // Use theme-aware alternating row colors
+      Color altRowColor = UIManager.getColor("Table.alternateRowColor");
+      if (altRowColor != null) {
+        c.setBackground( row % 2 == 0 ? getBackground() : altRowColor );
+      } else {
+        c.setBackground( row % 2 == 0 ? getBackground() : getBackground().brighter() );
+      }
     }
 
     return c;
@@ -113,6 +121,32 @@ public StrippedTable( String[][] data, String[] fields )
     frame.setSize( 400, 300 );
     frame.setLocationRelativeTo( null );
     frame.setVisible( true );
+  }
+
+  /**
+   * Refresh theme colors when theme changes
+   */
+  public void refreshThemeColors() {
+    System.out.println("🔄 STRIPPED TABLE: Refreshing theme colors");
+    java.awt.Color bg = javax.swing.UIManager.getColor("Table.background");
+    java.awt.Color fg = javax.swing.UIManager.getColor("Table.foreground");
+    java.awt.Color selBg = javax.swing.UIManager.getColor("Table.selectionBackground");
+    java.awt.Color headerBg = javax.swing.UIManager.getColor("TableHeader.background");
+
+    System.out.println("  └─ Table.background: " + bg);
+    System.out.println("  └─ Table.selectionBackground: " + selBg);
+
+    setBackground(bg);
+    setForeground(fg);
+    setSelectionBackground(selBg);
+    if (getTableHeader() != null) {
+      getTableHeader().setBackground(headerBg);
+    }
+
+    // Force update cell renderers
+    javax.swing.SwingUtilities.updateComponentTreeUI(this);
+    revalidate();
+    repaint();
   }
 
 }

@@ -34,29 +34,18 @@ class SplashWindow extends JWindow
                 }
             });
         final int pause = waitTime;
-        final Runnable closerRunner = new Runnable()
-            {
-                public void run()
-                {
-                    setVisible(false);
-                    dispose();
-                }
-            };
-        Runnable waitRunner = new Runnable()
-            {
-                public void run()
-                {
-                    try
-                        {
-                            Thread.sleep(pause);
-                            SwingUtilities.invokeAndWait(closerRunner);
-                        }
-                    catch(Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-                }
-            };
+        final Runnable closerRunner = () -> {
+            setVisible(false);
+            dispose();
+        };
+        Runnable waitRunner = () -> {
+            try {
+                Thread.sleep(pause);
+                SwingUtilities.invokeAndWait(closerRunner);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        };
         setVisible(true);
         Thread splashThread = new Thread(waitRunner, "SplashThread");
         splashThread.start();

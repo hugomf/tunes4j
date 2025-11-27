@@ -231,6 +231,16 @@ public class PlayerPanel  {
 	private boolean isValueLocked() {
 		return sliderValueLocked;
 	}
-	
+
+	/**
+	 * Refresh theme colors when theme changes
+	 * This calls refresh on the embedded SongDisplayPanel
+	 */
+	public void refreshThemeColors() {
+		System.out.println("🎨 PLAYER PANEL: Refreshing theme colors - calling SongDisplayPanel.refreshThemeColors()");
+		if (songDisplayPanel != null) {
+			songDisplayPanel.refreshThemeColors();
+		}
+	}
 
 }

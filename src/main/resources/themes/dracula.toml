@@ -1,0 +1,42 @@
+[theme]
+name = "Dracula"
+version = "1.0"
+author = "Dracula Theme Community / Tunes4J"
+description = "Dark theme inspired by Bram Stoker's Dracula, with delicious purple/red accents"
+
+[colors]
+background = "#282a36"
+foreground = "#f8f8f2"
+selection_bg = "#bd93f9"
+selection_fg = "#282a36"
+
+# Component-specific colors with dracula palette
+button_bg = "#44475a"
+button_fg = "#f8f8f2"
+text_field_bg = "#44475a"
+text_field_fg = "#f8f8f2"
+
+# Menu colors with dracula styling
+menu_bg = "#282a36"
+menu_fg = "#f8f8f2"
+menu_item_bg = "#282a36"
+menu_item_fg = "#f8f8f2"
+menu_item_selection_bg = "#6272a4"
+menu_item_selection_fg = "#f8f8f2"
+
+# Scrollbars with red accent
+scrollbar_bg = "#282a36"
+scrollbar_thumb = "#ff5555"
+
+[ui]
+# Table-specific colors for dracula theme
+table_header_bg = "#44475a"
+table_header_fg = "#50fa7b"
+table_alternate_row_bg = "#44475a"
+
+# Tree-specific colors (for playlist navigation)
+tree_bg = "#282a36"
+tree_fg = "#f8f8f2"
+tree_selection_bg = "#6272a4"
+tree_selection_fg = "#f8f8f2"
+tree_line_color = "#bd93f9"

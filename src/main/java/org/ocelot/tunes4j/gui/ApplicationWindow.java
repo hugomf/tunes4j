@@ -62,6 +62,9 @@ public class ApplicationWindow extends JFrame {
 	}
 
 	public void renderUI() {
+		// Initialize theme manager before creating UI components
+		ThemeManager.getInstance();
+
 		setApplicationIcons(this, ResourceLoader.ICON_APPICON.getImage());
 		this.audioPlayerPanel = new PlayerPanel();
 		this.radioPlayerPanel = new RadioPlayerPanel();

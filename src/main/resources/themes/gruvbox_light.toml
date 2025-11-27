@@ -1,0 +1,42 @@
+[theme]
+name = "Gruvbox Light"
+version = "1.0"
+author = "Gruvbox Community / Tunes4J"
+description = "Authentic Gruvbox light theme - warm, retro computing with neutral colors for comfort"
+
+[colors]
+background = "#fbf1c7"
+foreground = "#3c3836"
+selection_bg = "#d5c4a1"
+selection_fg = "#3c3836"
+
+# Component-specific colors with authentic gruvbox palette
+button_bg = "#ebdbb2"
+button_fg = "#504945"
+text_field_bg = "#fbf1c7"
+text_field_fg = "#3c3836"
+
+# Menu colors with gruvbox styling
+menu_bg = "#ebdbb2"
+menu_fg = "#504945"
+menu_item_bg = "#ebdbb2"
+menu_item_fg = "#504945"
+menu_item_selection_bg = "#d5c4a1"
+menu_item_selection_fg = "#282828"
+
+# Scrollbars with warm brown
+scrollbar_bg = "#fbf1c7"
+scrollbar_thumb = "#7c6f64"
+
+[ui]
+# UI-specific overrides for special components
+table_header_bg = "#ebdbb2"
+table_header_fg = "#b57614"
+table_alternate_row_bg = "#ebdbb2"
+
+# Tree-specific colors (for playlist navigation)
+tree_bg = "#fbf1c7"
+tree_fg = "#3c3836"
+tree_selection_bg = "#d5c4a1"
+tree_selection_fg = "#282828"
+tree_line_color = "#7c6f64"

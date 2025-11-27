@@ -1,0 +1,42 @@
+[theme]
+name = "Gruvbox Dark"
+version = "1.0"
+author = "Tunes4J Community"
+description = "Warm, retro color scheme from the Gruvbox colorscheme (dark variant)"
+
+[colors]
+background = "#282828"
+foreground = "#EBDBB2"
+selection_bg = "#689D6A"
+selection_fg = "#EBDBB2"
+
+# Component-specific colors with optional fallbacks
+button_bg = "#504945"
+button_fg = "#EBDBB2"
+text_field_bg = "#3C3836"
+text_field_fg = "#EBDBB2"
+
+# Menu colors
+menu_bg = "#282828"
+menu_fg = "#EBDBB2"
+menu_item_bg = "#282828"
+menu_item_fg = "#EBDBB2"
+menu_item_selection_bg = "#458588"
+menu_item_selection_fg = "#EBDBB2"
+
+# Scrollbars
+scrollbar_bg = "#282828"
+scrollbar_thumb = "#7C6F64"
+
+[ui]
+# UI-specific overrides for special components
+table_header_bg = "#504945"
+table_header_fg = "#EBDBB2"
+table_alternate_row_bg = "#32302F"
+
+# Tree-specific colors (for playlist navigation)
+tree_bg = "#282828"
+tree_fg = "#EBDBB2"
+tree_selection_bg = "#458588"
+tree_selection_fg = "#EBDBB2"
+tree_line_color = "#504945"

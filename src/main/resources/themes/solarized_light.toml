@@ -1,0 +1,35 @@
+[theme]
+name = "Solarized Light"
+version = "1.0"
+author = "Ethan Schoonover / Tunes4J"
+description = "Clean light theme with precision colors for reduced eye strain"
+
+[colors]
+background = "#fdf6e3"
+foreground = "#586e75"
+selection_bg = "#93a1a1"
+selection_fg = "#fdf6e3"
+
+# Component-specific colors with solarized palette
+button_bg = "#eee8d5"
+button_fg = "#586e75"
+text_field_bg = "#fdf6e3"
+text_field_fg = "#586e75"
+
+# Menu colors
+menu_bg = "#eee8d5"
+menu_fg = "#586e75"
+menu_item_bg = "#eee8d5"
+menu_item_fg = "#586e75"
+menu_item_selection_bg = "#93a1a1"
+menu_item_selection_fg = "#fdf6e3"
+
+# Scrollbars
+scrollbar_bg = "#fdf6e3"
+scrollbar_thumb = "#93a1a1"
+
+[ui]
+# Table-specific colors for striped/zebra tables
+table_header_bg = "#eee8d5"
+table_header_fg = "#2aa198"
+table_alternate_row_bg = "#eee8d5"

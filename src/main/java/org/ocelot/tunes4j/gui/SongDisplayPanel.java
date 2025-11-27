@@ -12,17 +12,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import java.util.Map;
-
 import org.ocelot.tunes4j.components.JSLidingLabel;
 import org.ocelot.tunes4j.components.RoundedJPanel;
 import org.ocelot.tunes4j.player.Tunes4JAudioPlayer;
 import org.ocelot.tunes4j.utils.ImageUtils;
 import org.ocelot.tunes4j.utils.ResourceLoader;
-
-import javazoom.jlgui.basicplayer.BasicController;
-import javazoom.jlgui.basicplayer.BasicPlayerEvent;
-import javazoom.jlgui.basicplayer.BasicPlayerListener;
 
 @SuppressWarnings("serial")
 public class SongDisplayPanel extends RoundedJPanel {
@@ -40,11 +34,15 @@ public class SongDisplayPanel extends RoundedJPanel {
 	private JPanelSpectrum spectrumPanel;
 
 	public SongDisplayPanel() {
+		// Set theme-aware background immediately
+		setBackground(javax.swing.UIManager.getColor("Panel.background"));
 		renderUI();
 	}
 
 	public SongDisplayPanel(Tunes4JAudioPlayer player) {
 		this.player = player;
+		// Set theme-aware background immediately
+		setBackground(javax.swing.UIManager.getColor("Panel.background"));
 		renderUI();
 	}
 
@@ -52,7 +50,7 @@ public class SongDisplayPanel extends RoundedJPanel {
 	private static class SongSpectrumPanel extends JPanelSpectrum {
 		public SongSpectrumPanel() {
 			// Configure for black bars, red peaks, light background
-			setBackground(new Color(0.95f,0.96f,0.98f));
+			setBackground(javax.swing.UIManager.getColor("Panel.background"));
 		}
 	}
 
@@ -98,7 +96,7 @@ public class SongDisplayPanel extends RoundedJPanel {
 			add(spectrumPanel);
 		}
 		add(songDetailPanel);
-		setBackground(new Color(0.95f,0.96f,0.98f));
+		setBackground(javax.swing.UIManager.getColor("Panel.background"));
 
 	}
 	
@@ -116,5 +114,26 @@ public class SongDisplayPanel extends RoundedJPanel {
 		ImageIcon resized = new ImageIcon(ImageUtils.resize(image, 60, 60));
 		this.artWorkImageLabel.setIcon(resized);
 	}
-	
+
+	/**
+	 * Refresh theme colors when theme changes
+	 */
+	public void refreshThemeColors() {
+		System.out.println("🔄 SONG DISPLAY PANEL: Refreshing theme colors");
+		java.awt.Color bg = javax.swing.UIManager.getColor("Panel.background");
+		System.out.println("  └─ Panel.background: " + bg);
+
+		// Update main panel background
+		setBackground(bg);
+
+		// Update spectrum panel background if it exists
+		if (spectrumPanel != null) {
+			spectrumPanel.setBackground(bg);
+			spectrumPanel.repaint();
+		}
+
+		// Force repaint of the component
+		repaint();
+	}
+
 }

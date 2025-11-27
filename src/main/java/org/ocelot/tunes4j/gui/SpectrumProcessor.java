@@ -25,7 +25,7 @@ public class SpectrumProcessor {
     private int processCount;
 
     // Colors - Light gray background, gray LCD bars, red peaks
-    private Color bgColor = new Color(0.95f,0.96f,0.98f); // SongDisplayPanel background
+    private Color bgColor = javax.swing.UIManager.getColor("Panel.background"); // SongDisplayPanel background
     private Color barColor = Color.DARK_GRAY;     // Gray LCD bars (better blending)
     private Color peakColor = new Color(255, 100, 100); // Red peaks
     private Color statusColor = Color.GRAY;      // Ready status color

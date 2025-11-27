@@ -50,6 +50,7 @@ public class MediaTable {
 	protected static final boolean notRestoringColumnState = true;
 	private BeanTableModel<Song> model;
 	private StrippedTable table;
+	private JScrollPane scrollPane; // Made field accessible for theme refresh
 	private ProgressLoadDialog dialog;
 	protected int prevRow = -1;
 	protected int currentRow;
@@ -118,6 +119,9 @@ public class MediaTable {
 		    
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		// Make scroll pane use theme colors instead of hardcoded ones
+		scrollPane.setBackground(javax.swing.UIManager.getColor("Panel.background"));
+		scrollPane.getViewport().setBackground(javax.swing.UIManager.getColor("Panel.background"));
 		return scrollPane;
 	}
 
@@ -360,6 +364,21 @@ public class MediaTable {
 				model.moveColumn(index, newIndex);
 			}
 		}
+	}
+
+	/**
+	 * Refresh theme colors when theme changes
+	 */
+	public void refreshThemeColors() {
+		// Refresh the underlying table if it's a StrippedTable
+		if (table instanceof StrippedTable) {
+			((StrippedTable) table).refreshThemeColors();
+		}
+
+		// Note: The scroll pane is created at application startup and inserted into parent containers.
+		// Since we can't easily reference it after creation, its background is handled by the
+		// force refresh in ApplicationMenuBar which targets all containers in the component tree.
+		// The scroll pane colors are set during creation via UIManager.getColor() calls.
 	}
 
 }

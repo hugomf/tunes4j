@@ -1,0 +1,8 @@
+[theme]
+name = "System Default"
+version = "1.0"
+author = "Tunes4J"
+description = "Platform default colors - restores original Tunes4J appearance"
+
+[colors]
+# Empty - uses platform default colors

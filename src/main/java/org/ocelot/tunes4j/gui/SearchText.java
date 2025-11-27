@@ -30,18 +30,15 @@ public class SearchText extends JTextField {
 		
 
 		getDocument().addDocumentListener(new DocumentListener() {
-			
+
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				getSorter().setRowFilter(null);
 			}
 			@Override
-			public void insertUpdate(DocumentEvent e) {
-			}
-			
+			public void insertUpdate(DocumentEvent e) { }
 			@Override
-			public void changedUpdate(DocumentEvent e) {
-			}
+			public void changedUpdate(DocumentEvent e) { }
 		});
 		
 		
@@ -50,15 +47,14 @@ public class SearchText extends JTextField {
 			public void keyReleased(KeyEvent e) {
 				if (mediaTable != null) {
 					String text = getText();
-
 					if (text.length() == 0) {
 						getSorter().setRowFilter(null);
 					} else {
-						String pattern = String.format("(?i)%s", text);
-						getSorter().setRowFilter(RowFilter.regexFilter(pattern));
+						getSorter().setRowFilter(RowFilter.regexFilter("(?i)" + text));
 					}
 				}
-			}});
+			}
+		});
 	}
 
 	private TableRowSorter<TableModel> getSorter() {
@@ -70,4 +66,3 @@ public class SearchText extends JTextField {
 	
 	
 }
-
