@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.ocelot.tunes4j.event.PlayProgressEvent;
 import org.ocelot.tunes4j.event.ProgressUpdateListener;
+import org.ocelot.tunes4j.dsp.Equalizer;
 import org.ocelot.tunes4j.dsp.KJDigitalSignalProcessor;
 import org.ocelot.tunes4j.gui.JPanelSpectrum;
 import org.slf4j.Logger;
@@ -45,12 +46,21 @@ public class Tunes4JAudioPlayer implements BasicPlayerListener {
 	/** Direct reference to spectrum panel for raw audio processing */
 	private JPanelSpectrum spectrumPanel;
 
+	/** Professional 10-band audio equalizer */
+	private Equalizer equalizer;
+
 	/** Last known running state */
 	private int currentRunningState = STATE_UNSTARTED;
+
+	/** Process count for debug logging */
+	private int processCount = 0;
 
 	public Tunes4JAudioPlayer() {
 		player = new BasicPlayer();
 		dspBridge = new DSPBridge();
+
+		// Initialize equalizer for real-time audio processing
+		equalizer = new Equalizer(44100.0, 2, 4096); // 44.1kHz, stereo, standard buffer
 	}
 
 	public void open(File file) {
@@ -143,14 +153,44 @@ public class Tunes4JAudioPlayer implements BasicPlayerListener {
 		PlayProgressEvent event = new PlayProgressEvent(Long.valueOf(bytesread));
 		listener.updateProgress(event);
 
-		// Feed audio data directly to spectrum visualizer
-		if (spectrumPanel != null && pcmdata != null && pcmdata.length > 0) {
-			spectrumPanel.processAudioData(pcmdata);
+		// ORIGINAL AUDIO FOR SPEAKERS (BasicPlayer handles this directly)
+		byte[] processedPcmData = pcmdata;
+
+		// EQUALIZER PROCESSING ONLY FOR VISUALIZATION (current limitation)
+		// ⚠️  BasicPlayer plays original PCM directly to speakers
+		// ⚠️  Our equalizer only affects spectrum visualization
+		// This is a fundamental architectural limitation
+		if (equalizer != null && pcmdata != null && pcmdata.length > 0) {
+			// Convert byte[] to double[] for equalizer processing
+			double[] samples = byteArrayToDoubleArray(pcmdata);
+
+			// Apply equalizer processing
+			if (samples != null) {
+				equalizer.processSamples(samples, samples); // In-place processing
+
+				// Convert back to byte[] for spectrum processing only
+				processedPcmData = doubleArrayToByteArray(samples);
+
+				// Debug: Log current preset and gains occasionally
+				processCount++;
+				if (processCount % 100 == 0) { // Every 100th buffer to avoid spam
+					String preset = equalizer.getCurrentPreset();
+					System.out.printf("VISUAL EQ - Preset: %s (Bass: %.1f, Treble: %.1f)\n",
+						preset,
+						(equalizer.getBandGain(0) + equalizer.getBandGain(1)) / 2.0,
+						(equalizer.getBandGain(5) + equalizer.getBandGain(6) + equalizer.getBandGain(7)) / 3.0);
+				}
+			}
 		}
 
-		// Feed audio data to DSP visualization pipeline (legacy)
-		if (dspBridge != null && pcmdata != null && pcmdata.length > 0) {
-			dspBridge.feedAudioData(pcmdata);
+		// Feed processed audio data to spectrum visualizer only
+		if (spectrumPanel != null && processedPcmData != null && processedPcmData.length > 0) {
+			spectrumPanel.processAudioData(processedPcmData);
+		}
+
+		// Feed processed audio data to DSP visualization pipeline (legacy)
+		if (dspBridge != null && processedPcmData != null && processedPcmData.length > 0) {
+			dspBridge.feedAudioData(processedPcmData);
 		}
 	}
 
@@ -244,5 +284,108 @@ public class Tunes4JAudioPlayer implements BasicPlayerListener {
 	 */
 	public DSPBridge getDSPBridge() {
 		return dspBridge;
+	}
+
+	/**
+	 * Get the equalizer for audio processing controls
+	 */
+	public Equalizer getEqualizer() {
+		return equalizer;
+	}
+
+	/**
+	 * Set equalizer band gain (0-9 bands, -20 to +20 dB)
+	 */
+	public void setEqualizerBandGain(int band, double gain) {
+		if (equalizer != null) {
+			equalizer.setBandGain(band, gain);
+		}
+	}
+
+	/**
+	 * Get equalizer band gain (0-9 bands)
+	 */
+	public double getEqualizerBandGain(int band) {
+		return equalizer != null ? equalizer.getBandGain(band) : 0.0;
+	}
+
+	/**
+	 * Load an equalizer preset
+	 */
+	public void loadEqualizerPreset(String presetName) {
+		if (equalizer != null) {
+			equalizer.loadPreset(presetName);
+		}
+	}
+
+	/**
+	 * Get current equalizer preset name
+	 */
+	public String getEqualizerPreset() {
+		return equalizer != null ? equalizer.getCurrentPreset() : "Flat";
+	}
+
+	/**
+	 * Get available equalizer preset names
+	 */
+	public String[] getEqualizerPresetNames() {
+		return equalizer != null ? equalizer.getPresetNames() : new String[]{"Flat"};
+	}
+
+	/**
+	 * Convert 16-bit PCM byte array to double array for DSP processing
+	 */
+	private double[] byteArrayToDoubleArray(byte[] pcmData) {
+		if (pcmData == null || pcmData.length == 0 || pcmData.length % 4 != 0) {
+			return null;
+		}
+
+		int sampleCount = pcmData.length / 4; // Stereo 16-bit = 4 bytes per sample
+		double[] samples = new double[sampleCount];
+
+		for (int i = 0; i < sampleCount; i++) {
+			int sampleIndex = i * 4;
+
+			// Read 16-bit little-endian stereo (same conversion as in SpectrumProcessor)
+			int left = (pcmData[sampleIndex + 1] << 8) | (pcmData[sampleIndex] & 0xFF);
+			int right = (pcmData[sampleIndex + 3] << 8) | (pcmData[sampleIndex + 2] & 0xFF);
+
+			// Convert to float (-1.0 to 1.0)
+			left = Math.max(-32768, Math.min(32767, left));
+			right = Math.max(-32768, Math.min(32767, right));
+
+			// Average left and right channels for mono processing
+			samples[i] = ((float)(left + right) / 2.0f) / 32768.0f;
+		}
+
+		return samples;
+	}
+
+	/**
+	 * Convert double array back to 16-bit PCM byte array
+	 */
+	private byte[] doubleArrayToByteArray(double[] samples) {
+		if (samples == null || samples.length == 0) {
+			return null;
+		}
+
+		int byteCount = samples.length * 4; // Stereo output: 4 bytes per sample
+		byte[] pcmData = new byte[byteCount];
+
+		for (int i = 0; i < samples.length; i++) {
+			int sampleIndex = i * 4;
+
+			// Convert double back to 16-bit int (clipping protection)
+			int sampleValue = (int)(samples[i] * 32767.0);
+			sampleValue = Math.max(-32768, Math.min(32767, sampleValue));
+
+			// Write as stereo (duplicate mono to both channels)
+			pcmData[sampleIndex] = (byte)(sampleValue & 0xFF);     // Left LSB
+			pcmData[sampleIndex + 1] = (byte)((sampleValue >> 8) & 0xFF); // Left MSB
+			pcmData[sampleIndex + 2] = (byte)(sampleValue & 0xFF);     // Right LSB
+			pcmData[sampleIndex + 3] = (byte)((sampleValue >> 8) & 0xFF); // Right MSB
+		}
+
+		return pcmData;
 	}
 }

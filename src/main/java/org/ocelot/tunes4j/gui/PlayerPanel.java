@@ -236,6 +236,10 @@ public class PlayerPanel  {
 		return this.songDisplayPanel;
 	}
 	
+	public Tunes4JAudioPlayer getPlayer() {
+		return this.player;
+	}
+
 	public JPanel getMainDisplayPanel() {
 		return this.mainDisplayPanel;
 	}

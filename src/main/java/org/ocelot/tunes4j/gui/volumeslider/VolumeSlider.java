@@ -23,19 +23,29 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JSlider;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.ocelot.tunes4j.player.Tunes4JAudioPlayer;
 
 
-public class VolumeSlider extends JSlider implements MouseWheelListener {
+public class VolumeSlider extends JSlider implements MouseWheelListener, ChangeListener {
 
 	private static final long serialVersionUID = 1L;
 
 	private Tunes4JAudioPlayer player;
-	
+
 	protected VolumeSliderUI ui;
+
+	// Ultra-low latency debouncing (10ms delay)
+	private Timer debounceTimer;
+	private static final int DEBOUNCE_DELAY_MS = 10; // 10ms for minimal perceived delay
+	private int pendingValue = -1; // Latest value waiting to be applied
 
 	public VolumeSlider(Tunes4JAudioPlayer player) {
 		this.player=player;
@@ -55,6 +65,9 @@ public class VolumeSlider extends JSlider implements MouseWheelListener {
 		ui = new VolumeSliderUI();
 		setUI(ui);
 
+		// Initialize debounce timer
+		debounceTimer = new Timer("VolumeDebounceTimer", true);
+
 		addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				setValue(ui.valueForXPosition(e.getX()));
@@ -63,15 +76,43 @@ public class VolumeSlider extends JSlider implements MouseWheelListener {
 		});
 
 		addMouseWheelListener(this);
-
 	}
 
 	public void setValue(int n) {
 		if (n != getValue()) {
 			super.setValue(n);
-			float newGain = n * 0.01f;
-			player.setGain(newGain);
+			// Debounced volume update to eliminate perceived latency
+			scheduleGainUpdate(n);
 		}
+	}
+
+	/**
+	 * Ultra-low latency debounced gain update (10ms delay)
+	 */
+	private void scheduleGainUpdate(int newValue) {
+		pendingValue = newValue;
+
+		// Cancel any pending update
+		debounceTimer.cancel();
+		debounceTimer = new Timer("VolumeDebounceTimer", true);
+
+		// Apply the gain change after a tiny delay
+		debounceTimer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				if (pendingValue != -1) {
+					float newGain = pendingValue * 0.01f;
+					player.setGain(newGain);
+					pendingValue = -1;
+				}
+			}
+		}, DEBOUNCE_DELAY_MS);
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		// No additional action needed - ChangeListener just ensures the interface is implemented
+		// The debouncing is handled in setValue()
 	}
 
 	public void mouseWheelMoved(MouseWheelEvent e) {

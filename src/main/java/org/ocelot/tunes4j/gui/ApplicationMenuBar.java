@@ -12,6 +12,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
@@ -19,6 +20,8 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.commons.lang.SystemUtils;
+import org.ocelot.tunes4j.dsp.Equalizer;
+import org.ocelot.tunes4j.player.Tunes4JAudioPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -164,7 +167,32 @@ public class ApplicationMenuBar {
 		menuBar = new JMenuBar();
 		menuBar.add(buildFileMenu());
 		menuBar.add(buildEditMenu());
+		menuBar.add(buildControlsMenu());
 		return menuBar;
+	}
+
+	public JMenu buildControlsMenu() {
+		JMenu controlsMenu = new JMenu("Controls");
+
+		JMenuItem equalizerItem = new JMenuItem("Equalizer");
+		equalizerItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.CTRL_MASK));
+		equalizerItem.addActionListener(e -> {
+			try {
+				PlayerPanel playerPanel = parentFrame.getPlayerPanel();
+				if (playerPanel != null) {
+					Tunes4JAudioPlayer player = playerPanel.getPlayer();
+					new EqualizerDialog(parentFrame, player); // Use actual player if available
+				} else {
+					System.err.println("PlayerPanel is null - cannot open equalizer");
+				}
+			} catch (Exception ex) {
+				System.err.println("Error opening equalizer: " + ex.getMessage());
+				JOptionPane.showMessageDialog(parentFrame, "Error opening equalizer: " + ex.getMessage());
+			}
+		});
+		controlsMenu.add(equalizerItem);
+
+		return controlsMenu;
 	}
 
 	public JPopupMenu createPopUpMenu() {
