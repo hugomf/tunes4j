@@ -41,8 +41,8 @@ public class PlayerPanel  {
 	
 	private JPanel playerPanel = new JPanel();
 
-	private SongDisplayPanel songDisplayPanel = new SongDisplayPanel();
-	
+	private SongDisplayPanel songDisplayPanel;
+
 	private JPanel mainDisplayPanel = new JPanel();
 	
 	private JSlider slider = new JSlider();
@@ -58,6 +58,9 @@ public class PlayerPanel  {
 	}
 	
 	public void renderUI() {
+
+		// Create SongDisplayPanel with player reference for spectrum
+		songDisplayPanel = new SongDisplayPanel(player);
 
 		this.playButton.setBorder(BorderFactory.createEmptyBorder());
 		this.playButton.setBorderPainted(false);
@@ -192,6 +195,7 @@ public class PlayerPanel  {
 	public void play() {
 		this.player.open(this.currentSong.getSongFile());
 		this.player.reset();
+		// Spectrum in SongDisplayPanel gets audio data automatically
 		this.player.play();
 		updateMainControlPanel(this.currentSong);
 		getPlayButton().setSelected(true);

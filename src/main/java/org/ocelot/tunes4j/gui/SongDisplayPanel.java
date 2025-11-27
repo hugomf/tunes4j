@@ -12,25 +12,48 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import java.util.Map;
+
 import org.ocelot.tunes4j.components.JSLidingLabel;
 import org.ocelot.tunes4j.components.RoundedJPanel;
-import org.ocelot.tunes4j.processing.SineWave;
+import org.ocelot.tunes4j.player.Tunes4JAudioPlayer;
 import org.ocelot.tunes4j.utils.ImageUtils;
 import org.ocelot.tunes4j.utils.ResourceLoader;
 
+import javazoom.jlgui.basicplayer.BasicController;
+import javazoom.jlgui.basicplayer.BasicPlayerEvent;
+import javazoom.jlgui.basicplayer.BasicPlayerListener;
+
 @SuppressWarnings("serial")
 public class SongDisplayPanel extends RoundedJPanel {
-	
+
+	private Tunes4JAudioPlayer player;
+
 	private JLabel artWorkImageLabel = new JLabel();
-	
+
 	private JSLidingLabel lblSongTitle = new JSLidingLabel("Song Title");
-	
+
 	private JLabel lblArtistAndAlbum = new JLabel("Artist - Album");
-	
+
 	private JPanel songDetailPanel = new JPanel();
-	
+
+	private JPanelSpectrum spectrumPanel;
+
 	public SongDisplayPanel() {
 		renderUI();
+	}
+
+	public SongDisplayPanel(Tunes4JAudioPlayer player) {
+		this.player = player;
+		renderUI();
+	}
+
+	// Custom spectrum panel for song display area
+	private static class SongSpectrumPanel extends JPanelSpectrum {
+		public SongSpectrumPanel() {
+			// Configure for black bars, red peaks, light background
+			setBackground(new Color(0.95f,0.96f,0.98f));
+		}
 	}
 
 	private void renderUI() {
@@ -38,36 +61,45 @@ public class SongDisplayPanel extends RoundedJPanel {
 		Image resized = ImageUtils.resize(ResourceLoader.ICON_APPICON.getImage(), 60, 60);
 		this.artWorkImageLabel.setIcon(new ImageIcon(resized));
 		this.artWorkImageLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		
+
 		lblSongTitle.setHorizontalAlignment(SwingConstants.LEFT);
 		lblSongTitle.setFont(new Font("Verdana", Font.PLAIN, 16));
 		lblSongTitle.setForeground(Color.black);
 		lblSongTitle.setPreferredSize(new Dimension(250, 20));
 		lblSongTitle.setInfinity(true);
-		
-		
+
+
 		lblArtistAndAlbum.setHorizontalAlignment(SwingConstants.LEFT);
 		lblArtistAndAlbum.setFont(new Font("Arial", Font.PLAIN, 12));
 		lblArtistAndAlbum.setForeground(Color.black);
 		lblArtistAndAlbum.setPreferredSize(new Dimension(250, 20));
-		
+
 		songDetailPanel.setLayout(new BoxLayout(songDetailPanel, BoxLayout.Y_AXIS));
 		songDetailPanel.setOpaque(false);
 
-		
+
 		songDetailPanel.add(new JLabel("   "));
 		songDetailPanel.add(new JLabel("   "));
 		songDetailPanel.add(lblSongTitle);
 		songDetailPanel.add(lblArtistAndAlbum);
-		
-		setLayout(new FlowLayout(FlowLayout.LEFT));
+
+		// Create spectrum panel to replace SineWave
+		if (player != null) {
+			spectrumPanel = new SongSpectrumPanel();
+			player.setSpectrumPanel(spectrumPanel);
+			spectrumPanel.setPreferredSize(new Dimension(200, 60));
+		}
+
+		setLayout(new FlowLayout(FlowLayout.LEFT, 20, 0)); // Add 20px horizontal gap
 		setForeground(Color.darkGray);
 		//this.controlPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		add(artWorkImageLabel);
-		add(new SineWave());
+		if (spectrumPanel != null) {
+			add(spectrumPanel);
+		}
 		add(songDetailPanel);
 		setBackground(new Color(0.95f,0.96f,0.98f));
-		
+
 	}
 	
 	public void setSongTitle(String title) {

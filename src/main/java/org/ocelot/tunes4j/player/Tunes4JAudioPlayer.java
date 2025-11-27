@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.ocelot.tunes4j.event.PlayProgressEvent;
 import org.ocelot.tunes4j.event.ProgressUpdateListener;
+import org.ocelot.tunes4j.dsp.KJDigitalSignalProcessor;
+import org.ocelot.tunes4j.gui.JPanelSpectrum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,8 +39,18 @@ public class Tunes4JAudioPlayer implements BasicPlayerListener {
 
 	private Map properties;
 
+	/** DSP bridge for audio visualization */
+	private DSPBridge dspBridge;
+
+	/** Direct reference to spectrum panel for raw audio processing */
+	private JPanelSpectrum spectrumPanel;
+
+	/** Last known running state */
+	private int currentRunningState = STATE_UNSTARTED;
+
 	public Tunes4JAudioPlayer() {
 		player = new BasicPlayer();
+		dspBridge = new DSPBridge();
 	}
 
 	public void open(File file) {
@@ -129,6 +141,16 @@ public class Tunes4JAudioPlayer implements BasicPlayerListener {
 	public void progress(int bytesread, long microseconds, byte[] pcmdata, Map properties) {
 		PlayProgressEvent event = new PlayProgressEvent(Long.valueOf(bytesread));
 		listener.updateProgress(event);
+
+		// Feed audio data directly to spectrum visualizer
+		if (spectrumPanel != null && pcmdata != null && pcmdata.length > 0) {
+			spectrumPanel.processAudioData(pcmdata);
+		}
+
+		// Feed audio data to DSP visualization pipeline (legacy)
+		if (dspBridge != null && pcmdata != null && pcmdata.length > 0) {
+			dspBridge.feedAudioData(pcmdata);
+		}
 	}
 
 	public void stateUpdated(BasicPlayerEvent event) {
@@ -140,6 +162,7 @@ public class Tunes4JAudioPlayer implements BasicPlayerListener {
 	public void setRunningState(BasicPlayerEvent event) {
 
 		int code = event.getCode();
+		int oldState = runningState;
 
 		switch (code) {
 		case BasicPlayerEvent.OPENED:
@@ -159,6 +182,14 @@ public class Tunes4JAudioPlayer implements BasicPlayerListener {
 			break;
 		default:
 			runningState = STATE_UNSTARTED;
+		}
+
+		// If state changed to paused or stopped, reset spectrum bars to 0
+		if ((code == BasicPlayerEvent.PAUSED || code == BasicPlayerEvent.STOPPED) &&
+			oldState == STATE_RUNNING) {
+			if (spectrumPanel != null) {
+				spectrumPanel.resetPeaks();
+			}
 		}
 	}
 
@@ -182,4 +213,35 @@ public class Tunes4JAudioPlayer implements BasicPlayerListener {
 		return runningState == Tunes4JAudioPlayer.STATE_SUSPENDED;
 	}
 
+	/**
+	 * Add a DSP processor for audio visualization
+	 */
+	public void addDSPProcessor(KJDigitalSignalProcessor processor) {
+		if (dspBridge != null) {
+			dspBridge.addProcessor(processor);
+		}
+	}
+
+	/**
+	 * Remove a DSP processor
+	 */
+	public void removeDSPProcessor(KJDigitalSignalProcessor processor) {
+		if (dspBridge != null) {
+			dspBridge.removeProcessor(processor);
+		}
+	}
+
+	/**
+	 * Set the spectrum panel for direct audio data processing
+	 */
+	public void setSpectrumPanel(JPanelSpectrum spectrumPanel) {
+		this.spectrumPanel = spectrumPanel;
+	}
+
+	/**
+	 * Get the DSP bridge (for advanced configuration)
+	 */
+	public DSPBridge getDSPBridge() {
+		return dspBridge;
+	}
 }

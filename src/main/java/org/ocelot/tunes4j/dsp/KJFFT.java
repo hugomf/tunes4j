@@ -28,6 +28,10 @@ public class KJFFT {
 	/** The nu. */
 	private int ss, ss2, nu;// , nu1;
 
+	public int getSampleSize() {
+		return ss;
+	}
+
 	/**
 	 * Instantiates a new kjfft.
 	 *
