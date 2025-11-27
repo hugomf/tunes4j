@@ -13,6 +13,7 @@ public class SearchTextTest {
 		
 		MediaTable mediaTable = Mockito.mock(MediaTable.class);
 		
+		@SuppressWarnings("unchecked")
 		TableRowSorter<TableModel> sorter = Mockito.mock(TableRowSorter.class);
 		Mockito.when(mediaTable.getSorter()).thenReturn(sorter);
 		

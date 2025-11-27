@@ -37,7 +37,7 @@ public class Tunes4JAudioPlayer implements BasicPlayerListener {
 
 	private BasicController control;
 
-	private Map properties;
+	private Map<String, Object> properties;
 
 	/** DSP bridge for audio visualization */
 	private DSPBridge dspBridge;
@@ -102,7 +102,7 @@ public class Tunes4JAudioPlayer implements BasicPlayerListener {
 
 			int totalBytes = (int) this.properties.get("mp3.length.bytes");
 			double rate = ms * 1.0 / 1000;
-			long skipBytes = (long) Math.round(totalBytes * rate) - 245000;
+			long skipBytes = Math.round(totalBytes * rate) - 245000L;
 
 			player.seek(skipBytes);
 		} catch (BasicPlayerException e) {
@@ -126,10 +126,11 @@ public class Tunes4JAudioPlayer implements BasicPlayerListener {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void opened(Object stream, Map properties) {
 		logger.info("opened : " + properties.toString());
-		this.properties = properties;
+		this.properties = (Map<String, Object>) properties;
 	}
 
 	

@@ -6,8 +6,6 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.BasicStroke;
 
-import javax.swing.JPanel;
-
 import org.ocelot.tunes4j.dsp.KJFFT;
 
 /**
@@ -29,8 +27,11 @@ public class SpectrumProcessor {
     // Colors - Light gray background, gray LCD bars, red peaks
     private Color bgColor = new Color(0.95f,0.96f,0.98f); // SongDisplayPanel background
     private Color barColor = Color.DARK_GRAY;     // Gray LCD bars (better blending)
-    private Color barColor2 = Color.DARK_GRAY;    // Gray LCD bars
     private Color peakColor = new Color(255, 100, 100); // Red peaks
+    private Color statusColor = Color.GRAY;      // Ready status color
+
+    // Performance optimizations - pre-created objects to avoid GC pressure
+    private BasicStroke peakStroke = new BasicStroke(1); // Thinner 1-pixel peaks
 
     public SpectrumProcessor() {
         fft = new KJFFT(SAMPLE_SIZE);
@@ -125,58 +126,67 @@ public class SpectrumProcessor {
 
     /**
      * Render the spectrum on the given graphics context
+     * Optimized for 60fps performance with minimal object allocation
      */
     public void renderSpectrum(Graphics g, int width, int height) {
         Graphics2D g2d = (Graphics2D) g.create();
+
+        // Performance: Set anti-aliasing once per frame
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Background
+        // Background - fast solid color fill
         g2d.setColor(bgColor);
         g2d.fillRect(0, 0, width, height);
 
-        // Draw frequency bars
-        int barWidth = width / NUM_BANDS;
-        int spacing = Math.max(2, barWidth / 6); // Increased spacing for LCD effect
-
         // Show minimal status if no data processed yet
         if (processCount == 0) {
-            g2d.setColor(Color.GRAY);
+            g2d.setColor(statusColor);
             g2d.drawString("Ready", width / 2 - 20, height / 2);
             g2d.dispose();
             return;
         }
 
+        // Performance: Pre-calculate common values once per frame
+        final int barWidth = width / NUM_BANDS;
+        final int spacing = Math.max(2, barWidth / 6);
+        final int barActualWidth = barWidth - spacing;
+
+        // Performance: Set color once for bars (conserves state changes)
+        g2d.setColor(barColor);
+
+        // LCD Pixel dimensions - constants for pixel render loop
+        final int pixelHeight = 3;
+        final int pixelSpacing = 2;
+        final int pixelStep = pixelHeight + pixelSpacing;
+
         for (int band = 0; band < NUM_BANDS; band++) {
-            int bin = getBinForBand(band);
-            float magnitude = (bin < magnitudes.length) ? magnitudes[bin] : 0;
+            final int bin = getBinForBand(band);
+            final float magnitude = (bin < magnitudes.length) ? magnitudes[bin] : 0;
 
-            // Scale magnitude (0-10) to full meter height
-            int barHeight = (int)(magnitude * height / 10.0f);
+            // Scale magnitude (0-10) to full meter height - optimized calculation
+            final int barHeight = (int)(magnitude * height * 0.1f); // /10.0f = *0.1f
 
-            int x = band * barWidth + spacing / 2;
-            int barActualWidth = barWidth - spacing;
-            int barY = height - barHeight;
+            // Skip rendering if bar would be invisible
+            if (barHeight == 0) continue;
 
-            // LCD Pixel Effect: Draw vertical dotted segments instead of solid fills
-            if (barHeight > 0) {
-                int pixelHeight = 3; // Height of each LCD pixel segment
-                int pixelSpacing = 2; // Space between pixel segments
-                g2d.setColor(barColor);
+            final int x = band * barWidth + spacing / 2;
+            final int barY = height - barHeight;
 
-                for (int y = barY; y < height; y += pixelHeight + pixelSpacing) {
-                    int pixelActualHeight = Math.min(pixelHeight, height - y);
-                    if (pixelActualHeight > 0) {
-                        g2d.fillRect(x, y, barActualWidth, pixelActualHeight);
-                    }
+            // LCD Pixel Effect: Optimized vertical dotted segments with integer math
+            for (int y = barY; y < height; y += pixelStep) {
+                final int pixelActualHeight = Math.min(pixelHeight, height - y);
+                if (pixelActualHeight > 0) {
+                    g2d.fillRect(x, y, barActualWidth, pixelActualHeight);
                 }
             }
 
             // Traditional peak hold indicator - only show when significant (> 1.5f threshold)
             if (peaks[band] > 1.5f) { // Threshold prevents pesky bottom lines
-                int peakY = height - (int)(peaks[band] * height / 10.0f);
+                final int peakY = height - (int)(peaks[band] * height * 0.1f); // Optimized division
                 g2d.setColor(peakColor);
-                g2d.setStroke(new BasicStroke(1)); // Thinner 1-pixel peaks
+                g2d.setStroke(peakStroke); // Reuse pre-created stroke, no object allocation
                 g2d.drawLine(x, peakY, x + barActualWidth - 1, peakY);
+                g2d.setColor(barColor); // Restore color for next bar
             }
         }
 

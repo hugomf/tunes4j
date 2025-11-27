@@ -153,7 +153,7 @@ dependencies {
 
 
 // Test exclusions for Spring integration tests until framework migration is complete
-test {
+	test {
     jvmArgs = [
         '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
         '--add-opens', 'java.base/java.util=ALL-UNNAMED',
@@ -168,6 +168,11 @@ test {
     exclude '**/dao/PlayListServiceTest.class'
     exclude '**/dao/PlayListWithSongsServiceTest.class'
     exclude '**/dao/SongServiceTest.class'
+}
+
+compileJava {
+    options.compilerArgs.add('-Xlint:all')
+    options.compilerArgs.add('-Xlint:-serial,-unchecked,-this-escape,-deprecation')
 }
 
 
