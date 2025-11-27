@@ -17,12 +17,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import org.ocelot.tunes4j.effects.FadeTransition;
 import org.ocelot.tunes4j.effects.MoveEffect;
@@ -45,16 +43,14 @@ public class CustomNotifier {
 
 	public static void main(String[] args) throws Exception {
 
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					CustomNotifier notifier = new CustomNotifier();
-					notifier.display(ResourceLoader.ICON_APPICON.getImage(),
-							"Arthur's Theme (Best That You Can Do) - Remastered", "Song Author", "Album");
+		SwingUtilities.invokeLater(() -> {
+			try {
+				CustomNotifier notifier = new CustomNotifier();
+				notifier.display(ResourceLoader.ICON_APPICON.getImage(),
+						"Arthur's Theme (Best That You Can Do) - Remastered", "Song Author", "Album");
 
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
 
@@ -146,15 +142,12 @@ public class CustomNotifier {
 		@Override
 		protected void done() {
 			super.done();
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					sleep(1500);
-					FadeTransition.fadeOut(frame, 8);
-					frame.setVisible(false);
-					frame.dispose();
-					//setLookAndFeel(previousLF.getClass().getName());
-				}
+			new Thread(() -> {
+				sleep(1500);
+				FadeTransition.fadeOut(frame, 8);
+				frame.setVisible(false);
+				frame.dispose();
+				//setLookAndFeel(previousLF.getClass().getName());
 			}).start();;
 		}
 

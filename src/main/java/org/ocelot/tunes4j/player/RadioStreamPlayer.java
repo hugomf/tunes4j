@@ -67,12 +67,7 @@ public class RadioStreamPlayer implements RadioPlayer {
 
 	@Override
 	public void play() {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				radioPlayer.play();
-			}
-		}).start();
+		new Thread(() -> radioPlayer.play()).start();
 	}
 
 	@Override

@@ -3,8 +3,6 @@ package org.ocelot.tunes4j.effects;
 
 import java.awt.Dimension;
 import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -49,12 +47,9 @@ public class FadeTransition {
 		frame.setUndecorated(true);
 		frame.setPreferredSize(new Dimension(200, 120));
 		JButton button = new JButton("Close");
-		button.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				FadeTransition.fadeOut(frame,8);
-				frame.dispose();
-			}
+		button.addActionListener(e -> {
+			FadeTransition.fadeOut(frame,8);
+			frame.dispose();
 		});
 		frame.add(button);
 		frame.pack();
@@ -65,4 +60,4 @@ public class FadeTransition {
 		
 	}
 	
-}	
+}

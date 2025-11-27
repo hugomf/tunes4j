@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.FontMetrics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -59,16 +57,12 @@ public class JSLidingLabel extends JLabel {
 	}
 
 	public void play(int ms) {
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				synchronized (LOCK) {
-					animateSlideText(ms);
-				}
+		new Thread(() -> {
+			synchronized (LOCK) {
+				animateSlideText(ms);
 			}
 		}).start();
-		
+
 	}
 
 	@Override
@@ -149,19 +143,9 @@ public class JSLidingLabel extends JLabel {
 		label.setPreferredSize(new Dimension(150, 180));
 		label.setInfinity(true);
 		JButton button = new JButton("OK");
-		button.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				label.play(120);
-			}
-		});
+		button.addActionListener(e -> label.play(120));
 		JButton cancel = new JButton("Stop");
-		cancel.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				label.stop();
-			}
-		});
+		cancel.addActionListener(e -> label.stop());
 
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

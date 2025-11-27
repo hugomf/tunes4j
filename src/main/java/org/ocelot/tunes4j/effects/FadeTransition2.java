@@ -133,20 +133,16 @@ public class FadeTransition2 {
 				
 				
 				if(transition != null ) {
-					
+
 					Polygon p = new Polygon();
-					
-					transition.setConsumer(new Consumer<Integer>() {
-						int x = 1;
-						int y = 10;
-						int delta = 5;
-						
-						@Override
-						public void accept(Integer t) {
-							 p.addPoint(x, t);
-							 x++;
-							
-						}
+
+					transition.setConsumer(t -> {
+						 int x = 1;
+						 int y = 10;
+						 int delta = 5;
+
+						 p.addPoint(x, t);
+						 x++;
 					});
 					transition.start(0, 7);
 					g2.drawPolyline(p.xpoints, p.ypoints, p.npoints);

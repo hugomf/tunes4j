@@ -21,16 +21,14 @@ public class Tunes4JLauncher {
 		//LiquidLookAndFeel.setLiquidDecorations(true, "mac");
 		
 		MimeUtil.registerMimeDetector("eu.medsea.mimeutil.detector.MagicMimeMimeDetector");
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					try {
-						window.setTitle("tunes4J");
-						window.renderUI();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			});
+		SwingUtilities.invokeLater(() -> {
+			try {
+				window.setTitle("tunes4J");
+				window.renderUI();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
 		
 	}
 	
