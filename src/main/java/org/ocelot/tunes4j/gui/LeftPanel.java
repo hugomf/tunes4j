@@ -1,8 +1,5 @@
 package org.ocelot.tunes4j.gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.Icon;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -108,10 +105,8 @@ public class LeftPanel {
 					}
 				});
 		SourceListControlBar controlBar = new SourceListControlBar();
-		controlBar.createAndAddButton(MacIcons.PLUS, new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		controlBar.createAndAddButton(MacIcons.PLUS, e -> {
 
-			}
 		});
 		controlBar.createAndAddButton(MacIcons.MINUS, null);
 		controlBar.createAndAddPopdownButton(MacIcons.GEAR,

@@ -3,8 +3,6 @@ package org.ocelot.tunes4j.gui;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
@@ -222,11 +220,9 @@ public class RadioStationTable {
 		for (String itemName : headers) {
 			final JMenuItem item = new JCheckBoxMenuItem(itemName);
 			item.setSelected(true);
-			item.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent event) {
-					TableColumn column = getColumnByHeaderName(item.getText());
-					setColumnVisible(column, item.isSelected());
-				}
+			item.addActionListener(event -> {
+				TableColumn column = getColumnByHeaderName(item.getText());
+				setColumnVisible(column, item.isSelected());
 			});
 
 			popupMenu.add(item);
@@ -323,16 +319,14 @@ public class RadioStationTable {
 	public void addToggleVisibilityMenuItem(final JPopupMenu popupMenu,
 			String label, final boolean visibility) {
 		JMenuItem itemSelectAll = new JMenuItem(label);
-		itemSelectAll.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				for (int i = 0; i < popupMenu.getComponents().length; i++) {
-					Object item = popupMenu.getComponent(i);
-					if (item instanceof JCheckBoxMenuItem) {
-						JCheckBoxMenuItem checkItem = (JCheckBoxMenuItem) item;
-						checkItem.setSelected(visibility);
-						setColumnVisible(getColumnByHeaderName(checkItem
-								.getText()), visibility);
-					}
+		itemSelectAll.addActionListener(event -> {
+			for (int i = 0; i < popupMenu.getComponents().length; i++) {
+				Object item = popupMenu.getComponent(i);
+				if (item instanceof JCheckBoxMenuItem) {
+					JCheckBoxMenuItem checkItem = (JCheckBoxMenuItem) item;
+					checkItem.setSelected(visibility);
+					setColumnVisible(getColumnByHeaderName(checkItem
+							.getText()), visibility);
 				}
 			}
 		});

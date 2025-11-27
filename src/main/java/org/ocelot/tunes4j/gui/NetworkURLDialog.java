@@ -1,8 +1,6 @@
 package org.ocelot.tunes4j.gui;
 
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import javax.swing.JButton;
@@ -27,26 +25,18 @@ public class NetworkURLDialog extends JDialog {
 		JLabel label = new JLabel("URL:");
 		JTextField text = new OcelotTextField(40,150);
 		JButton okButton = new JButton("OK");
-		okButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String url = text.getText();
-				RadioStation radioStation = getRadioStationMetadata(url);
-				if(radioStation!=null) {
-					parentFrame.getRadioTable().getModel().addRow(radioStation);
-					parentFrame.getRadioTable().getRadioStationService().save(radioStation);
-				}
-				setVisible(false);
-				dispose();
-			}
-		});
+		okButton.addActionListener(e -> {
+		String url = text.getText();
+		RadioStation radioStation = getRadioStationMetadata(url);
+		if(radioStation!=null) {
+			parentFrame.getRadioTable().getModel().addRow(radioStation);
+			parentFrame.getRadioTable().getRadioStationService().save(radioStation);
+		}
+		setVisible(false);
+		dispose();
+	});
 		JButton cancelButton = new JButton("Cancel");
-		cancelButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
+		cancelButton.addActionListener(e -> dispose());
 		setUndecorated(true);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLayout(new FlowLayout());

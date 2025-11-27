@@ -45,9 +45,7 @@ public class SampleToolBar {
 	  }
 	  
 	  public static void main(String[] args) {
-		  SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
+		  SwingUtilities.invokeLater(() -> {
 					try {
 						UIManager.setLookAndFeel("org.violetlib.aqua.AquaLookAndFeel");
 						new SampleToolBar();
@@ -56,9 +54,7 @@ public class SampleToolBar {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				}
-			});
+				});
 	}
 	  
 	}
-

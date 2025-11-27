@@ -1,7 +1,6 @@
 package org.ocelot.tunes4j.gui;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.commons.lang.SystemUtils;
-import org.ocelot.tunes4j.dsp.Equalizer;
 import org.ocelot.tunes4j.player.Tunes4JAudioPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,12 +65,7 @@ public class ApplicationMenuBar {
 		fileMenu.add(new JSeparator());
 		JMenuItem exitItem = new JMenuItem("Exit");
 		fileMenu.add(exitItem);
-		exitItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
+		exitItem.addActionListener(e -> System.exit(0));
 		return fileMenu;
 	}
 
@@ -84,12 +77,7 @@ public class ApplicationMenuBar {
 		} else if(SystemUtils.IS_OS_MAC_OSX) {
 			menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, ActionEvent.META_MASK));
 		}
-		menuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new NetworkURLDialog(parentFrame);
-			}
-		});
+		menuItem.addActionListener(e -> new NetworkURLDialog(parentFrame));
 		return menuItem;
 	
 	}
@@ -101,43 +89,34 @@ public class ApplicationMenuBar {
 		} else if(SystemUtils.IS_OS_MAC_OSX) {
 			newPlayListItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.META_MASK));
 		}
-		newPlayListItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-			//	leftSplitPane.createPlaylist();
-				leftSplitPane.getSourceList().addPlaylist();
-			}
-		});
+		newPlayListItem.addActionListener(e -> leftSplitPane.getSourceList().addPlaylist());
 		return newPlayListItem;
 	}
 
 	private JMenuItem buildImportFolderMenuItem() {
 		JMenuItem importFolderItem = new JMenuItem("Import Folder ... ");
-		importFolderItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JFileChooser chooser = new JFileChooser();
-				FileFilter mp3Filter = new FileNameExtensionFilter("MP3 File", "mp3");
-				chooser.addChoosableFileFilter(mp3Filter);
-				chooser.setCurrentDirectory(new java.io.File(System.getProperty("user.home")));
-				chooser.setDialogTitle("Select MP3 File Format");
-				chooser.setMultiSelectionEnabled(true);
-				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-				chooser.setAcceptAllFileFilterUsed(false);
-				if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-					List<File> fileList = new ArrayList<File>();
-					if (chooser.getSelectedFile() != null) {
-						fileList.add(chooser.getSelectedFile());
-					} 
-					
-					if (chooser.getSelectedFiles() != null){
-						File[] selectedFiles = chooser.getSelectedFiles();
-						fileList = Arrays.asList(selectedFiles);
-					}
-					new ProgressLoadDialog(fileList,parentFrame, true);
-				} else {
-					logger.info("No Selection ");
+		importFolderItem.addActionListener(e -> {
+			JFileChooser chooser = new JFileChooser();
+			FileFilter mp3Filter = new FileNameExtensionFilter("MP3 File", "mp3");
+			chooser.addChoosableFileFilter(mp3Filter);
+			chooser.setCurrentDirectory(new java.io.File(System.getProperty("user.home")));
+			chooser.setDialogTitle("Select MP3 File Format");
+			chooser.setMultiSelectionEnabled(true);
+			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+			chooser.setAcceptAllFileFilterUsed(false);
+			if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+				List<File> fileList = new ArrayList<File>();
+				if (chooser.getSelectedFile() != null) {
+					fileList.add(chooser.getSelectedFile());
 				}
+
+				if (chooser.getSelectedFiles() != null){
+					File[] selectedFiles = chooser.getSelectedFiles();
+					fileList = Arrays.asList(selectedFiles);
+				}
+				new ProgressLoadDialog(fileList,parentFrame, true);
+			} else {
+				logger.info("No Selection ");
 			}
 		});
 		return importFolderItem;

@@ -4,10 +4,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -18,13 +15,9 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.ocelot.tunes4j.dto.Song;
-import org.ocelot.tunes4j.event.PlayProgressEvent;
-import org.ocelot.tunes4j.event.ProgressUpdateListener;
 import org.ocelot.tunes4j.gui.volumeslider.VolumePanel;
 import org.ocelot.tunes4j.player.Tunes4JAudioPlayer;
 import org.ocelot.tunes4j.utils.ImageUtils;
@@ -70,20 +63,15 @@ public class PlayerPanel  {
 		this.playButton.setIcon(ResourceLoader.PLAY);
 		this.playButton.setSelectedIcon(ResourceLoader.PAUSE);
 
-		this.playButton.addItemListener(new ItemListener() {
-
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				int state = e.getStateChange();
-				if (state == ItemEvent.SELECTED) {
-					if (player.isPaused()) {
-						player.resume();
-					} else {
-						play();
-					}
+		this.playButton.addItemListener(e -> {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				if (player.isPaused()) {
+					player.resume();
 				} else {
-					player.pause();
+					play();
 				}
+			} else {
+				player.pause();
 			}
 		});
 
@@ -94,19 +82,9 @@ public class PlayerPanel  {
 
 		stopButton.setIcon(ResourceLoader.STOP);
 		stopButton.setSelectedIcon(ResourceLoader.STOP_ON);
-		stopButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				stopButton.setSelected(false);
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						stop();
-					}
-				}).start();
-
-			}
+		stopButton.addActionListener(e -> {
+			stopButton.setSelected(false);
+			new Thread(() -> stop()).start();
 		});
 		
 		
@@ -114,49 +92,36 @@ public class PlayerPanel  {
 		slider.setMaximum(1000);
 		slider.setOpaque(false);
 		
-		slider.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				if (slider.getValueIsAdjusting()) {
-					sliderValueLocked = true;
-					int value = slider.getValue();
-					int totalBytes = (int) player.getProperties().get("mp3.length.bytes");
-					long bytesread = (long) value * totalBytes / 1000l;
-					timeLabel.setText(getTimeProgress(bytesread));
-				}
-
+		slider.addChangeListener(e -> {
+			if (slider.getValueIsAdjusting()) {
+				sliderValueLocked = true;
+				int value = slider.getValue();
+				int totalBytes = (int) player.getProperties().get("mp3.length.bytes");
+				long bytesread = (long) value * totalBytes / 1000l;
+				timeLabel.setText(getTimeProgress(bytesread));
 			}
 		});
 		
 		slider.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				JSlider source = (JSlider) e.getSource();
-				player.skip(source.getValue());
+				player.skip(((JSlider) e.getSource()).getValue());
 				sliderValueLocked = false;
 			}
-
 		});
 		
 		timeLabel.setText("00:00:00.00");
 		timeLabel.setFont(new Font("Arial", Font.PLAIN, 15));
 		timeLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		player.addProgressUpdateListener(new ProgressUpdateListener() {
-
-			@Override
-			public void updateProgress(PlayProgressEvent e) {
-				
-				if (!isValueLocked()) {
-					int totalBytes = (int) player.getProperties().get("mp3.length.bytes");
-					int bytesread = e.getCurrentProgress().intValue();
-					timeLabel.setText(getTimeProgress(bytesread));
-					long value = bytesread * 1000l / totalBytes;
-					slider.setValue((int) value);
-				}
-				
+		player.addProgressUpdateListener(e -> {
+			if (!isValueLocked()) {
+				int totalBytes = (int) player.getProperties().get("mp3.length.bytes");
+				int bytesread = e.getCurrentProgress().intValue();
+				timeLabel.setText(getTimeProgress(bytesread));
+				long value = bytesread * 1000l / totalBytes;
+				slider.setValue((int) value);
 			}
-
 		});
 		
 		playerPanel = new JPanel();

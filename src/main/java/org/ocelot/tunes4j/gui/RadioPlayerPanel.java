@@ -4,8 +4,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -75,13 +73,7 @@ public class RadioPlayerPanel  {
 //		});
 		
 		
-		this.playButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				play();
-			}
-		});
+		this.playButton.addActionListener(e -> play());
 
 		this.stopButton.setBorder(BorderFactory.createEmptyBorder());
 		this.stopButton.setBorderPainted(false);
@@ -90,13 +82,9 @@ public class RadioPlayerPanel  {
 
 		this.stopButton.setIcon(ResourceLoader.STOP);
 		this.stopButton.setSelectedIcon(ResourceLoader.STOP_ON);
-		this.stopButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				stopButton.setSelected(false);
-				stop();
-			}
+		this.stopButton.addActionListener(e -> {
+			stopButton.setSelected(false);
+			stop();
 		});
 		
 		playerPanel = new JPanel();

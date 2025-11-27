@@ -1,10 +1,24 @@
 package org.ocelot.tunes4j.gui;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Label;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Hashtable;
-import javax.swing.*;
-import javax.swing.border.*;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -271,14 +285,11 @@ public class EqualizerDialog extends JDialog {
         });
 
         // Reset button listener
-        resetButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (equalizer != null) {
-                    equalizer.reset();
-                    presetComboBox.setSelectedItem("Flat");
-                    updateUI();
-                }
+        resetButton.addActionListener(e -> {
+            if (equalizer != null) {
+                equalizer.reset();
+                presetComboBox.setSelectedItem("Flat");
+                updateUI();
             }
         });
     }
