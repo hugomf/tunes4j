@@ -1,4 +1,4 @@
-package org.ocelot.tunes4j.dao;
+package org.ocelot.tunes4j.library.adapter;
 
 import java.util.List;
 import java.util.Optional;

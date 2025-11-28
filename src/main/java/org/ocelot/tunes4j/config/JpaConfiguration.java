@@ -14,7 +14,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "org.ocelot.tunes4j.dao")
+@EnableJpaRepositories(basePackages = {"org.ocelot.tunes4j.dao", "org.ocelot.tunes4j.playlist.adapter.dbo"})
 @EnableTransactionManagement
 public class JpaConfiguration {
 	
@@ -34,7 +34,7 @@ public class JpaConfiguration {
 
         LocalContainerEntityManagerFactoryBean emFactory = new LocalContainerEntityManagerFactoryBean();
         emFactory.setJpaVendorAdapter(vendorAdapter);
-        emFactory.setPackagesToScan("org.ocelot.tunes4j.dto");
+        emFactory.setPackagesToScan("org.ocelot.tunes4j.dto", "org.ocelot.tunes4j.playlist.adapter.dbo");
         emFactory.setDataSource(dataSource());
         return emFactory;
     }

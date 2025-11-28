@@ -57,7 +57,7 @@ public class MediaTable {
 	private RowSorter<TableModel> sorter;
 	
 	@Autowired
-	private SongRepository audioService;
+	private org.ocelot.tunes4j.dao.SongRepository audioService;
 	
 	@Autowired
 	private ColumnRepository columnService;

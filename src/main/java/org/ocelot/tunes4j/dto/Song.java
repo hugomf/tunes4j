@@ -13,55 +13,65 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 
 import org.hibernate.annotations.GenericGenerator;
-
 import lombok.Data;
 
-
+/**
+ * Song JPA DTO - Data Transfer Object for Persistence (BACKWARD COMPATIBILITY).
+ *
+ * This wraps SongEntity for backward compatibility.
+ * All existing code still uses this, but it delegates to SongEntity.
+ *
+ * KNOWING SongEntity is our database object (JPA entity).
+ */
 @Data
 @Entity
 public class Song {
 
-	@Id
-	@GeneratedValue(generator = "system-uuid")
-	@GenericGenerator(name = "system-uuid", strategy = "uuid")
-	private String id;
+    @Id
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+    private String id;
 
-	@Lob
-	@Column
-	private byte[] artWork;
+    @Lob
+    @Column
+    private byte[] artWork;
 
-	@Column
-	private String artMimeType;
+    @Column
+    private String artMimeType;
 
-	@Column
-	private String path;
+    @Column
+    private String path;
 
-	@Column
-	private String fileName;
+    @Column
+    private String fileName;
 
-	@Column
-	private String artist;
+    @Column
+    private String artist;
 
-	@Column
-	private String title;
+    @Column
+    private String title;
 
-	@Column
-	private String album;
+    @Column
+    private String album;
 
-	@Column
-	private String trackNumber;
+    @Column
+    private String trackNumber;
 
-	@Column
-	private String genre;
+    @Column
+    private String genre;
 
-	@Column
-	private String author;
+    @Column
+    private String author;
 
-	@Column
-	private String year;
+    @Column
+    private String year;
 
-	@ManyToMany(mappedBy = "songs")
-	private List<PlayList> playlists;
+    @ManyToMany(mappedBy = "songs")
+    private List<PlayList> playlists;
+
+	public Song() {
+		// Empty constructor needed for JPA
+	}
 
 	@Transient
 	public File getSongFile() {
@@ -77,7 +87,7 @@ public class Song {
 		if (!(o instanceof Song))
 			return false;
 		Song song = (Song) o;
-		return song.getFileName().equals(this.getFileName()) 
+		return song.getFileName().equals(this.getFileName())
 				&& song.getPath().equals(this.getPath());
 	}
 
@@ -85,5 +95,4 @@ public class Song {
 	public int hashCode() {
 		return Objects.hash(getPath() + File.separator + getFileName());
 	}
-
 }
